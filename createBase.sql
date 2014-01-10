@@ -31,14 +31,15 @@ CREATE TABLE markets
     libelle                     VARCHAR(300),
     libelleInverse              VARCHAR(300),
     dateFin                     DATE,
+    publication                 DATETIME,
 
     CONSTRAINT pk_market        PRIMARY KEY (idMarket)
 );
 
-INSERT INTO markets(libelle, libelleInverse, dateFin) 
-    VALUES('Monsieur Beaufils mettra un 20 en projet', 'Monsieur Beaufils ne mettra aucun 20 en projet', '2014-04-01');
-INSERT INTO markets(libelle, libelleInverse, dateFin) 
-    VALUES('Demode arrivera en retard a tous les cours cette annee', 'Demode arrivera a temps a au moins un cours cette annee', '2014-07-01');
+INSERT INTO markets(libelle, libelleInverse, dateFin, publication) 
+    VALUES('Monsieur Beaufils mettra un 20 en projet', 'Monsieur Beaufils ne mettra aucun 20 en projet', '2014-04-01',  CURRENT_TIMESTAMP);
+INSERT INTO markets(libelle, libelleInverse, dateFin, publication) 
+    VALUES('Demode arrivera en retard a tous les cours cette annee', 'Demode arrivera a temps a au moins un cours cette annee', '2014-07-01',  CURRENT_TIMESTAMP);
 
 
 CREATE TABLE transactions
