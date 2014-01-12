@@ -169,6 +169,7 @@ body {
 }
 #body .right li {
     margin-left: 15px;
+    margin-bottom: 7px;
     list-style-type: circle;
 }
 #body .right li a {
