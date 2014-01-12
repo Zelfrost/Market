@@ -8,16 +8,18 @@ body {
 	color: #444;
 }
 
+
 #wrapper {
     min-height: calc(100% - 3.05em);
 }
 
+
 #header {
     min-height: 1em;
-    padding: 1em 0 1em 1.5em;
+    padding: 1em 0 1em 8%;
     
-    background:linear-gradient(to bottom, #5eb6d0, #025c73);
-    border-bottom: 2px solid #444;
+    background: url("../Images/fond.png") repeat scroll right center #025C73;
+    border-bottom: 2px solid #025C73;
     
     color: #EEE;
     font-family: "Myriad Pro", Verdana, Arial;
@@ -25,7 +27,6 @@ body {
 }
 #header .left {
     display: inline-block;
-    width: 70%;
     
     font-size: 2.2em;
     font-weight: bold;
@@ -36,16 +37,21 @@ body {
     right: 2em;
     
     max-width: 30%;
-    padding-top: 1.4em;
+    margin-top: 1.4em;
+    padding: 7px 15px;
     
-    font-size: 0.8em;
+    background-color: #025C73;
+    font-size: 0.7em;
+    border-radius: 15px;
 }
 #header a {
-	color: #EEE;
+    color: #DDD;
 }
 
+
+
 #body {
-    padding: 0.5% 8%;
+    padding: 1% 8%;
     
     text-align: justify;
 }
@@ -55,30 +61,133 @@ body {
     background-color: white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
-#body h2 {
+
+
+#body .left {
+    display: inline-block;
+    
+    width: 75%;
+    margin-right: 10px;
+}
+
+#body .left h2 {
     margin-bottom: 10px;
     
     font-size: 1.8em;
     font-weight: bold;
 }
-#body p {
-    margin-top: 10px;
+
+#body .left h3 {
+    margin: 20px 0 10px 15px;
+    
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+#body .left p {
+    margin: 5px 5px 10px 20px;
     
     text-align: justify;
 }
-#body p:first-letter {
+#body .left p:first-letter {
     margin-left: 25px;
     
     font-size: 1.1em;
+}
+
+#body .left table {
+    width: 90%;
+    margin: 40px 0 40px 20px;
+}
+#body .left table tr {
+    margin-bottom: 100px;
+}
+#body .left tr th {
+    padding: 5px;
+    
+    text-align: left;
     font-weight: bold;
 }
+#body .left tr:not(.th):hover {
+    background-color: #EEE;
+}
+#body .left tr td {
+    padding: 5px;
+    
+    border-top: 1px solid #CCC;
+    color: #777;
+}
+#body .left tr td:nth-child(1) {
+    width: 80%;
+}
+#body .left tr td:nth-child(2) {
+    width: 15%;
+}
+#body .left tr td:nth-child(3) {
+    width: 5%;
+}
+#body .left td a {
+    color: #777;
+    text-decoration: none;
+}
+#body .left table .positif {
+    color: #4e9a06;
+}
+#body .left table .negatif {
+    color: #cc0000;
+}
+
+
+#body .right {
+    float: right;
+    width: calc(25% - 16px);
+}
+#body .right .menu {
+    margin-top: 15px;
+    
+    border: 3px solid #025c73;
+}
+#body .right .header {
+    padding: 0.4em 0 0.4em 1em;
+    
+    background-color: #025c73;
+    
+    font-size: 1.1em;
+    color: #EEE;
+}
+#body .right .body {
+    padding: 10px;
+    
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.24) inset;
+}
+#body .right input[type="text"] {
+    max-width: 70%;
+}
+#body .right input[type="submit"] {
+    display: inline-block;
+    max-width: 30%;
+}
+#body .right li {
+    margin-left: 15px;
+    list-style-type: circle;
+}
+#body .right li a {
+    color: #FF6600;
+    text-decoration: none;
+}
+#body .right li a:hover {
+    color: #CD5200;
+    font-weight: bold;
+}
+
+
 
 #footer {
     height: 1em;
     padding: 1em 0;
     padding-right: 1em;
     
-    background:linear-gradient(to top, #5eb6d0, #025c73);
+    background:linear-gradient(to top, #06718B, #025c73);
     border-top: 1px solid #444;
     
     color: #EEE;
