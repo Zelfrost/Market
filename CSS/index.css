@@ -161,7 +161,7 @@ body {
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.24) inset;
 }
 #body .right input[type="text"] {
-    max-width: 70%;
+    max-width: 60%;
 }
 #body .right input[type="submit"] {
     display: inline-block;
