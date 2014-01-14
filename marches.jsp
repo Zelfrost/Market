@@ -1,34 +1,38 @@
 <%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:include page="header.jsp?titre=Les marchés" />
 
 <h2>Marchés en cours</h2>
 
 <div id="selectPage">
-	<%
-	int p = 	(request.getParameter("page")!=null)
-				?Integer.parseInt(request.getParameter("page"))
-				:1;
+    <%
+	    int p = 	(request.getParameter("page")!=null)
+				    ?Integer.parseInt(request.getParameter("page"))
+				    :1;
+        
+        Context initCtx = new InitialContext();
+        Context envCtx = (Context) initCtx.lookup("java:comp/env");
+        DataSource ds = (DataSource) envCtx.lookup("base");
+        Connection con = ds.getConnection();
 
-	Class.forName("org.sqlite.JDBC");
-	Connection con = DriverManager.getConnection("jdbc:sqlite:base.db");
+	    Statement st = con.createStatement();
+	    ResultSet rs = st.executeQuery("SELECT count(*) as c FROM markets where dateFin > date('now');");
 
-	Statement st = con.createStatement();
-	ResultSet rs = st.executeQuery("SELECT count(*) as c FROM markets where dateFin > date('now');");
-
-	int nbPages = (int)Math.ceil((double)rs.getInt("c") / 10);
-	if(nbPages>0)
-		out.println("Pages : ");
-	if(p!=1)
-		out.println("(<a href='marches.jsp?page=" + (p-1) + "'>Précédent</a>)");
-	for( int i=1; i<=nbPages; i++ ) {
-		if(i!=p)
-			out.println("<a href='marches.jsp?page=" + i + "'>" + i + "</a>");
-		else
-			out.println("<span>" + i + "</span>");
-	}
-	if(p!=nbPages)
-		out.println("(<a href='marches.jsp?page=" + (p+1) + "'>Suivant</a>)");
+	    int nbPages = (int)Math.ceil((double)rs.getInt("c") / 10);
+	    if(nbPages>0)
+		    out.println("Pages : ");
+	    if(p!=1)
+		    out.println("(<a href='marches?page=" + (p-1) + "'>Précédent</a>)");
+	    for( int i=1; i<=nbPages; i++ ) {
+		    if(i!=p)
+			    out.println("<a href='marches?page=" + i + "'>" + i + "</a>");
+		    else
+			    out.println("<span>" + i + "</span>");
+	    }
+	    if(p!=nbPages)
+		    out.println("(<a href='marches?page=" + (p+1) + "'>Suivant</a>)");
 	%>
 </div>
 
@@ -47,7 +51,7 @@
 	while (rs.next()) {
 		id = rs.getString("idMarket");
 	    out.println("<tr>");
-	    out.println("<td><a href='information.jsp?id=" + id + "'>" + rs.getString("libelle") + "</a></td>");
+	    out.println("<td><a href='information?id=" + id + "'>" + rs.getString("libelle") + "</a></td>");
 	    out.println("<td>" + rs.getString("d") + "</td>");
 
 	    stTaux = con.createStatement();

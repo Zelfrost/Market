@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<Context antiJARLocking="true" path="/Market">
+    <Resource   name="base" auth="Container" type="javax.sql.DataSource"
+                maxActive="100" maxIdle="70" maxWait="10000"
+                username="" password="" driverClassName="org.sqlite.JDBC"
+                url="jdbc:sqlite:base.db" />
+</Context>

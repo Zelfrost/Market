@@ -1,7 +1,41 @@
- <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
-
-<web-app>
+<?xml version="1.0" encoding="ISO-8859-1" ?>  
+  
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"  
+    version="2.4">  
+    
 	<display-name>Marché de l'Information</display-name>
 	<description>Application de gestion d'un marché de l'Information</description>
+	
+	<servlet>
+        <servlet-name>index</servlet-name>
+        <jsp-file>/index.jsp</jsp-file>
+    </servlet>
+    
+	<servlet>
+        <servlet-name>marches</servlet-name>
+        <jsp-file>/marches.jsp</jsp-file>
+    </servlet>
+    
+	<servlet>
+        <servlet-name>information</servlet-name>
+        <jsp-file>/information.jsp</jsp-file>
+    </servlet>
+    
+    
+    <servlet-mapping>
+        <servlet-name>index</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>marches</servlet-name>
+        <url-pattern>/marches</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>information</servlet-name>
+        <url-pattern>/information</url-pattern>
+    </servlet-mapping>
 </web-app> 

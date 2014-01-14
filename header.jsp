@@ -19,7 +19,7 @@
 	                <img src="Images/titre.png" alt="IM - Marché de l'Information" />
 	            </div>
 	            <div class="right">
-	                Non connecté. (<a href="">Connexion</a>)
+	                <img src="Images/user-group.gif" alt="icone" />Non connecté. (<a href="">Connexion</a>)
 	            </div>
 	        </div>
 	

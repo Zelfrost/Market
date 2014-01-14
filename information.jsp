@@ -1,4 +1,6 @@
 <%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%
@@ -7,8 +9,10 @@
 					?Integer.parseInt(request.getParameter("choix"))
 					:0;
 	
-	Class.forName("org.sqlite.JDBC");
-	Connection con = DriverManager.getConnection("jdbc:sqlite:/home/damien/BDD/tomcat/webapps/Market/base.db");
+    Context initCtx = new InitialContext();
+    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+    DataSource ds = (DataSource) envCtx.lookup("base");
+    Connection con = ds.getConnection();
 
 	Statement st = con.createStatement();
 	ResultSet rs = st.executeQuery("SELECT libelle, libelleInverse, strftime('%d/%m/%Y', dateFin) as d FROM markets WHERE idMarket='" + id +"';");
@@ -18,7 +22,7 @@
 %>
 <jsp:include page="<%=head%>" />
 <%
-	out.println("<h3>" + rs.getString("libelle") + "</h3>");
+	out.println("<h3>" + rs.getString("libelle") + "</h3><span class='small'>Si vous ne croyez pas en cette information, investissez dans <a href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
 %>
 
 <p>Date de fin : <strong><%= rs.getString("d") %></strong></p>

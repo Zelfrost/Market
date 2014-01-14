@@ -34,18 +34,23 @@ body {
 #header .right {
     float: right;
     position: relative;
-    right: 2em;
+    right: 8%;
     
     max-width: 30%;
     margin-top: 1.4em;
-    padding: 7px 15px;
+    padding: 6px 5px;
     
     background-color: #025C73;
-    font-size: 0.7em;
-    border-radius: 15px;
+    font-size: 0.6em;
+    border-radius: 7px;
+}
+#header img {
+    vertical-align: middle;
+    margin-right: 4px;
 }
 #header a {
     color: #DDD;
+    text-decoration: none;
 }
 
 
@@ -83,6 +88,13 @@ body {
     
     font-size: 1.4em;
     font-weight: bold;
+}
+#body h3 + .small {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+#body h3 + .small a {
+    color: #FF6600;
 }
 
 #body p {

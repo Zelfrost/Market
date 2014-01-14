@@ -1,4 +1,6 @@
 <%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:include page="header.jsp" />
 
@@ -31,16 +33,18 @@
         <div class="body">
             <ul>
 <%
-Class.forName("org.sqlite.JDBC");
-Connection con = DriverManager.getConnection("jdbc:sqlite:base.db");
+    Context initCtx = new InitialContext();
+    Context envCtx = (Context) initCtx.lookup("java:comp/env");
+    DataSource ds = (DataSource) envCtx.lookup("base");
+    Connection con = ds.getConnection();
 
-Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("SELECT idMarket, libelle FROM markets ORDER BY publication DESC LIMIT 10");
-while (rs.next())
-    out.println("<li><a href='information.jsp?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
-con.close();
+    Statement st = con.createStatement();
+    ResultSet rs = st.executeQuery("SELECT idMarket, libelle FROM markets ORDER BY publication DESC LIMIT 10");
+    while (rs.next())
+        out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
+    con.close();
 %>
-                <li class="all"><a href="marches.jsp">Tous les marchés</a></li>
+                <li class="all"><a href="marches">Tous les marchés</a></li>
             </ul>
         </div>
      </div>
