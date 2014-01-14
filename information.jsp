@@ -22,6 +22,8 @@
 	String head 	= 	"header.jsp?titre=" + libelle;
 %>
 <jsp:include page="<%=head%>" />
+
+<a id="prev" href='marches'>Retour aux marchés</a>
 <%
 	out.println("<h3>" + libelle + "</h3><span class='small'>Si vous ne croyez pas en cette information, investissez dans <a href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
 %>

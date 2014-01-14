@@ -1,3 +1,4 @@
+<%@ page import="java.net.URLEncoder" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
@@ -21,10 +22,10 @@
 	            <div class="right">
 	                <img src="Images/user-group.gif" alt="icone" />
 	                <%
-	                	if(session.getAttribute("nom")==null)
-	                		out.println("Non connecté. (<a href='connexion?origin=" + request.getRequestURL().append('?').append(request.getQueryString()) + "'>Connexion</a>)");
+	                	if( ! (request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User") ) )
+	                		out.println("Non connecté. (<a href='Conn?url=" + URLEncoder.encode((request.getRequestURL().append('?').append(request.getQueryString())).toString()) + "'>Connexion</a>)");
 	            		else {
-	            			out.println("Connecté sous le nom \" " + session.getAttribute("nom") + " \" (<a href='deconnexion'>Déconnexion</a>)");
+	            			out.println("Connecté sous le nom \" " + request.getUserPrincipal().getName() + " \"");
 	            		}
 	            	%>
 	            </div>

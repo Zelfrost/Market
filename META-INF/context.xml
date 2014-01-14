@@ -6,7 +6,7 @@
                 username="" password="" driverClassName="org.sqlite.JDBC"
                 url="jdbc:sqlite:base.db" />
 
-    <Realm className="org.apache.catalina.realm.DataSourceRealm" name="realm"
+    <Realm className="org.apache.catalina.realm.DataSourceRealm" name="realmBase" localDataSource="true"
 			    dataSourceName="base" userTable="users" userNameCol="login"
 			    userCredCol="pass" userRoleTable="users" roleNameCol="role" />
 </Context>

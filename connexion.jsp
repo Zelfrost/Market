@@ -7,13 +7,13 @@
 	<span id="error" <% if(request.getParameter("error")!=null)out.print("style='display: inline-block;'"); %>>Erreur dans le login ou le mot de passe</span>
 
 	<div>
-		<label for="login">Login :</label>
-		<input type="text" 		name="j_username" />
+		<label for="username">Login :</label>
+		<input type="text" 		id="j_username" name="j_username" />
 	</div>
 
 	<div>
-		<label for="pass">Mot de passe :</label>
-		<input type="password" 	name="j_password" />
+		<label for="password">Mot de passe :</label>
+		<input type="password" 	id="j_password" name="j_password" />
 	</div>
 
 	<input type="submit" 	value="Confirmer" />

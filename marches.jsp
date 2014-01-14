@@ -6,10 +6,10 @@
 
 <h2>Marchés en cours</h2>
 
-<div id="selectPage">
+<div id="selectpage">
     <%
-	    int page 		= 	(request.getParameter("page")!=null)
-				    		?Integer.parseInt(request.getParameter("page"))
+	    int pages 		= 	(request.getParameter("pages")!=null)
+				    		?Integer.parseInt(request.getParameter("pages"))
 				    		:1;
         
         Context initCtx = 	new InitialContext();
@@ -20,20 +20,20 @@
 	    Statement st 	= 	con.createStatement();
 	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin > date('now');");
 
-	    int nbPages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
+	    int nbpages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
 
-	    if( nbPages > 0 )
-		    out.println("Pages : ");
-	    if( page != 1 )
-		    out.println("(<a href='marches?page=" + (page-1) + "'>Précédent</a>)");
-	    for( int i = 1; i <= nbPages; i++ ) {
-		    if( i != page )
+	    if( nbpages > 0 )
+		    out.println("pages : ");
+	    if( pages != 1 )
+		    out.println("(<a href='marches?page=" + (pages-1) + "'>Précédent</a>)");
+	    for( int i = 1; i <= nbpages; i++ ) {
+		    if( i != pages )
 			    out.println("<a href='marches?page=" + i + "'>" + i + "</a>");
 		    else
 			    out.println("<span>" + i + "</span>");
 	    }
-	    if( page != nbPages )
-		    out.println("(<a href='marches?page=" + (page+1) + "'>Suivant</a>)");
+	    if( pages != nbpages )
+		    out.println("(<a href='marches?page=" + (pages+1) + "'>Suivant</a>)");
 	%>
 </div>
 
@@ -44,7 +44,7 @@
 		<th>Taux</th>
 	</tr>
 	<%
-		rs 			= st.executeQuery("SELECT idMarket, libelle, strftime('%d/%m/%Y', dateFin) AS d FROM markets WHERE dateFin > date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((page-1)*10) + ";");
+		rs 			= st.executeQuery("SELECT idMarket, libelle, strftime('%d/%m/%Y', dateFin) AS d FROM markets WHERE dateFin > date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
 		String id;
 		Statement stTaux;
 		ResultSet rsTaux;
