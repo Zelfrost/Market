@@ -1,21 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<jsp:include page="header.jsp?titre=Les marchés" />
+<jsp:include page="header.jsp?titre=Connexion" />
 
 
-<form method="POST" action="servlet/Connexion">
-	<span>
-		Login : 
-		<input type="text" 		name="login" 		/>
-	</span>
+<form id="conn" method="POST" action="j_security_check">
+	<h3>Connexion :</h3>
+	<span id="error">Erreur dans le login ou le mot de passe</span>
 
-	<span>
-		Mot de passe : 
-		<input type="password" 	name="pass" 		/>
-	</span>
+	<div>
+		<label for="login">Login :</label>
+		<input type="text" 		name="j_username" />
+	</div>
 
-	<span>
-		<input type="submit" 		value="Confirmer" 	/>
-	</span>
+	<div>
+		<label for="pass">Mot de passe :</label>
+		<input type="password" 	name="j_password" />
+	</div>
+
+	<input type="submit" 	value="Confirmer" />
 </form>
 
 

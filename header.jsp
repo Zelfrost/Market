@@ -19,7 +19,14 @@
 	                <img src="Images/titre.png" alt="IM - Marché de l'Information" />
 	            </div>
 	            <div class="right">
-	                <img src="Images/user-group.gif" alt="icone" />Non connecté. (<a href="">Connexion</a>)
+	                <img src="Images/user-group.gif" alt="icone" />
+	                <%
+	                	if(session.getAttribute("nom")==null)
+	                		out.println("Non connecté. (<a href='connexion?origin=" + request.getRequestURL().append('?').append(request.getQueryString()) + "'>Connexion</a>)");
+	            		else {
+	            			out.println("Connecté sous le nom \" " + session.getAttribute("nom") + " \" (<a href='deconnexion'>Déconnexion</a>)");
+	            		}
+	            	%>
 	            </div>
 	        </div>
 	

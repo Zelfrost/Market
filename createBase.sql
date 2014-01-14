@@ -16,13 +16,13 @@ CREATE TABLE  users (
 );
 
 INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', '10000', 'admin');
+    VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', '10000', 'Admin');
 INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', '10000', 'admin');
+    VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', '10000', 'Admin');
 INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '10000', 'marketMaker');
+    VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '10000', 'MarketMaker');
 INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', '10000', 'user');
+    VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', '10000', 'User');
 
 
 CREATE TABLE markets

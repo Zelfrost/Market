@@ -28,6 +28,11 @@
         <jsp-file>/connexion.jsp</jsp-file>
     </servlet>
     
+    <servlet>
+        <servlet-name>creerPronostic</servlet-name>
+        <jsp-file>/creerPronostic.jsp</jsp-file>
+    </servlet>
+    
     
     <servlet-mapping>
         <servlet-name>index</servlet-name>
@@ -48,4 +53,47 @@
         <servlet-name>connexion</servlet-name>
         <url-pattern>/connexion</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>creerPronostic</servlet-name>
+        <url-pattern>/creerPronostic</url-pattern>
+    </servlet-mapping>
+
+
+    <security-constraint>
+
+        <web-resource-collection>
+            <web-resource-name>MaketMaker</web-resource-name>
+            <url-pattern>/creerPronostic</url-pattern>
+        </web-resource-collection>
+
+        <auth-constraint>
+            <role-name>MarketMaker</role-name>
+        </auth-constraint>
+
+    </security-constraint>
+
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>realm</realm-name>
+        <form-login-config>
+            <form-login-page>/connexion</form-login-page>
+            <form-error-page>/connexion?error=1</form-error-page>
+        </form-login-config>
+    </login-config>
+
+
+    
+    <security-role>
+        <role-name>User</role-name>
+    </security-role> 
+
+    <security-role>
+        <role-name>MarketMaker</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>Admin</role-name>
+    </security-role> 
 </web-app> 

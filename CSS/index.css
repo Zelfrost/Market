@@ -96,6 +96,12 @@ body {
 #body h3 + .small a {
     color: #FF6600;
 }
+#body #error {
+    display: inline-block;
+    margin-bottom: 15px;
+
+    color: red;
+}
 
 #body p {
     margin: 5px 5px 10px 20px;
@@ -181,6 +187,24 @@ body {
 }
 #body table .negatif {
     color: #cc0000;
+}
+
+#body form#conn div {
+    margin-bottom: 3px;
+}
+#body form#conn label {
+    display: inline-block;
+    width: 150px;
+
+    color: #888;
+}
+#body form#conn input {
+    display: inline-block;
+    width: 175px;
+}
+#body form#conn input[type="submit"] {
+    width: 80px;
+    margin-left: 250px;
 }
 
 
