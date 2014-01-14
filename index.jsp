@@ -34,12 +34,13 @@
             <ul>
 <%
     Context initCtx = new InitialContext();
-    Context envCtx = (Context) initCtx.lookup("java:comp/env");
-    DataSource ds = (DataSource) envCtx.lookup("base");
-    Connection con = ds.getConnection();
+    Context envCtx  = (Context) initCtx.lookup("java:comp/env");
+    DataSource ds   = (DataSource) envCtx.lookup("base");
+    Connection con  = ds.getConnection();
 
-    Statement st = con.createStatement();
-    ResultSet rs = st.executeQuery("SELECT idMarket, libelle FROM markets ORDER BY publication DESC LIMIT 10");
+    Statement st    = con.createStatement();
+    ResultSet rs    = st.executeQuery("SELECT idMarket, libelle FROM markets ORDER BY publication DESC LIMIT 10");
+
     while (rs.next())
         out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
     con.close();

@@ -8,31 +8,32 @@
 
 <div id="selectPage">
     <%
-	    int p = 	(request.getParameter("page")!=null)
-				    ?Integer.parseInt(request.getParameter("page"))
-				    :1;
+	    int page 		= 	(request.getParameter("page")!=null)
+				    		?Integer.parseInt(request.getParameter("page"))
+				    		:1;
         
-        Context initCtx = new InitialContext();
-        Context envCtx = (Context) initCtx.lookup("java:comp/env");
-        DataSource ds = (DataSource) envCtx.lookup("base");
-        Connection con = ds.getConnection();
+        Context initCtx = 	new InitialContext();
+        Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
+        DataSource ds 	= 	(DataSource) envCtx.lookup("base");
+        Connection con 	= 	ds.getConnection();
 
-	    Statement st = con.createStatement();
-	    ResultSet rs = st.executeQuery("SELECT count(*) as c FROM markets where dateFin > date('now');");
+	    Statement st 	= 	con.createStatement();
+	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin > date('now');");
 
-	    int nbPages = (int)Math.ceil((double)rs.getInt("c") / 10);
-	    if(nbPages>0)
+	    int nbPages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
+
+	    if( nbPages > 0 )
 		    out.println("Pages : ");
-	    if(p!=1)
-		    out.println("(<a href='marches?page=" + (p-1) + "'>Précédent</a>)");
-	    for( int i=1; i<=nbPages; i++ ) {
-		    if(i!=p)
+	    if( page != 1 )
+		    out.println("(<a href='marches?page=" + (page-1) + "'>Précédent</a>)");
+	    for( int i = 1; i <= nbPages; i++ ) {
+		    if( i != page )
 			    out.println("<a href='marches?page=" + i + "'>" + i + "</a>");
 		    else
 			    out.println("<span>" + i + "</span>");
 	    }
-	    if(p!=nbPages)
-		    out.println("(<a href='marches?page=" + (p+1) + "'>Suivant</a>)");
+	    if( page != nbPages )
+		    out.println("(<a href='marches?page=" + (page+1) + "'>Suivant</a>)");
 	%>
 </div>
 
@@ -43,47 +44,47 @@
 		<th>Taux</th>
 	</tr>
 	<%
-	rs = st.executeQuery("SELECT idMarket, libelle, strftime('%d/%m/%Y', dateFin) AS d FROM markets WHERE dateFin > date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((p-1)*10) + ";");
-	String id;
-	Statement stTaux;
-	ResultSet rsTaux;
-	int t0, t1, max, taux;
-	while (rs.next()) {
-		id = rs.getString("idMarket");
-	    out.println("<tr>");
-	    out.println("<td><a href='information?id=" + id + "'>" + rs.getString("libelle") + "</a></td>");
-	    out.println("<td>" + rs.getString("d") + "</td>");
+		rs 			= st.executeQuery("SELECT idMarket, libelle, strftime('%d/%m/%Y', dateFin) AS d FROM markets WHERE dateFin > date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((page-1)*10) + ";");
+		String id;
+		Statement stTaux;
+		ResultSet rsTaux;
+		int t0, t1, max, taux;
+		while (rs.next()) {
+			id 		= rs.getString("idMarket");
+		    out.println("<tr>");
+		    out.println("<td><a href='information?id=" + id + "'>" + rs.getString("libelle") + "</a></td>");
+		    out.println("<td>" + rs.getString("d") + "</td>");
 
-	    stTaux = con.createStatement();
-	    rsTaux = stTaux.executeQuery("SELECT sum(nombre * prix) AS t0 FROM transactions WHERE marketID = " + id + " AND choix = 0;");
-	    rsTaux.next();
-	    t0 = rsTaux.getInt("t0");
+		    stTaux 	= con.createStatement();
+		    rsTaux 	= stTaux.executeQuery("SELECT sum(nombre * prix) AS t0 FROM transactions WHERE marketID = " + id + " AND choix = 0;");
+		    rsTaux.next();
+		    t0 		= rsTaux.getInt("t0");
 
-	    rsTaux = stTaux.executeQuery("SELECT sum(nombre * prix) AS t1 FROM transactions WHERE marketID = " + id + " AND choix = 1;");
-	    rsTaux.next();
-	    t1 = rsTaux.getInt("t1");
+		    rsTaux 	= stTaux.executeQuery("SELECT sum(nombre * prix) AS t1 FROM transactions WHERE marketID = " + id + " AND choix = 1;");
+		    rsTaux.next();
+		    t1 		= rsTaux.getInt("t1");
 
-	    max = 	(t1>t0)
-	    		?t1
-	    		:t0;
-	    try {
-	    	taux = (int)(((double)max/(t0+t1))*100);
-	    } catch(ArithmeticException e) {
-	    	taux = 0;
+		    max 	= 	(t1>t0)
+		    			?t1
+		    			:t0;
+		    try {
+		    	taux = (int)(((double)max/(t0+t1))*100);
+		    } catch(ArithmeticException e) {
+		    	taux = 0;
+			}
+
+		    out.print("<td");
+		    out.print( 	(taux==0)
+		    			?">"
+		    			:
+		    				(t0==max)
+		    				?" class='positif'>+"
+		    				:" class='negatif'>-"
+		   	);
+		    out.println(taux + "%</td>");
+		    out.println("</tr>");
 		}
-
-	    out.print("<td");
-	    out.print( 	(taux==0)
-	    			?">"
-	    			:
-	    				(t0==max)
-	    				?" class='positif'>+"
-	    				:" class='negatif'>-"
-	   	);
-	    out.println(taux + "%</td>");
-	    out.println("</tr>");
-	}
-	con.close();
+		con.close();
 	%>
 </table>
 

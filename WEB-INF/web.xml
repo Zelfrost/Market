@@ -18,9 +18,14 @@
         <jsp-file>/marches.jsp</jsp-file>
     </servlet>
     
-	<servlet>
+    <servlet>
         <servlet-name>information</servlet-name>
         <jsp-file>/information.jsp</jsp-file>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>connexion</servlet-name>
+        <jsp-file>/connexion.jsp</jsp-file>
     </servlet>
     
     
@@ -37,5 +42,10 @@
     <servlet-mapping>
         <servlet-name>information</servlet-name>
         <url-pattern>/information</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>connexion</servlet-name>
+        <url-pattern>/connexion</url-pattern>
     </servlet-mapping>
 </web-app> 

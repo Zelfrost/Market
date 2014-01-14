@@ -4,10 +4,10 @@
 		<link rel="stylesheet" href="CSS/resetCSS.css" />
 		<link rel="stylesheet" href="CSS/index.css" />
 <%
-	String titre = "Votre marché de l'Information";
+	String titre 	= "Votre marché de l'Information";
 	if(request.getParameter("titre")!=null)
-		titre = request.getParameter("titre");
-	titre +=  " - Lille 1";
+		titre 		= request.getParameter("titre");
+	titre 		   +=  " - Lille 1";
 %>
 		<title>IM - <%= titre %></title>
 	</head>

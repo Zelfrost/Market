@@ -10,19 +10,19 @@ CREATE TABLE  users (
     login                       VARCHAR(20),
     pass                        VARCHAR(20),
     argent                      NUMERIC(10),
-    marketMaker                 NUMERIC(1),
+    role                        VARCHAR(20),
     
     CONSTRAINT pk_user          PRIMARY KEY (idUser)
 );
 
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, marketMaker) 
-    VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', '10000', 1);
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, marketMaker) 
-    VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', '10000', 1);
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, marketMaker) 
-    VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', 10000, 0);
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, marketMaker) 
-    VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', 10000, 0);
+INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
+    VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', '10000', 'admin');
+INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
+    VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', '10000', 'admin');
+INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
+    VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '10000', 'marketMaker');
+INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
+    VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', '10000', 'user');
 
 
 CREATE TABLE markets

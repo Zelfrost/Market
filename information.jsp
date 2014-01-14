@@ -4,25 +4,26 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%
-	int id 		=	Integer.parseInt(request.getParameter("id"));
-	int choix 	= 	(request.getParameter("choix")!=null)
-					?Integer.parseInt(request.getParameter("choix"))
-					:0;
+	int id 			= 	Integer.parseInt(request.getParameter("id"));
+	int choix 		= 	(request.getParameter("choix")!=null)
+						?Integer.parseInt(request.getParameter("choix"))
+						:0;
 	
-    Context initCtx = new InitialContext();
-    Context envCtx = (Context) initCtx.lookup("java:comp/env");
-    DataSource ds = (DataSource) envCtx.lookup("base");
-    Connection con = ds.getConnection();
+    Context initCtx = 	new InitialContext();
+    Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
+    DataSource ds 	= 	(DataSource) envCtx.lookup("base");
+    Connection con 	= 	ds.getConnection();
 
-	Statement st = con.createStatement();
-	ResultSet rs = st.executeQuery("SELECT libelle, libelleInverse, strftime('%d/%m/%Y', dateFin) as d FROM markets WHERE idMarket='" + id +"';");
-	String libelle = rs.getString("libelle");
-	String libelleInverse = rs.getString("libelleInverse");
-	String head = "header.jsp?titre=" + libelle;
+	Statement st 	= 	con.createStatement();
+	ResultSet rs 	= 	st.executeQuery("SELECT libelle, libelleInverse, strftime('%d/%m/%Y', dateFin) as d FROM markets WHERE idMarket='" + id +"';");
+	String libelle 	= 	(choix==0)
+						?rs.getString("libelle")
+						:rs.getString("libelleInverse");
+	String head 	= 	"header.jsp?titre=" + libelle;
 %>
 <jsp:include page="<%=head%>" />
 <%
-	out.println("<h3>" + rs.getString("libelle") + "</h3><span class='small'>Si vous ne croyez pas en cette information, investissez dans <a href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
+	out.println("<h3>" + libelle + "</h3><span class='small'>Si vous ne croyez pas en cette information, investissez dans <a href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
 %>
 
 <p>Date de fin : <strong><%= rs.getString("d") %></strong></p>
@@ -33,7 +34,7 @@
 		<th colspan="3">Vendeurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT userID, nom, prenom, count(*) AS nbre, sum(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT userID, nom, prenom, count(*) AS nbre, SUM(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
 
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas de vendeurs</td></tr>");
@@ -53,7 +54,7 @@
 		<th colspan="3">Acheteurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT userID, nom, count(*) AS nbre, sum(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT userID, nom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas d'acheteurs</td></tr>");
 	else {
