@@ -4,7 +4,7 @@
 
 <form id="conn" method="POST" action="j_security_check">
 	<h3>Connexion :</h3>
-	<span id="error">Erreur dans le login ou le mot de passe</span>
+	<span id="error" <% if(request.getParameter("error")!=null)out.print("style='display: inline-block;'"); %>>Erreur dans le login ou le mot de passe</span>
 
 	<div>
 		<label for="login">Login :</label>

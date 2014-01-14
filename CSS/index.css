@@ -96,12 +96,6 @@ body {
 #body h3 + .small a {
     color: #FF6600;
 }
-#body #error {
-    display: inline-block;
-    margin-bottom: 15px;
-
-    color: red;
-}
 
 #body p {
     margin: 5px 5px 10px 20px;
@@ -189,6 +183,12 @@ body {
     color: #cc0000;
 }
 
+#body form#conn #error {
+    display: none;
+    margin-bottom: 15px;
+
+    color: #FF0000;
+}
 #body form#conn div {
     margin-bottom: 3px;
 }
