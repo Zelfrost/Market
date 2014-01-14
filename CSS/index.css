@@ -65,20 +65,21 @@ body {
 
 #body .left {
     display: inline-block;
-    
+    vertical-align: top;
+
     width: 75%;
     margin-right: 10px;
 }
 
 #body h2 {
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     
     font-size: 1.8em;
     font-weight: bold;
 }
 
 #body h3 {
-    margin: 20px 0 10px 15px;
+    margin: 10px 0 10px 0px;
     
     font-size: 1.4em;
     font-weight: bold;
@@ -100,24 +101,39 @@ body {
 }
 #body #selectPage a {
     display: inline-block;
-    padding: 7px;
-
-    border: 1px solid #AAA;
-    border-radius: 5px;
+    margin: 0 2px;
 
     text-decoration: none;
-    color: #333;
+    color: #FF6600;
 }
 #body #selectPage a:hover {
     background-color: #EEE;
+}
+#body #selectPage span {
+    display: inline-block;
+    margin: 0 2px;
 }
 
 #body table {
     width: 90%;
     margin: 40px 0 40px 20px;
 }
+#body table.rouge, #body table.vert {
+    width: 60%;
+}
+#body table.rouge th {
+    background-color: #f02000;
+    text-align: center;
+}
+#body table.vert th {
+    background-color: #3fd16a;
+    text-align: center;
+}
 #body table tr {
     margin-bottom: 100px;
+}
+#body table tr.empty {
+    text-align: center;
 }
 #body tr th {
     padding: 5px;
@@ -125,7 +141,7 @@ body {
     text-align: left;
     font-weight: bold;
 }
-#body tr:not(.th):hover {
+#body tr:not(.th):not(.empty):hover {
     background-color: #EEE;
 }
 #body tr td {
@@ -142,6 +158,7 @@ body {
 }
 #body tr td:nth-child(3) {
     width: 5%;
+    text-align: right;
 }
 #body td a {
     color: #777;
@@ -156,7 +173,7 @@ body {
 
 
 #body .right {
-    float: right;
+    display: inline-block;
     width: calc(25% - 16px);
 }
 #body .right .menu {

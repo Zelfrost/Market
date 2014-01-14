@@ -65,12 +65,12 @@ CREATE TABLE transactions
 INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
     VALUES(0, 0, 0, 10, 50, 0, CURRENT_TIMESTAMP);
 INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(1, 0, 1, 60, 60, 1, CURRENT_TIMESTAMP);
+    VALUES(1, 1, 0, 60, 60, 1, CURRENT_TIMESTAMP);
 INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(2, 0, 2, 40, 80, 1, CURRENT_TIMESTAMP);
+    VALUES(2, 2, 0, 40, 80, 1, CURRENT_TIMESTAMP);
 INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(3, 0, 3, 20, 80, 1, CURRENT_TIMESTAMP);
+    VALUES(3, 3, 0, 20, 80, 1, CURRENT_TIMESTAMP);
 INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
     VALUES(4, 0, 0, 70, 90, 1, CURRENT_TIMESTAMP);
 INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(5, 0, 1, 20, 30, 1, CURRENT_TIMESTAMP);
+    VALUES(5, 1, 0, 20, 30, 1, CURRENT_TIMESTAMP);
