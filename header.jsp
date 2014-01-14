@@ -1,4 +1,7 @@
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
@@ -25,7 +28,15 @@
 	                	if( ! (request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User") ) )
 	                		out.println("Non connecté. (<a href='Conn?url=" + URLEncoder.encode((request.getRequestURL().append('?').append(request.getQueryString())).toString()) + "'>Connexion</a>)");
 	            		else {
-	            			out.println("Connecté sous le nom \" " + request.getUserPrincipal().getName() + " \"");
+            				Context initCtx = 	new InitialContext();
+				            Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
+				            DataSource ds 	= 	(DataSource) envCtx.lookup("base");
+				            Connection con 	= 	ds.getConnection();
+
+				        	Statement st 	= 	con.createStatement();
+				       		ResultSet rs 	= 	st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+				       		
+	            			out.print("Connecté sous le nom \" " + rs.getString("n") + " \" (<a href='Conn?deco=1'>Déconnexion</a>)");
 	            		}
 	            	%>
 	            </div>

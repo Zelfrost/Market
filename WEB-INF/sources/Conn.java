@@ -10,19 +10,27 @@ public class Conn extends HttpServlet
 	public void service( HttpServletRequest req, HttpServletResponse res )
 		throws ServletException, IOException
 	{
-	    if( request.getUserPrincipal().getName()!=null ) {
-	        HttpSession session = request.getSession(true);
+		if( req.getParameter("deco")!=null )
+			req.getSession().invalidate();/*
+	    else if( req.getUserPrincipal().getName()!=null ) {
+	        HttpSession session = req.getSession(true);
 	        
-            Context initCtx = 	new InitialContext();
-            Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
-            DataSource ds 	= 	(DataSource) envCtx.lookup("base");
-            Connection con 	= 	ds.getConnection();
+	        Connection con 		= null;
+	        try {
+	            Context initCtx = 	new InitialContext();
+	            Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
+	            DataSource ds 	= 	(DataSource) envCtx.lookup("base");
+	            con 			= 	ds.getConnection();
 
-	        Statement st 	= 	con.createStatement();
-	        ResultSet rs 	= 	st.executeQuery("SELECT CONCAT(nom, prenom) AS nom FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-	        
-            session.setAttribute("nom", nom);
-        }
+	        	Statement st 	= 	con.createStatement();
+	       		ResultSet rs 	= 	st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + req.getUserPrincipal().getName() + "';");
+
+	       		rs.next();
+            	session.setAttribute("nom", rs.getString("n"));
+	        } catch( Exception e ) {
+	         	e.printStackTrace(res.getWriter());
+	        }
+        }*/
         
 		if(req.getParameter("url")!=null)
 		    res.sendRedirect(req.getParameter("url"));
