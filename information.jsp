@@ -1,0 +1,69 @@
+<%@ page import="java.sql.*" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+
+<%
+	int id 		=	Integer.parseInt(request.getParameter("id"));
+	int choix 	= 	(request.getParameter("choix")!=null)
+					?Integer.parseInt(request.getParameter("choix"))
+					:0;
+	
+	Class.forName("org.sqlite.JDBC");
+	Connection con = DriverManager.getConnection("jdbc:sqlite:/home/damien/BDD/tomcat/webapps/Market/base.db");
+
+	Statement st = con.createStatement();
+	ResultSet rs = st.executeQuery("SELECT libelle, libelleInverse, strftime('%d/%m/%Y', dateFin) as d FROM markets WHERE idMarket='" + id +"';");
+	String libelle = rs.getString("libelle");
+	String libelleInverse = rs.getString("libelleInverse");
+	String head = "header.jsp?titre=" + libelle;
+%>
+<jsp:include page="<%=head%>" />
+<%
+	out.println("<h3>" + rs.getString("libelle") + "</h3>");
+%>
+
+<p>Date de fin : <strong><%= rs.getString("d") %></strong></p>
+<p>État de l'offre :</p>
+
+<table class="rouge">
+	<tr>
+		<th colspan="3">Vendeurs</th>
+	</tr>
+<%
+	rs = st.executeQuery("SELECT userID, nom, prenom, count(*) AS nbre, sum(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
+
+	if(!rs.next())
+		out.println("<tr class='empty'><td colspan='3'>Pas de vendeurs</td></tr>");
+	else {
+		do {
+			out.println("<tr>");
+			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom") + " " + rs.getString("prenom"):"---") + "</td>");
+			out.println("<td>" + rs.getString("somme") + " bons</td>");
+			out.println("<td>" + rs.getString("prix") + "€</td>");
+			out.println("</tr>");
+		} while(rs.next());
+	}
+%>
+</table>
+<table class="vert">
+	<tr>
+		<th colspan="3">Acheteurs</th>
+	</tr>
+<%
+	rs = st.executeQuery("SELECT userID, nom, count(*) AS nbre, sum(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
+	if(!rs.next())
+		out.println("<tr class='empty'><td colspan='3'>Pas d'acheteurs</td></tr>");
+	else {
+		do {
+			out.println("<tr>");
+			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
+			out.println("<td>" + rs.getString("somme") + " bons</td>");
+			out.println("<td>" + rs.getString("prix") + "€</td>");
+			out.println("</tr>");
+		} while(rs.next());
+	}
+%>
+</table>
+
+
+
+<jsp:include page="footer.jsp" />
