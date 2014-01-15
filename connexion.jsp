@@ -2,8 +2,9 @@
 <jsp:include page="header.jsp?titre=Connexion" />
 
 
+<h3>Connexion :</h3>
+
 <form id="conn" method="POST" action="j_security_check">
-	<h3>Connexion :</h3>
 	<%
 		if(request.getParameter("error")!=null)
 			out.println("<span id='error'>Erreur dans le login ou le mot de passe</span>");

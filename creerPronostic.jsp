@@ -19,9 +19,12 @@
 	});
 </script>
 
-<form id="pronostic" method="POST" action="AjoutPronostic">
+<a id="prev" href='marches'>Retour aux marchés</a>
 
 <h3>Création d'un Pronostic</h3>
+
+<form id="pronostic" method="POST" action="AjoutPronostic">
+
 <%
 	if(request.getParameter("succes")!=null)
 		out.println("<span id='success'>L'ajout s'est bien déroulé</span>");
