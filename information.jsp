@@ -76,7 +76,7 @@
 			out.println("<td><form>");
 			out.println("<input type=number size=2 /></td>");
 			out.println("<td><input type=number size=2 /></td>");
-			out.println("</tr><tr>");
+			out.println("</tr><tr class='empty'>");
 			out.println("<td colspan='3'><input type=submit value=acheter /></td></tr>");
 	
 		}
