@@ -21,7 +21,7 @@
 	    <div id="wrapper">
 	        <div id="header">
 	            <div class="left">
-	                <img src="Images/titre.png" alt="IM - Marché de l'Information" />
+	                <a href='index'><img src="Images/titre.png" alt="IM - Marché de l'Information" /></a>
 	            </div>
 	            <div class="right">
 	                <img src="Images/user-group.gif" alt="icone" />
@@ -38,7 +38,7 @@
 				       		ResultSet rs 	= 	st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 				       		
 				       		rs.next();
-	            			out.print("Connecté sous le nom \" " + rs.getString("n") + " \" (<a href='Conn?deco=1'>Déconnexion</a>)");
+	            			out.print("Connecté sous le nom « " + rs.getString("n") + " » (<a href='Conn?deco=1'>Déconnexion</a>)");
 							con.close();
 	            		}
 	            	%>

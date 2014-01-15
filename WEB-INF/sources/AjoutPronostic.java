@@ -19,7 +19,7 @@ public class AjoutPronostic extends HttpServlet
 
 			PreparedStatement pst = null;
 
-		    String insert = "INSERT INTO markets SELECT MAX(idMarket)+1, ?, ?, ?, date('now') FROM markets;";
+		    String insert = "INSERT INTO markets SELECT MAX(idMarket)+1, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), date('now') FROM markets;";
 
 		    try {
 				Context initCtx = 	new InitialContext();
@@ -36,7 +36,10 @@ public class AjoutPronostic extends HttpServlet
       			pst.executeUpdate();
 
       			con.close();
-		    } catch (Exception e ) {}
+      			res.sendRedirect("creerPronostic?succes=1");
+		    } catch (Exception e ) {
+		    	e.printStackTrace(res.getWriter());
+		    }
 		}
 	}
 }

@@ -8,7 +8,7 @@
 	function sub(){
 		$( "#datepicker").val(
 			$.datepicker.formatDate(
-				"yy-mm-dd", 
+				"dd/mm/yy", 
 				new Date($( "#datepicker" ).val())
 			)
 		);
@@ -19,9 +19,13 @@
 	});
 </script>
 
-<h3>Création d'un Pronostic</h3>
+<form id="pronostic" method="POST" action="AjoutPronostic">
 
-<form id="pronostic" method="POST" action="AjoutPronostic" onsubmit="sub();">
+<h3>Création d'un Pronostic</h3>
+<%
+	if(request.getParameter("succes")!=null)
+		out.println("<span id='success'>L'ajout s'est bien déroulé</span>");
+%>
 
 <div>
 	<label for="libelle">Libellé :</label>
@@ -35,7 +39,7 @@
 
 <div>
 	<label for="dateFin">Date de fin :</label>
-	<input type="text" id="datepicker" name="dateFin" />
+	<input type="text" id="datepicker" name="dateFin" onchange="sub();" />
 </div>
 
 <input type="submit" value="Valider" />
