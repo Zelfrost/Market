@@ -31,7 +31,7 @@ CREATE TABLE markets
     libelle                     VARCHAR(300),
     libelleInverse              VARCHAR(300),
     dateFin                     DATE,
-    publication                 DATETIME,
+    publication                 TIMESTAMP,
 
     CONSTRAINT pk_market        PRIMARY KEY (idMarket)
 );
@@ -51,7 +51,7 @@ CREATE TABLE transactions
     nombreRestant               NUMERIC(10),
     prix                        NUMERIC(10),
     choix                       NUMERIC(1),
-    dateTrans                   DATETIME,
+    dateTrans                   TIMESTAMP,
 
     CONSTRAINT pk_transactions  PRIMARY KEY (idTrans),
     CONSTRAINT fk_markets       FOREIGN KEY (marketID)  REFERENCES markets(idMarket)
