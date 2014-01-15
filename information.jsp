@@ -9,7 +9,7 @@
 						?Integer.parseInt(request.getParameter("choix"))
 						:0;
 	
-    Context initCtx = 	new InitialContext();
+    Context initCtx 	= 	new InitialContext();
     Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
     DataSource ds 	= 	(DataSource) envCtx.lookup("base");
     Connection con 	= 	ds.getConnection();
@@ -56,17 +56,30 @@
 		<th colspan="3">Acheteurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT userID, nom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT userID, nom, prenom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas d'acheteurs</td></tr>");
 	else {
 		do {
 			out.println("<tr>");
-			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
+			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom") + " " + rs.getString("prenom"):"---") + "</td>");
 			out.println("<td>" + rs.getString("somme") + " bons</td>");
 			out.println("<td>" + rs.getString("prix") + "€</td>");
 			out.println("</tr>");
 		} while(rs.next());
+				
+		if ( request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User")){
+				
+			rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+				       		
+	        	out.println("<tr><td>" + rs.getString("n") + "</td>");
+			out.println("<td><form>");
+			out.println("<input type=number size=2 /></td>");
+			out.println("<td><input type=number size=2 /></td>");
+			out.println("</tr><tr>");
+			out.println("<td colspan='3'><input type=submit value=acheter /></td></tr>");
+	
+		}
 	}
 %>
 </table>
