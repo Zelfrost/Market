@@ -15,7 +15,8 @@
     Connection con 	= 	ds.getConnection();
 
 	Statement st 	= 	con.createStatement();
-	ResultSet rs 	= 	st.executeQuery("SELECT libelle, libelleInverse, strftime('%d/%m/%Y', dateFin) as d FROM markets WHERE idMarket='" + id +"';");
+	ResultSet rs 	= 	st.executeQuery("SELECT libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d FROM markets WHERE idMarket='" + id +"';");
+	rs.next();
 	String libelle 	= 	(choix==0)
 						?rs.getString("libelle")
 						:rs.getString("libelleInverse");
@@ -36,7 +37,7 @@
 		<th colspan="3">Vendeurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT userID, nom, prenom, count(*) AS nbre, SUM(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom) AS nom, MIN(prenom) AS prenom, count(*) AS nbre, SUM(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
 
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas de vendeurs</td></tr>");
@@ -56,7 +57,7 @@
 		<th colspan="3">Acheteurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT userID, nom, prenom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom) AS nom, MIN(prenom) AS prenom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas d'acheteurs</td></tr>");
 	else {
@@ -71,8 +72,9 @@
 		if ( request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User")){
 				
 			rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-				       		
-	        	out.println("<tr><td>" + rs.getString("n") + "</td>");
+			rs.next();
+
+	        out.println("<tr><td>" + rs.getString("n") + "</td>");
 			out.println("<td><form>");
 			out.println("<input type=number size=2 /></td>");
 			out.println("<td><input type=number size=2 /></td>");
@@ -81,6 +83,7 @@
 	
 		}
 	}
+	con.close();
 %>
 </table>
 

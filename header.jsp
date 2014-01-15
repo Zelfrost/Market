@@ -37,7 +37,9 @@
 				        	Statement st 	= 	con.createStatement();
 				       		ResultSet rs 	= 	st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 				       		
+				       		rs.next();
 	            			out.print("Connecté sous le nom \" " + rs.getString("n") + " \" (<a href='Conn?deco=1'>Déconnexion</a>)");
+							con.close();
 	            		}
 	            	%>
 	            </div>

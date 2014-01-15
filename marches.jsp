@@ -19,6 +19,7 @@
 
 	    Statement st 	= 	con.createStatement();
 	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin > date('now');");
+	    rs.next();
 
 	    int nbpages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
 
