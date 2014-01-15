@@ -6,6 +6,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="CSS/resetCSS.css" />
+		<link rel="stylesheet" href="CSS/jquery-ui.css" />
 		<link rel="stylesheet" href="CSS/index.css" />
 <%
 	String titre 	= "Votre marché de l'Information";
