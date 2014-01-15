@@ -21,7 +21,7 @@
 
 <h3>Création d'un Pronostic</h3>
 
-<form id="pronostic" method="POST" action="servlet/pronostic" onsubmit="sub();">
+<form id="pronostic" method="POST" action="AjoutPronostic" onsubmit="sub();">
 
 <div>
 	<label for="libelle">Libellé :</label>

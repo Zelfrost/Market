@@ -210,7 +210,7 @@ body {
     width: 40%;
     height: 100px;
 }
-#body form input {
+#body form#conn input, #body form#pronostic input {
     display: inline-block;
     width: 175px;
 }
