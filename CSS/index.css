@@ -195,6 +195,23 @@ body {
     color: #cc0000;
 }
 
+#body form h3 {
+    margin-bottom: 10px;
+}
+#body form span#error {
+    display: inline-block;
+    margin-bottom: 20px;
+
+    color: #FF0000;
+    font-weight: bold;
+}
+#body form span#success {
+    display: inline-block;
+    margin-bottom: 20px;
+
+    color: #3fd16a;
+    font-weight: bold;
+}
 #body form div {
     margin-bottom: 3px;
     margin-left: 15px;
@@ -217,12 +234,6 @@ body {
 #body form#pronostic input[type="submit"] {
     width: 80px;
     margin-left: 265px;
-}
-#body form#conn #error {
-    display: none;
-    margin-bottom: 15px;
-
-    color: #FF0000;
 }
 #body form#conn input[type="submit"] {
     width: 80px;
