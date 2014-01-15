@@ -21,8 +21,9 @@
         </div>
         <div class="body">
             <form method="POST" action="">
-            <input type="text" name="search" />
-            <input type="submit" value="Valider">
+                <input type="text" name="search" />
+                <input type="submit" value="Valider">
+            </form>
         </div>
     </div>
      
