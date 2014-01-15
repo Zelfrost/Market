@@ -45,7 +45,7 @@
 		<th>Taux</th>
 	</tr>
 	<%
-		rs 			= st.executeQuery("SELECT idMarket, libelle, strftime('%d/%m/%Y', dateFin) AS d FROM markets WHERE dateFin > date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
+		rs 			= st.executeQuery("SELECT idMarket, libelle, to_char(dateFin, 'DD/MM/YYYY') as d FROM markets WHERE dateFin > date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
 		String id;
 		Statement stTaux;
 		ResultSet rsTaux;
