@@ -68,21 +68,22 @@
 			out.println("<td>" + rs.getString("prix") + "€</td>");
 			out.println("</tr>");
 		} while(rs.next());
+	}		
+	if ( request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User")){
 				
-		if ( request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User")){
-				
-			rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-			rs.next();
-
-	        out.println("<tr><td>" + rs.getString("n") + "</td>");
-			out.println("<td><form>");
-			out.println("<input type=number size=2 /></td>");
-			out.println("<td><input type=number size=2 /></td>");
-			out.println("</tr><tr class='empty'>");
-			out.println("<td colspan='3'><input type=submit value=acheter /></td></tr>");
+		rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+		rs.next();
 	
-		}
+	        out.println("<tr><td>" + rs.getString("n") + "</td>");
+		out.println("<td><form id=acheter method=post action=AcheterBons>");
+		out.println("<input name=nbBons type=number size=2 /></td>");
+		out.println("<td><input name=prixBons type=number size=2 /></td>");
+		out.println("<input type=hidden name=login value=" + request.getUserPrincipal().getName() + "/>");
+		out.println("</tr><tr class='empty'>");
+		out.println("<td colspan='3'><input type=submit value=acheter /></td></tr>");
+	
 	}
+	
 	con.close();
 %>
 </table>
