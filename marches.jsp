@@ -85,8 +85,12 @@
 		    out.println(taux + "%</td>");
 		    out.println("</tr>");
 		}
+		out.println("</table>");
+
+		rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE dateFin<DATE('now');");
+		if( rs.next() && rs.getInt("c")>0 )
+			out.println("<a href='marchesFinis'>Voir les marchés terminés</a>");
 		con.close();
 	%>
-</table>
 
 <jsp:include page="footer.jsp" />
