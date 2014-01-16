@@ -2,9 +2,11 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<!DOCTYPE HTML>
 <html>
 	<head>
+		<%@ page contentType="text/html;charset=UTF-8" %>
+		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="CSS/resetCSS.css" />
 		<link rel="stylesheet" href="CSS/jquery-ui.css" />
 		<link rel="stylesheet" href="CSS/index.css" />
@@ -35,7 +37,7 @@
 				            Connection con 	= 	ds.getConnection();
 
 				        	Statement st 	= 	con.createStatement();
-				       		ResultSet rs 	= 	st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+				       		ResultSet rs 	= 	st.executeQuery("SELECT (prenom || ' ' || nom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 				       		
 				       		rs.next();
 	            			out.print("Connecté sous le nom « " + rs.getString("n") + " » (<a href='Conn?deco=1'>Déconnexion</a>)");

@@ -244,6 +244,12 @@ body {
     width: 40%;
     height: 50px;
 }
+#body form input[type="number"] {
+    width: 40%;
+}
+#body form input[type="number"].first {
+    width: 27%;
+}
 #body form#conn input, #body form#pronostic input {
     display: inline-block;
     width: 175px;

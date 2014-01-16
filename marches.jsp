@@ -4,7 +4,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:include page="header.jsp?titre=Les marchés" />
 
-<div id="prono"><a href="creerPronostic">Créer un marché</a></div>
+<%
+	if(request.isUserInRole("Admin") || request.isUserInRole("MarketMaker"))
+		out.println("<div id='prono'><a href='creerPronostic'>Créer un marché</a></div>");
+%>
 <h2>Marchés en cours</h2>
 
 <div id="selectpage">

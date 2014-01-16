@@ -13,28 +13,39 @@ public class AcheterBons extends HttpServlet
 		throws ServletException, IOException
 	{
 
-		if (req.getParameter("nbBons") != null && req.getParameter("prixBons") != null && req.getParameter("login"))
+		if (req.getParameter("nbBons") != null && req.getParameter("prixBons") != null)
 		{
-			
-			PreparedStatement pst = null;
+			String login 			= req.getUserPrincipal().getName();
 
-		   	String insert = "UPDATE users SET argent = argent - " + req.getParameter("nbBons") + " * " + req.getParameter("prixBons") + " WHERE login=" + req.getParameter("login")	
 			try {
-				Context initCtx = new InitialContext();
+					Context initCtx = new InitialContext();
 		          	Context envCtx 	= (Context) initCtx.lookup("java:comp/env");
-		            	DataSource ds 	= (DataSource) envCtx.lookup("base");
-		            	Connection con 	= ds.getConnection();
+	            	DataSource ds 	= (DataSource) envCtx.lookup("base");
+	            	Connection con 	= ds.getConnection();
 
-			        pst = con.prepareStatement(insert);
+	            	Statement st 	= con.createStatement();
+	            	ResultSet rs 	= st.executeQuery("SELECT idUser, argent FROM users WHERE login='" + req.getUserPrincipal().getName() + "'");
+	            	rs.next();
 
-			        pst.setString(1, req.getParameter("libelle"));
-			        pst.setString(2, req.getParameter("libelleInverse"));
-			        pst.setString(3, req.getParameter("dateFin"));
+	            	String idUser	= rs.getString("idUser");
+	            	int somme		= Integer.parseInt(req.getParameter("nbBons")) * Integer.parseInt(req.getParameter("prixBons"));
 
-      				pst.executeUpdate();
+	            	if(rs.getInt("argent") >= somme) {
+		            	String argent	= "UPDATE users SET argent = argent - " + somme + " WHERE login='" + login + "';";
+		            	String trans	= "INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + req.getParameter("nbBons") + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;";
+				        
+		            	st.executeUpdate(argent);
+		            	st.executeUpdate(trans);
 
-      				con.close();
-		    	} catch (Exception e ) {}			
+      					con.close();
+	      				res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&success=1");
+	      			} else {
+      					con.close();
+	      				res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=1");
+	      			}
+		    	} catch (Exception e ) {
+		    		e.printStackTrace(res.getWriter());
+		    	}			
 		}
 	}
 }	

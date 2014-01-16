@@ -37,14 +37,14 @@
 		<th colspan="3">Vendeurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom) AS nom, MIN(prenom) AS prenom, count(*) AS nbre, SUM(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(*) AS nbre, SUM(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
 
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas de vendeurs</td></tr>");
 	else {
 		do {
 			out.println("<tr>");
-			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom") + " " + rs.getString("prenom"):"---") + "</td>");
+			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
 			out.println("<td>" + rs.getString("somme") + " bons</td>");
 			out.println("<td>" + rs.getString("prix") + "€</td>");
 			out.println("</tr>");
@@ -52,18 +52,23 @@
 	}
 %>
 </table>
+<form id='acheter' method='POST' action='AcheterBons'>
+<%
+	out.println("<input type='hidden' name='id' value='" + request.getParameter("id") + "'/>");
+	out.println("<input type='hidden' name='choix' value='" + choix + "'/>");
+%>
 <table class="vert">
 	<tr>
 		<th colspan="3">Acheteurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom) AS nom, MIN(prenom) AS prenom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas d'acheteurs</td></tr>");
 	else {
 		do {
 			out.println("<tr>");
-			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom") + " " + rs.getString("prenom"):"---") + "</td>");
+			out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
 			out.println("<td>" + rs.getString("somme") + " bons</td>");
 			out.println("<td>" + rs.getString("prix") + "€</td>");
 			out.println("</tr>");
@@ -74,19 +79,17 @@
 		rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 		rs.next();
 	
-	        out.println("<tr><td>" + rs.getString("n") + "</td>");
-		out.println("<td><form id=acheter method=post action=AcheterBons>");
-		out.println("<input name=nbBons type=number size=2 /></td>");
-		out.println("<td><input name=prixBons type=number size=2 /></td>");
-		out.println("<input type=hidden name=login value=" + request.getUserPrincipal().getName() + "/>");
-		out.println("</tr><tr class='empty'>");
-		out.println("<td colspan='3'><input type=submit value=acheter /></td></tr>");
+	    out.println("<tr><td>" + rs.getString("n") + "</td>");
+		out.println("<td><input name='nbBons' type='number' class='first' /> bons</td>");
+		out.println("<td><input name='prixBons' type='number' />€</td></tr>");
+		out.println("<tr class='empty'><td colspan='3'><input type='submit' value='acheter' /></td></tr>");
 	
 	}
 	
 	con.close();
 %>
 </table>
+</form>
 
 
 

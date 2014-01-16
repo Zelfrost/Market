@@ -1,6 +1,6 @@
+DROP TABLE IF EXISTS    transactions;
 DROP TABLE IF EXISTS    users;
 DROP TABLE IF EXISTS    markets;
-DROP TABLE IF EXISTS    transactions;
 
 
 CREATE TABLE  users (
@@ -32,8 +32,12 @@ CREATE TABLE markets
     libelleInverse              VARCHAR(300),
     dateFin                     DATE,
     publication                 TIMESTAMP,
+    userID                      INT,
 
-    CONSTRAINT pk_market        PRIMARY KEY (idMarket)
+    CONSTRAINT pk_market        PRIMARY KEY (idMarket),
+    CONSTRAINT fk_user          FOREIGN KEY (userID)    REFERENCES users(idUser)
+                                ON UPDATE CASCADE
+                                ON DELETE SET NULL
 );
 
 INSERT INTO markets(idMarket, libelle, libelleInverse, dateFin, publication) 

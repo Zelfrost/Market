@@ -90,6 +90,8 @@
         <web-resource-collection>
             <web-resource-name>Offline</web-resource-name>
             <url-pattern>/Conn</url-pattern>
+            <url-pattern>/AjoutPronostic</url-pattern>
+            <url-pattern>/AcheterBons</url-pattern>
         </web-resource-collection>
 
         <auth-constraint>
