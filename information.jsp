@@ -37,7 +37,7 @@
 		<th colspan="3">Vendeurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(*) AS nbre, SUM(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombre) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
 
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas de vendeurs</td></tr>");
@@ -62,7 +62,7 @@
 		<th colspan="3">Acheteurs</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(*) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY prix ORDER BY prix DESC");
+	rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombre) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
 	if(!rs.next())
 		out.println("<tr class='empty'><td colspan='3'>Pas d'acheteurs</td></tr>");
 	else {
@@ -81,7 +81,7 @@
 	
 	    out.println("<tr><td>" + rs.getString("n") + "</td>");
 		out.println("<td><input name='nbBons' type='number' class='first' /> bons</td>");
-		out.println("<td><input name='prixBons' type='number' />€</td></tr>");
+		out.println("<td><input name='prixBons' type='number' /></td></tr>");
 		out.println("<tr class='empty'><td colspan='3'><input type='submit' value='acheter' /></td></tr>");
 	
 	}

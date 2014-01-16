@@ -245,10 +245,10 @@ body {
     height: 50px;
 }
 #body form input[type="number"] {
-    width: 40%;
+    width: 100%;
 }
 #body form input[type="number"].first {
-    width: 27%;
+    width: 33%;
 }
 #body form#conn input, #body form#pronostic input {
     display: inline-block;

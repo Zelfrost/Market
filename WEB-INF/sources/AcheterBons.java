@@ -29,15 +29,30 @@ public class AcheterBons extends HttpServlet
 
 	            	String idUser	= rs.getString("idUser");
 	            	int somme		= Integer.parseInt(req.getParameter("nbBons")) * Integer.parseInt(req.getParameter("prixBons"));
-
+	            	int nbBons		= Integer.parseInt(req.getParameter("nbBons"));
+	            	String argent = rs.getString("argent");
 	            	if(rs.getInt("argent") >= somme) {
-		            	String argent	= "UPDATE users SET argent = argent - " + somme + " WHERE login='" + login + "';";
-		            	String trans	= "INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + req.getParameter("nbBons") + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;";
-				        
-		            	st.executeUpdate(argent);
-		            	st.executeUpdate(trans);
-
-      					con.close();
+	            		rs 			= st.executeQuery("SELECT idTrans, userID, prix ,nombreRestant FROM transactions WHERE 100-prix < " + req.getParameter("prixBons") + " AND choix = " + ((Integer.parseInt(req.getParameter("choix"))==0)?1:0) + " ORDER BY prix DESC;");
+	            		if(rs.next()) {
+	            			Statement upST	= con.createStatement();
+	            			int retraitBons;
+	            			do {
+	            				retraitBons	= (nbBons > rs.getInt("nombreRestant")?rs.getInt("nombreRestant"):nbBons);
+	            				upST		= con.createStatement();
+	            				upST.executeUpdate("UPDATE transactions SET nombreRestant = nombreRestant - " + retraitBons + " WHERE idTrans = " + rs.getString("idTrans"));
+	            				upST.executeUpdate("UPDATE users SET argent = argent - " + (rs.getInt("prix") * retraitBons) + " WHERE idUser = " + rs.getString("userID"));
+	            				upST.executeUpdate("UPDATE users SET argent = argent - " + (rs.getInt("prix") * retraitBons) + " WHERE idUser = " + idUser);
+	            				nbBons		-= retraitBons;
+	            				if(nbBons == 0)
+	            					break;
+	            			} while(rs.next());
+	            			if(nbBons>0) {
+	            				st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
+	            			}
+	            		} else {
+			            	st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + req.getParameter("nbBons") + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
+			            }
+	      				con.close();
 	      				res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&success=1");
 	      			} else {
       					con.close();
