@@ -9,16 +9,17 @@ CREATE TABLE  users (
     prenom                      VARCHAR(30),
     login                       VARCHAR(20),
     pass                        VARCHAR(20),
+    mail                        VARCHAR(40),
     argent                      NUMERIC(10),
     role                        VARCHAR(20),
     
     CONSTRAINT pk_user          PRIMARY KEY (idUser)
 );
 
-INSERT INTO users VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', '10000', 'Admin');
-INSERT INTO users VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', '10000', 'Admin');
-INSERT INTO users VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '10000', 'MarketMaker');
-INSERT INTO users VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', '10000', 'User');
+INSERT INTO users VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', 'deconinck.damien@gmail.com', '10000', 'Admin');
+INSERT INTO users VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', 'godart.christophe@gmail.com', '10000', 'Admin');
+INSERT INTO users VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', 'vanhoutte.mickael@gmail.com', '10000', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', 'weng.tom@gmail.com', '10000', 'User');
 
 
 CREATE TABLE markets
@@ -38,9 +39,9 @@ CREATE TABLE markets
 );
 
 INSERT INTO markets 
-    VALUES(0, 'Monsieur Beaufils mettra un 20 en projet', 'Monsieur Beaufils ne mettra aucun 20 en projet', '2014-04-01',  CURRENT_TIMESTAMP, 0, NULL);
+    VALUES(0, 'Monsieur Beaufils mettra un 20 en projet', 'Monsieur Beaufils ne mettra aucun 20 en projet', '2014-04-01',  CURRENT_TIMESTAMP, 0, 2);
 INSERT INTO markets
-    VALUES(1, 'Demode arrivera en retard a tous les cours cette annee', 'Demode arrivera a temps a au moins un cours cette annee', '2014-07-01', CURRENT_TIMESTAMP, 1, NULL);
+    VALUES(1, 'Demode arrivera en retard a tous les cours cette annee', 'Demode arrivera a temps a au moins un cours cette annee', '2014-07-01', CURRENT_TIMESTAMP, 1, 2);
 
 
 CREATE TABLE transactions

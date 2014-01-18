@@ -46,9 +46,7 @@ public class AcheterBons extends HttpServlet
 	            				if(nbBons == 0)
 	            					break;
 	            			} while(rs.next());
-	            			if(nbBons>0) {
-	            				st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
-	            			}
+	            			st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
 	            		} else {
 			            	st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + req.getParameter("nbBons") + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
 			            }

@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import java.sql.*;
 import javax.sql.*;
 import javax.naming.*;
+import org.apache.commons.lang.StringEscapeUtils;
 
 @WebServlet("/AjoutPronostic")
 public class AjoutPronostic extends HttpServlet
@@ -19,7 +20,7 @@ public class AjoutPronostic extends HttpServlet
 
 			PreparedStatement pst = null;
 
-		    String insert 		= "INSERT INTO markets SELECT MAX(idMarket)+1, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), CURRENT_TIMESTAMP, ?::INTEGER FROM markets;";
+		    String insert 		= "INSERT INTO markets SELECT MAX(idMarket)+1, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), CURRENT_TIMESTAMP, ?::INTEGER, 2 FROM markets;";
 
 		    try {
 				Context initCtx = 	new InitialContext();
@@ -33,7 +34,6 @@ public class AjoutPronostic extends HttpServlet
 	            rs.next();
 
 		        pst = con.prepareStatement(insert);
-
 		        pst.setString(1, req.getParameter("libelle"));
 		        pst.setString(2, req.getParameter("libelleInverse"));
 		        pst.setString(3, req.getParameter("dateFin"));

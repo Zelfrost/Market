@@ -87,6 +87,7 @@
             <url-pattern>/creerPronostic</url-pattern>
             <url-pattern>/AjoutPronostic</url-pattern>
             <url-pattern>/resultat</url-pattern>
+            <url-pattern>/Result</url-pattern>
         </web-resource-collection>
 
         <auth-constraint>

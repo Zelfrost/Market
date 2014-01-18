@@ -2,7 +2,6 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.WebServlet;
-import java.sql.*;
 
 @WebServlet("/Conn")
 public class Conn extends HttpServlet

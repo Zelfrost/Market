@@ -89,6 +89,8 @@ body {
 }
 
 #body a#prev {
+    display: block;
+    margin-bottom: 30px;
     color: #FF6600;
     text-decoration: none;
 }
@@ -111,6 +113,9 @@ body {
 
 #body a + h3 {
     margin: 30px 0 10px 0;
+}
+#body #success + h3 {
+    margin: 0 0 10px 0;
 }
 #body h3 {
     margin: 10px 0 10px 0px;
@@ -248,7 +253,10 @@ body {
     color: #FF0000;
     font-weight: bold;
 }
-#body form span#success {
+#body #prev + span#success {
+    margin-bottom: 0;
+}
+#body span#success {
     display: inline-block;
     margin-bottom: 20px;
 
@@ -288,7 +296,21 @@ body {
     width: 80px;
     margin-left: 250px;
 }
-
+#body form#resultat {
+    display: inline-block;
+    line-height: 30px;
+}
+#body form#resultat input[type='radio'] {
+    margin-left: 20px;
+    margin-top: 10px;
+    vertical-align: top;
+}
+#body form#resultat input + span {
+    text-decoration: underline;
+}
+#body form#resultat input[type='submit'] {
+    margin-left: 30px;
+}
 
 #body .right {
     display: inline-block;

@@ -5,11 +5,12 @@
 <jsp:include page="header.jsp?titre=Les marchés" />
 
 <%
-	if(request.isUserInRole("Admin") || request.isUserInRole("MarketMaker"))
-		out.println("<div id='prono'><a href='creerPronostic'>Créer un marché</a></div>");
-	
 	String old = request.getParameter("old");
 	String toOld = "old=1&";
+
+	if((request.isUserInRole("Admin") || request.isUserInRole("MarketMaker")) && old==null)
+		out.println("<div id='prono'><a href='creerPronostic'>Créer un marché</a></div>");
+	
 	out.println( (old==null)?"<h2>Marchés en cours</h2>":"<h2>Marchés terminés</h2>" );
 %>
 
@@ -25,7 +26,7 @@
         Connection con 	= 	ds.getConnection();
 
 	    Statement st 	= 	con.createStatement();
-	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin " + ((old==null)?">=":"<") + " date('now') AND resultat=2;");
+	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin " + ((old==null)?">=":"<") + " date('now');");
 	    rs.next();
 
 	    int nbpages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
@@ -52,7 +53,7 @@
 		<th>Taux</th>
 	</tr>
 	<%
-		rs 			= st.executeQuery("SELECT idMarket, libelle, to_char(dateFin, 'DD/MM/YYYY') as d FROM markets WHERE dateFin " + ((old==null)?">=":"<") + " date('now') AND resultat=2 ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
+		rs 			= st.executeQuery("SELECT idMarket, libelle, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM markets WHERE dateFin " + ((old==null)?">=":"<") + " date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
 		String id;
 		Statement stTaux;
 		ResultSet rsTaux;
@@ -60,7 +61,7 @@
 		while (rs.next()) {
 			id 		= rs.getString("idMarket");
 		    out.println("<tr>");
-		    out.println("<td><a href='information?id=" + id + "'>" + rs.getString("libelle") + "</a></td>");
+		    out.println("<td><a " + ((!rs.getString("resultat").equals("2"))?"style='color: green;'":"") + " href='information?id=" + id + "'>" + ((rs.getString("resultat").equals("1"))?rs.getString("libelleInverse"): rs.getString("libelle")) + "</a></td>");
 		    out.println("<td>" + rs.getString("d") + "</td>");
 
 		    stTaux 	= con.createStatement();

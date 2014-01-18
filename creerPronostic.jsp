@@ -23,7 +23,7 @@
 
 <h3>Création d'un Pronostic</h3>
 
-<form id="pronostic" method="POST" action="AjoutPronostic">
+<form accept-charset="ISO-8859-1" id="pronostic" method="POST" action="AjoutPronostic">
 
 <%
 	if(request.getParameter("succes")!=null)
