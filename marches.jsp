@@ -7,8 +7,11 @@
 <%
 	if(request.isUserInRole("Admin") || request.isUserInRole("MarketMaker"))
 		out.println("<div id='prono'><a href='creerPronostic'>Créer un marché</a></div>");
+	
+	String old = request.getParameter("old");
+	String toOld = "old=1&";
+	out.println( (old==null)?"<h2>Marchés en cours</h2>":"<h2>Marchés terminés</h2>" );
 %>
-<h2>Marchés en cours</h2>
 
 <div id="selectpage">
     <%
@@ -22,7 +25,7 @@
         Connection con 	= 	ds.getConnection();
 
 	    Statement st 	= 	con.createStatement();
-	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin > date('now');");
+	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin " + ((old==null)?">=":"<") + " date('now') AND resultat=2;");
 	    rs.next();
 
 	    int nbpages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
@@ -30,15 +33,15 @@
 	    if( nbpages > 0 )
 		    out.println("pages : ");
 	    if( pages != 1 )
-		    out.println("(<a href='marches?page=" + (pages-1) + "'>Précédent</a>)");
+		    out.println("(<a href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
 	    for( int i = 1; i <= nbpages; i++ ) {
 		    if( i != pages )
-			    out.println("<a href='marches?page=" + i + "'>" + i + "</a>");
+			    out.println("<a href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
 		    else
 			    out.println("<span>" + i + "</span>");
 	    }
 	    if( pages != nbpages )
-		    out.println("(<a href='marches?page=" + (pages+1) + "'>Suivant</a>)");
+		    out.println("(<a href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
 	%>
 </div>
 
@@ -49,7 +52,7 @@
 		<th>Taux</th>
 	</tr>
 	<%
-		rs 			= st.executeQuery("SELECT idMarket, libelle, to_char(dateFin, 'DD/MM/YYYY') as d FROM markets WHERE dateFin > date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
+		rs 			= st.executeQuery("SELECT idMarket, libelle, to_char(dateFin, 'DD/MM/YYYY') as d FROM markets WHERE dateFin " + ((old==null)?">=":"<") + " date('now') AND resultat=2 ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
 		String id;
 		Statement stTaux;
 		ResultSet rsTaux;
@@ -91,9 +94,9 @@
 		}
 		out.println("</table>");
 
-		rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE dateFin<DATE('now');");
+		rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE " + ((old==null)?"dateFin<DATE('now')":"dateFin>=DATE('now')") + ";");
 		if( rs.next() && rs.getInt("c")>0 )
-			out.println("<a href='marchesFinis' class='orange' >Voir les marchés terminés</a>");
+			out.println("<a href='marches?" + ((old==null)?"old=1":"") + "' class='orange' >Voir les marchés " + ((old==null)?"terminés":"en cours") + "</a>");
 		con.close();
 	%>
 

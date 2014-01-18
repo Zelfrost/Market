@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>  
+<?xml version="1.0" encoding="ISO-8859-1" ?>
   
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"  
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"  
-    version="2.4">  
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
     
-	<display-name>Marché de l'Information</display-name>
-	<description>Application de gestion d'un marché de l'Information</description>
-	
-	<servlet>
+    <display-name>Marché de l'Information</display-name>
+    <description>Application de gestion d'un marché de l'Information</description>
+        
+    <servlet>
         <servlet-name>index</servlet-name>
         <jsp-file>/index.jsp</jsp-file>
     </servlet>
     
-	<servlet>
+    <servlet>
         <servlet-name>marches</servlet-name>
         <jsp-file>/marches.jsp</jsp-file>
     </servlet>
@@ -31,6 +31,11 @@
     <servlet>
         <servlet-name>creerPronostic</servlet-name>
         <jsp-file>/creerPronostic.jsp</jsp-file>
+    </servlet>
+        
+    <servlet>
+        <servlet-name>resultat</servlet-name>
+        <jsp-file>/resultat.jsp</jsp-file>
     </servlet>
     
     
@@ -58,6 +63,11 @@
         <servlet-name>creerPronostic</servlet-name>
         <url-pattern>/creerPronostic</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>resultat</servlet-name>
+        <url-pattern>/resultat</url-pattern>
+    </servlet-mapping>
 
 
     <login-config>
@@ -76,6 +86,7 @@
             <web-resource-name>NotUser</web-resource-name>
             <url-pattern>/creerPronostic</url-pattern>
             <url-pattern>/AjoutPronostic</url-pattern>
+            <url-pattern>/resultat</url-pattern>
         </web-resource-collection>
 
         <auth-constraint>

@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS    transactions;
-DROP TABLE IF EXISTS    users;
 DROP TABLE IF EXISTS    markets;
+DROP TABLE IF EXISTS    users;
 
 
 CREATE TABLE  users (
@@ -15,14 +15,10 @@ CREATE TABLE  users (
     CONSTRAINT pk_user          PRIMARY KEY (idUser)
 );
 
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', '10000', 'Admin');
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', '10000', 'Admin');
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '10000', 'MarketMaker');
-INSERT INTO users(idUser, nom, prenom, login, pass, argent, role) 
-    VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', '10000', 'User');
+INSERT INTO users VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', '10000', 'Admin');
+INSERT INTO users VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', '10000', 'Admin');
+INSERT INTO users VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '10000', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', '10000', 'User');
 
 
 CREATE TABLE markets
@@ -33,6 +29,7 @@ CREATE TABLE markets
     dateFin                     DATE,
     publication                 TIMESTAMP,
     userID                      INT,
+    resultat                    NUMERIC(1),
 
     CONSTRAINT pk_market        PRIMARY KEY (idMarket),
     CONSTRAINT fk_user          FOREIGN KEY (userID)    REFERENCES users(idUser)
@@ -40,10 +37,10 @@ CREATE TABLE markets
                                 ON DELETE SET NULL
 );
 
-INSERT INTO markets(idMarket, libelle, libelleInverse, dateFin, publication) 
-    VALUES(0, 'Monsieur Beaufils mettra un 20 en projet', 'Monsieur Beaufils ne mettra aucun 20 en projet', '2014-04-01',  CURRENT_TIMESTAMP);
-INSERT INTO markets(idMarket, libelle, libelleInverse, dateFin, publication) 
-    VALUES(1, 'Demode arrivera en retard a tous les cours cette annee', 'Demode arrivera a temps a au moins un cours cette annee', '2014-07-01',  CURRENT_TIMESTAMP);
+INSERT INTO markets 
+    VALUES(0, 'Monsieur Beaufils mettra un 20 en projet', 'Monsieur Beaufils ne mettra aucun 20 en projet', '2014-04-01',  CURRENT_TIMESTAMP, 0, NULL);
+INSERT INTO markets
+    VALUES(1, 'Demode arrivera en retard a tous les cours cette annee', 'Demode arrivera a temps a au moins un cours cette annee', '2014-07-01', CURRENT_TIMESTAMP, 1, NULL);
 
 
 CREATE TABLE transactions
@@ -66,15 +63,4 @@ CREATE TABLE transactions
                                 ON DELETE SET NULL
 );
 
-INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(0, 0, 0, 10, 50, 0, CURRENT_TIMESTAMP);
-INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(1, 1, 0, 60, 60, 1, CURRENT_TIMESTAMP);
-INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(2, 2, 0, 40, 80, 1, CURRENT_TIMESTAMP);
-INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(3, 3, 0, 20, 80, 1, CURRENT_TIMESTAMP);
-INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(4, 0, 0, 70, 90, 1, CURRENT_TIMESTAMP);
-INSERT INTO transactions(idTrans, userID, marketID, nombre, prix, choix, dateTrans) 
-    VALUES(5, 1, 0, 20, 30, 1, CURRENT_TIMESTAMP);
+INSERT INTO transactions VALUES(0, 0, 0, 0, 0, 0, 0, CURRENT_TIMESTAMP);

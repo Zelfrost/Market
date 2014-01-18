@@ -1,3 +1,7 @@
+html {
+    height: 100%;
+}
+
 body {
 	margin: 0;
 	height: 100%;
@@ -122,6 +126,25 @@ body {
     color: #FF6600;
 }
 
+#body #result {
+    display: inline-block;
+
+    margin-left: 25px;
+    padding: 5px 10px;
+
+    background-color: #DDD;
+    border: 2px solid #EEE;
+    border-radius: 5px;
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.2) inset;
+}
+#body #result:hover {
+    box-shadow: 0px 0px 9px rgba(255, 255, 255, 0.2) inset;
+}
+#body #result a {
+    color: #443399;
+    text-decoration: none;
+}
+
 #body p {
     margin: 5px 5px 10px 20px;
     
@@ -136,6 +159,9 @@ body {
 #body a.orange {
     color: #FF6600;
     text-decoration: none;
+}
+#body a.orange:hover {
+    color: #CD5200;
 }
 #body #selectPage a {
     display: inline-block;
