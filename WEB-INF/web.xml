@@ -37,6 +37,11 @@
         <servlet-name>resultat</servlet-name>
         <jsp-file>/resultat.jsp</jsp-file>
     </servlet>
+        
+    <servlet>
+        <servlet-name>perso</servlet-name>
+        <jsp-file>/perso.jsp</jsp-file>
+    </servlet>
     
     
     <servlet-mapping>
@@ -67,6 +72,11 @@
     <servlet-mapping>
         <servlet-name>resultat</servlet-name>
         <url-pattern>/resultat</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>perso</servlet-name>
+        <url-pattern>/perso</url-pattern>
     </servlet-mapping>
 
 
@@ -104,6 +114,7 @@
             <url-pattern>/Conn</url-pattern>
             <url-pattern>/AjoutPronostic</url-pattern>
             <url-pattern>/AcheterBons</url-pattern>
+            <url-pattern>/perso</url-pattern>
         </web-resource-collection>
 
         <auth-constraint>

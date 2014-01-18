@@ -16,10 +16,11 @@ CREATE TABLE  users (
     CONSTRAINT pk_user          PRIMARY KEY (idUser)
 );
 
-INSERT INTO users VALUES(0, 'Deconinck', 'Damien', 'deconind', 'moi', 'deconinck.damien@gmail.com', '10000', 'Admin');
-INSERT INTO users VALUES(1, 'Godart', 'Christophe', 'godartc', 'moi', 'godart.christophe@gmail.com', '10000', 'Admin');
-INSERT INTO users VALUES(2, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', 'vanhoutte.mickael@gmail.com', '10000', 'MarketMaker');
-INSERT INTO users VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', 'weng.tom@gmail.com', '10000', 'User');
+INSERT INTO users VALUES(0, 'Admin', '', 'admin', 'Rt6cO9f', 'deconinck.damien@gmail.com', '1000000', 'Admin');
+INSERT INTO users VALUES(1, 'Deconinck', 'Damien', 'deconind', 'moi', 'deconinck.damien@gmail.com', '10000', 'Admin');
+INSERT INTO users VALUES(2, 'Godart', 'Christophe', 'godartc', 'moi', 'godart.christophe@gmail.com', '10000', 'Admin');
+INSERT INTO users VALUES(3, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', 'vanhoutte.mickael@gmail.com', '10000', 'MarketMaker');
+INSERT INTO users VALUES(4, 'Weng', 'Tom', 'wengh', 'moi', 'weng.tom@gmail.com', '10000', 'User');
 
 
 CREATE TABLE markets

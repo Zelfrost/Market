@@ -150,6 +150,18 @@ body {
     text-decoration: none;
 }
 
+#body div.label span {
+    display: inline-block;
+    width: 150px;
+}
+#body div.label span:last-child {
+    width: auto;
+    margin-bottom: 5px;
+
+    color: #444;
+    font-weight: bold;
+}
+
 #body p {
     margin: 5px 5px 10px 20px;
     

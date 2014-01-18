@@ -40,7 +40,7 @@
 				       		ResultSet rs 	= 	st.executeQuery("SELECT (prenom || ' ' || nom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 				       		
 				       		rs.next();
-	            			out.print("Connecté sous le nom « <a href='compte'>" + rs.getString("n") + "</a> » (<a href='Conn?deco=1'>Déconnexion</a>)");
+	            			out.print("Connecté sous le nom « <a style='text-decoration: underline;' href='perso'>" + rs.getString("n") + "</a> » (<a href='Conn?deco=1'>Déconnexion</a>)");
 							con.close();
 	            		}
 	            	%>
