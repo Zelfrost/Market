@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:include page="header.jsp?titre=Page personnelle" />
 
+
 <%
 	
     Context initCtx = new InitialContext();
@@ -15,9 +16,13 @@
 	ResultSet rs 	= 	st.executeQuery("SELECT idUser, nom, prenom, mail, argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 	rs.next();
 	String id 		= rs.getString("idUser");
+
+	if(request.getParameter("success")!=null)
+		out.println("<span id='success'>Vos modifications ont bien été prises en compte.</span>");
 %>
 
-<h2><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2>
+<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2>
+<a href='changePerso' class='orange'>Changer mes infos</a>
 
 <div class="label">
 	<span>Login : </span>
@@ -34,19 +39,51 @@
 	<span><%= rs.getString("argent") %>€</span>
 </div>
 
+
+<% 
+	rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle FROM markets WHERE markets.userID=" + id + " AND dateFin=DATE('now') AND resultat=2 GROUP BY idMarket, libelle ORDER BY publication DESC;");
+	if(rs.next() && rs.getInt("nb") != 0 ) {
+%>
+
+<h3>Marchés auxquels vous devez donner un résultat</h3>
+
 <table>
-	<tr>
+	<tr class="th">
 		<th>Libellé</th>
 	</tr>
 <%
-	rs = st.executeQuery("SELECT idMarket, libelle, libelleInverse, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " ORDER BY publication DESC;");
-	while(rs.next()) {
-		out.println("<tr>");
-		out.println( "<td style='text-align: center;'><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "''>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>" );
-		out.println("</tr>");
-	}
+		do {
+			out.println("<tr>");
+			out.println( "<td style='text-align: center;'><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></td>" );
+			out.println("</tr>");
+		} while(rs.next());
 %>
 </table>
+
+
+<%
+	}
+	rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle, libelleInverse, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " GROUP BY idMarket, choix ORDER BY publication DESC;");
+	if(rs.next() && rs.getInt("nb") != 0 ) {
+%>
+
+<h3>Pronostics dans lesquels vous avez investis</h3>
+
+<table>
+	<tr class="th">
+		<th>Libellé</th>
+	</tr>
+<%
+		do {
+			out.println("<tr>");
+			out.println( "<td style='text-align: center;'><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "''>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>" );
+			out.println("</tr>");
+		} while(rs.next());
+%>
+</table>
+<%
+	}
+%>
 
 
 <jsp:include page="footer.jsp" />

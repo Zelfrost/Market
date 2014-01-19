@@ -42,6 +42,11 @@
         <servlet-name>perso</servlet-name>
         <jsp-file>/perso.jsp</jsp-file>
     </servlet>
+        
+    <servlet>
+        <servlet-name>changePerso</servlet-name>
+        <jsp-file>/changePerso.jsp</jsp-file>
+    </servlet>
     
     
     <servlet-mapping>
@@ -77,6 +82,11 @@
     <servlet-mapping>
         <servlet-name>perso</servlet-name>
         <url-pattern>/perso</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>changePerso</servlet-name>
+        <url-pattern>/changePerso</url-pattern>
     </servlet-mapping>
 
 
@@ -115,6 +125,8 @@
             <url-pattern>/AjoutPronostic</url-pattern>
             <url-pattern>/AcheterBons</url-pattern>
             <url-pattern>/perso</url-pattern>
+            <url-pattern>/changePerso</url-pattern>
+            <url-pattern>/changerPerso</url-pattern>
         </web-resource-collection>
 
         <auth-constraint>

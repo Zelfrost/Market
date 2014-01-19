@@ -150,6 +150,19 @@ body {
     text-decoration: none;
 }
 
+#body h2#perso {
+    display: inline-block;
+}
+#body h2#perso + a {
+    margin-left: 20px;
+    text-decoration: underline;
+}
+#body form#changePerso div.label span:first-child {
+    width: 200px;
+}
+#body form#changePerso input[type='submit'] {
+    margin-left: 380px;
+}
 #body div.label span {
     display: inline-block;
     width: 150px;
@@ -160,6 +173,12 @@ body {
 
     color: #444;
     font-weight: bold;
+}
+#body div.label + h3 {
+    margin-top: 50px;
+}
+#body div.label + h3 + table {
+    margin-left: 30px;
 }
 
 #body p {
@@ -258,18 +277,21 @@ body {
 #body form div:first-child {
     margin-top: 30px;
 }
-#body form span#error {
-    display: inline-block;
+#body span#error {
+    display: block;
     margin-bottom: 20px;
 
     color: #FF0000;
     font-weight: bold;
 }
+#body #prev + span#error {
+    color: red;
+}
 #body #prev + span#success {
     margin-bottom: 0;
 }
 #body span#success {
-    display: inline-block;
+    display: block;
     margin-bottom: 20px;
 
     color: #3fd16a;
