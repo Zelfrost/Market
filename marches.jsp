@@ -53,7 +53,7 @@
 		<th>Taux</th>
 	</tr>
 	<%
-		rs 			= st.executeQuery("SELECT idMarket, libelle, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM markets WHERE dateFin " + ((old==null)?">=":"<") + " date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
+		rs 			= st.executeQuery("SELECT idMarket, libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM markets WHERE dateFin " + ((old==null)?">=":"<") + " date('now') ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
 		String id;
 		Statement stTaux;
 		ResultSet rsTaux;
@@ -94,6 +94,7 @@
 		    out.println("</tr>");
 		}
 		out.println("</table>");
+		out.println("En <span style='color: green;'>vert</span>, les pronostics dont le résultat a été ajouté");
 
 		rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE " + ((old==null)?"dateFin<DATE('now')":"dateFin>=DATE('now')") + ";");
 		if( rs.next() && rs.getInt("c")>0 )
