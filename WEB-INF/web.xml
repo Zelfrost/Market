@@ -124,6 +124,7 @@
             <url-pattern>/Conn</url-pattern>
             <url-pattern>/AjoutPronostic</url-pattern>
             <url-pattern>/AcheterBons</url-pattern>
+            <url-pattern>/AcheterBonsQuery</url-pattern>
             <url-pattern>/perso</url-pattern>
             <url-pattern>/changePerso</url-pattern>
             <url-pattern>/changerPerso</url-pattern>

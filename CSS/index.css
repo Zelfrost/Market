@@ -241,8 +241,19 @@ body {
     text-align: left;
     font-weight: bold;
 }
-#body tr:not(.th):not(.empty):hover {
+#body tr:not(.th):not(.empty):not(.form):hover {
     background-color: #EEE;
+}
+#body form table.vert {
+    overflow: hidden;
+}
+#body form table tr.info.last td {
+    display: none;
+}
+#body form table tr.info div {
+    position: relative;
+    left: -1000px;
+    margin: 0;
 }
 #body tr td {
     padding: 5px;
