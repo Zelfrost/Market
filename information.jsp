@@ -3,9 +3,6 @@
 <%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<script src="JS/jquery-1.9.1.js"></script>
-<script src="JS/information.js"></script>
-
 <%
 	if(request.getParameter("id")==null || request.getParameter("id").equals("")) {
 %>
@@ -18,7 +15,7 @@
 							?Integer.parseInt(request.getParameter("choix"))
 							:0;
 		
-	    Context initCtx 	= 	new InitialContext();
+	    Context initCtx = 	new InitialContext();
 	    Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
 	    DataSource ds 	= 	(DataSource) envCtx.lookup("base");
 	    Connection con 	= 	ds.getConnection();
@@ -132,7 +129,7 @@
 					rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 					rs.next();
 				
-				    out.println("<tr class='form'><td>" + rs.getString("n") + "</td>");
+				    out.println("<tr class='form'><td id='nom'>" + rs.getString("n") + "</td>");
 					out.println("<td><input name='nbBons' type='number' class='first' /> bons</td>");
 					out.println("<td><input name='prixBons' type='number' class='second' /></td></tr>");
 					out.println("<tr class='form'><td colspan='3'><input type='submit' value='acheter' /></td></tr>");

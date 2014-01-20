@@ -5,6 +5,9 @@
 <jsp:include page="header.jsp?titre=Page personnelle" />
 
 
+<script src="JS/jquery-1.9.1.js"></script>
+<script src="JS/perso.js"></script>
+
 <%
 	
     Context initCtx = new InitialContext();
@@ -76,7 +79,7 @@
 <%
 		do {
 			out.println("<tr>");
-			out.println( "<td style='text-align: center;'><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "''>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>" );
+			out.println( "<td style='text-align: center;' class='invest'><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "''>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>" );
 			out.println("</tr>");
 		} while(rs.next());
 %>

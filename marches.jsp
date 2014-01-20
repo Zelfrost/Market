@@ -61,7 +61,7 @@
 		while (rs.next()) {
 			id 		= rs.getString("idMarket");
 		    out.println("<tr>");
-		    out.println("<td><a " + ((!rs.getString("resultat").equals("2"))?"style='color: green;'":"") + " href='information?id=" + id + "'>" + ((rs.getString("resultat").equals("1"))?rs.getString("libelleInverse"): rs.getString("libelle")) + "</a></td>");
+		    out.println("<td><a " + ((!rs.getString("resultat").equals("2"))?"style='color: #3322CC;'":"") + " href='information?id=" + id + "'>" + ((rs.getString("resultat").equals("1"))?rs.getString("libelleInverse"): rs.getString("libelle")) + "</a></td>");
 		    out.println("<td>" + rs.getString("d") + "</td>");
 
 		    stTaux 	= con.createStatement();
@@ -94,11 +94,11 @@
 		    out.println("</tr>");
 		}
 		out.println("</table>");
-		out.println("En <span style='color: green;'>vert</span>, les pronostics dont le résultat a été ajouté");
+		out.println("En <span style='color: #3322CC;'>bleu</span>, les pronostics dont le résultat a été ajouté<br/>");
 
 		rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE " + ((old==null)?"dateFin<DATE('now')":"dateFin>=DATE('now')") + ";");
 		if( rs.next() && rs.getInt("c")>0 )
-			out.println("<a href='marches?" + ((old==null)?"old=1":"") + "' class='orange' >Voir les marchés " + ((old==null)?"terminés":"en cours") + "</a>");
+			out.println("<a href='marches?" + ((old==null)?"old=1":"") + "' class='orange next' >Voir les marchés " + ((old==null)?"terminés":"en cours") + "</a>");
 		con.close();
 	%>
 

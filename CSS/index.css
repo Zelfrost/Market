@@ -199,6 +199,10 @@ body {
 #body a.orange:hover {
     color: #CD5200;
 }
+#body a.orange.next {
+    display: inline-block;
+    margin-top: 20px;
+}
 #body #selectPage a {
     display: inline-block;
     margin: 0 2px;
