@@ -58,6 +58,8 @@
 
 	<input type="submit" value="Valider" />
 </form>
-
+<%
+    con.close();
+%>
 
 <jsp:include page="footer.jsp" />

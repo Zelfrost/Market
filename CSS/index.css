@@ -65,7 +65,7 @@ body {
     
     text-align: justify;
 }
-#body .info {
+#body .persoInfo {
     display: none;
     position: absolute;
     padding: 5px;
@@ -74,6 +74,12 @@ body {
     border: 2px solid #CCC;
 
     color: #2222AA;
+}
+#body .persoInfo div {
+    display: none;
+}
+#body .persoInfo div:last-child {
+    margin-top: 5px;
 }
 #body #prono {
     position: absolute;

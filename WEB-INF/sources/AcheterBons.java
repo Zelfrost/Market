@@ -39,7 +39,7 @@ public class AcheterBons extends HttpServlet
 	            			do {
 	            				retraitBons	= (nbBons > rs.getInt("nombreRestant")?rs.getInt("nombreRestant"):nbBons);
 	            				upST		= con.createStatement();
-	            				upST.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + ", " + retraitBons + ", 0, " + rs.getInt("prix") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
+	            				upST.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + retraitBons + ", 0, " + rs.getInt("prix") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
 	            				upST.executeUpdate("UPDATE transactions SET nombreRestant = nombreRestant - " + retraitBons + " WHERE idTrans = " + rs.getString("idTrans"));
 	            				upST.executeUpdate("UPDATE users SET argent = argent - " + ((100-rs.getInt("prix")) * retraitBons) + " WHERE idUser = " + rs.getString("userID"));
 	            				upST.executeUpdate("UPDATE users SET argent = argent - " + (rs.getInt("prix") * retraitBons) + " WHERE idUser = " + idUser);
@@ -47,7 +47,8 @@ public class AcheterBons extends HttpServlet
 	            				if(nbBons == 0)
 	            					break;
 	            			} while(rs.next());
-	            			st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
+	            			if(nbBons != 0)
+	            				st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + nbBons + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
 	            		} else {
 			            	st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + req.getParameter("nbBons") + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
 			            }

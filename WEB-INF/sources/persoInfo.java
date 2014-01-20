@@ -19,8 +19,19 @@ public class persoInfo extends HttpServlet
             	Connection con 	= ds.getConnection();
 
             	Statement st 	= con.createStatement();
-            	ResultSet rs 	= st.executeQuery("SELECT idUser, argent FROM users WHERE login='" + req.getUserPrincipal().getName() + "'");
+            	ResultSet rs 	= st.executeQuery("SELECT idUser FROM users WHERE login='" + req.getUserPrincipal().getName() + "';");
             	rs.next();
-        } catch( Exception e ) {}
+            	String id 		= rs.getString("idUser");
+
+            	rs 				= st.executeQuery("SELECT SUM(nombre - nombreRestant) AS nombre, SUM((nombre - nombreRestant) * prix) AS prix FROM transactions WHERE userID=" + id + " AND marketID=" + req.getParameter("id") + " AND choix=" + req.getParameter("choix") + " AND nombre<>nombreRestant;");
+            	rs.next();
+            	res.getWriter().print("nombre:" + rs.getString("nombre") + ";prix:" + rs.getString("prix") + "|");
+
+            	rs 	= st.executeQuery("SELECT SUM(nombreRestant) AS nombre, SUM(nombreRestant * prix) AS prix FROM transactions WHERE userID=" + id + " AND marketID=" + req.getParameter("id") + " AND choix=" + req.getParameter("choix") + ";");
+            	rs.next();
+            	res.getWriter().print("nombre:" + rs.getString("nombre") + ";prix:" + rs.getString("prix"));
+
+            	con.close();
+        } catch( Exception e ) { e.printStackTrace(res.getWriter()); } 
 	}
 }

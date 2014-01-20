@@ -17,8 +17,8 @@ Placer le jar commons-lang qui se trouve dans WEB-INF/LIB dans $CLASSPATH
 TODO
 ====
 
+	- Bean
 	- Le champs de recherche
-	- jQuery
 	- Courbes
 	- Internationalisation
 
