@@ -65,6 +65,16 @@ body {
     
     text-align: justify;
 }
+#body .info {
+    display: none;
+    position: absolute;
+    padding: 5px;
+
+    background-color: #FFF;
+    border: 2px solid #CCC;
+
+    color: #2222AA;
+}
 #body #prono {
     position: absolute;
     right: 8%;

@@ -66,6 +66,12 @@
 
 <%
 	}
+%>
+
+<div class="info">	Vous avez tenté d'acheter <span id="nb"></span> bons aux prix de <span id="prix"></span>€<br/>
+					Vous avez acheté <span id="nbA"></span> bons aux prix de <span id="prixA"></span>€</div>
+
+<%
 	rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle, libelleInverse, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " GROUP BY idMarket, choix ORDER BY publication DESC;");
 	if(rs.next() && rs.getInt("nb") != 0 ) {
 %>
