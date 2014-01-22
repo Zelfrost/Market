@@ -70,16 +70,18 @@
 </p>
 <p>État de l'offre : <strong>
 	<%
-			if(rs.getString("resultat").equals("2"))
-				out.println("En cours</strong>");
-			else
+			if(! rs.getString("resultat").equals("2"))
 				out.println("Terminé</strong> - <span style='color: green'>Le libellé affiché est celui qui s'est avéré vrai</span>");
+			else {
+				if(fin.compareTo(new java.util.Date()) <= 0)
+					out.println("Terminé</strong> - Résultat en attente</span>");
+				else
+					out.println("En cours</strong>");
+			}
 %>
 </p>
 <%
-			if( ! rs.getString("resultat").equals("2") ) {
-
-			} else {
+			if( fin.compareTo(new java.util.Date()) > 0 && rs.getString("resultat").equals("2") ) {
 %>
 
 <table class="rouge">
@@ -124,7 +126,7 @@
 						out.println("</tr>");
 					} while(rs.next());
 				}		
-				if ( request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User")){
+				if ( request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User") ){
 							
 					rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 					rs.next();
