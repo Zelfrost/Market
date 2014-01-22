@@ -3,8 +3,8 @@
 <Context antiJARLocking="true" path="/Market">
     <Resource   name="base" auth="Container" type="javax.sql.DataSource"
                 maxActive="100" maxIdle="70" maxWait="10000"
-                username="damdev" password="pw:rcZtlm" driverClassName="org.postgresql.Driver"
-                url="jdbc:postgresql:dev" />
+                username="godartc" password="moi" driverClassName="org.postgresql.Driver"
+                url="jdbc:postgresql://sqlserv/da2i" />
 
     <Realm className="org.apache.catalina.realm.DataSourceRealm" name="realmBase" localDataSource="true"
 			    dataSourceName="base" userTable="users" userNameCol="login"
