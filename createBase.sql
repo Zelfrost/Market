@@ -48,9 +48,7 @@ CREATE TABLE markets
 );
 
 INSERT INTO markets 
-    VALUES(0, 'Monsieur Beaufils mettra un 20 en projet', 'Monsieur Beaufils ne mettra aucun 20 en projet', '2014-04-01',  CURRENT_TIMESTAMP, 0, 2);
-INSERT INTO markets
-    VALUES(1, 'Demode arrivera en retard a tous les cours cette annee', 'Demode arrivera a temps a au moins un cours cette annee', '2014-07-01', CURRENT_TIMESTAMP, 1, 2);
+    VALUES(0, '', '', '1995-01-01',  CURRENT_TIMESTAMP, 0, 2);
 
 
 CREATE TABLE transactions

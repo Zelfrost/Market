@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%
-	if(request.getParameter("id")==null || request.getParameter("id").equals("")) {
+	if(request.getParameter("id")==null || request.getParameter("id").equals("") || request.getParameter("id").equals("0")) {
 %>
 <jsp:include page="header.jsp?titre=Error" />
 <%
