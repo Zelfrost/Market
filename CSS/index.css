@@ -304,6 +304,9 @@ body {
 #body table .negatif {
     color: #cc0000;
 }
+#body table td span.achatInfo {
+    color: #007777;
+}
 
 #body form div:first-child {
     margin-top: 30px;

@@ -131,8 +131,8 @@
 				
 				    out.println("<tr class='form'><td id='nom'>" + rs.getString("n") + "</td>");
 					out.println("<td><input name='nbBons' type='number' class='first' /> bons</td>");
-					out.println("<td><input name='prixBons' type='number' class='second' /></td></tr>");
-					out.println("<tr class='form'><td colspan='3'><input type='submit' value='acheter' /></td></tr>");
+					out.println("<td><input name='prixBons' type='number' class='second' placeholder='€' /></td></tr>");
+					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>Un bon s'achète entre 1 et 99€, le prix doit être un entier</span><input type='submit' value='acheter' /></td></tr>");
 				
 				}
 				

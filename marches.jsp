@@ -16,8 +16,8 @@
 
 <div id="selectpage">
     <%
-	    int pages 		= 	(request.getParameter("pages")!=null)
-				    		?Integer.parseInt(request.getParameter("pages"))
+	    int pages 		= 	(request.getParameter("page")!=null)
+				    		?Integer.parseInt(request.getParameter("page"))
 				    		:1;
         
         Context initCtx = 	new InitialContext();
@@ -34,15 +34,15 @@
 	    if( nbpages > 0 )
 		    out.println("pages : ");
 	    if( pages != 1 )
-		    out.println("(<a href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
+		    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
 	    for( int i = 1; i <= nbpages; i++ ) {
 		    if( i != pages )
-			    out.println("<a href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
+			    out.println("<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
 		    else
 			    out.println("<span>" + i + "</span>");
 	    }
 	    if( pages != nbpages )
-		    out.println("(<a href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
+		    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
 	%>
 </div>
 
