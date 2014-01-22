@@ -47,7 +47,7 @@ public class AcheterBons extends HttpServlet
 		    
 		   
 		    if(rs.getInt("argent") >= somme) {
-			rs 			= st.executeQuery("SELECT idTrans, userID, 100-prix AS prix ,nombreRestant FROM transactions WHERE 100-prix <= " + req.getParameter("prixBons") + " AND choix = " + ((Integer.parseInt(req.getParameter("choix"))==0)?1:0) + " AND marketID=" + req.getParameter("id") + " ORDER BY prix DESC;");
+			rs 			= st.executeQuery("SELECT idTrans, userID, 100-prix AS prix ,nombreRestant FROM transactions WHERE 100-prix <= " + req.getParameter("prixBons") + " AND choix = " + ((Integer.parseInt(req.getParameter("choix"))==0)?1:0) + " AND marketID=" + req.getParameter("id") + " AND nombreRestant>0 ORDER BY prix ASC;");
 			if(rs.next()) {
 			    Statement upST	= con.createStatement();
 			    int retraitBons;
