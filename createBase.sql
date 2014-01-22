@@ -18,8 +18,8 @@ CREATE TABLE  users (
 );
 
 INSERT INTO users VALUES(0, 'Admin', '', 'admin', 'Rt6cO9f', 'deconinck.damien@gmail.com', '1000000', '0', 'Admin');
-INSERT INTO users VALUES(1, 'Deconinck', 'Damien', 'deconind', 'moi', 'deconinck.damien@gmail.com', '100000', '0', 'Admin');
-INSERT INTO users VALUES(2, 'Godart', 'Christophe', 'godartc', 'moi', 'godart.christophe@gmail.com', '100000', '0', 'Admin');
+INSERT INTO users VALUES(1, 'Deconinck', 'Damien', 'deconind', 'vrpCLZ', 'deconinck.damien@gmail.com', '100000', '0', 'Admin');
+INSERT INTO users VALUES(2, 'Godart', 'Christophe', 'godartc', 'vrpCLZ', 'godart.christophe@gmail.com', '100000', '0', 'Admin');
 INSERT INTO users VALUES(3, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '', '10000', '0', 'MarketMaker');
 INSERT INTO users VALUES(4, 'Vandenbussche', 'Mathieu', 'vandenbm', 'moi', '', '10000', '0', 'MarketMaker');
 INSERT INTO users VALUES(5, 'Delerue', 'Axel', 'deleruea', 'moi', '', '10000', '0', 'MarketMaker');
@@ -47,8 +47,8 @@ CREATE TABLE markets
                                 ON DELETE SET NULL
 );
 
-INSERT INTO markets 
-    VALUES(0, '', '', '1995-01-01',  CURRENT_TIMESTAMP, 0, 2);
+INSERT INTO markets VALUES(0, '', '', '1995-01-01',  CURRENT_TIMESTAMP, 0, 2);
+INSERT INTO markets VALUES(1, 'Il pleuvra le 1er Juin', 'Il ne pleuvra pas le 1er Juin', '2014-06-01',  CURRENT_TIMESTAMP, 0, 2);
 
 
 CREATE TABLE transactions

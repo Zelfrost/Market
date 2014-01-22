@@ -31,13 +31,18 @@ public class changerPerso extends HttpServlet
 	    rs.next();
 
 	    String redirect	= "perso",
-		update 	= "UPDATE users SET ";
+				update 	= "UPDATE users SET ",
+				arg1	= null,
+				arg2	= null;
+		int nbArg		= 0;
 
 	    if(ancienPass!=null && !ancienPass.equals("") && !nouveauPass.equals("")) {
 		if(ancienPass.equals(rs.getString("pass"))) {
 		    if(nouveauPass.equals(repetePass)) {
-			update   += "pass='" + nouveauPass + "'";
-			redirect = "perso?success=1";
+				update   += "pass=?";
+				arg1 	 = nouveauPass;
+				nbArg++;
+				redirect = "perso?success=1";
 		    } else
 			redirect = "changePerso?error=2";
 		} else
@@ -48,9 +53,14 @@ public class changerPerso extends HttpServlet
 		Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
 		Matcher m = p.matcher(mail.toUpperCase());
 		if(m.matches()) {
-		    if(update.charAt(update.length()-1) == '\'')
-			update += ", ";
-		    update += " mail='" + mail + "'";
+		    if(update.charAt(update.length()-1) == '\'') {
+				update += ", mail=?";
+				arg2 	= mail;
+			} else {
+		    	update += " mail=?";
+				arg1 	= mail;
+		    }
+		    nbArg++;
 		    redirect = "perso?success=1";
 		} else
 		    redirect = "changePerso?error=3";
@@ -58,8 +68,14 @@ public class changerPerso extends HttpServlet
 
 	    update += " WHERE login='" + req.getUserPrincipal().getName() + "';";
 
-	    if(!update.equals("UPDATE users SET  WHERE login='" + req.getUserPrincipal().getName() + "';"))
-		st.executeUpdate(update);
+    	PreparedStatement pst = con.prepareStatement(update);
+	    if(nbArg>0) {
+	    	pst.setString(1, arg1);
+	    	if(nbArg==2)
+	    		pst.setString(2, arg2);
+
+			pst.executeUpdate();
+		}
 	    res.sendRedirect(redirect);
 	} catch (Exception e) {
 	    e.printStackTrace(res.getWriter());

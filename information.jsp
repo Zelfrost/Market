@@ -107,7 +107,7 @@
 						out.println("<tr>");
 						out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
 						out.println("<td>" + rs.getString("somme") + " bons</td>");
-						out.println("<td>" + rs.getString("prix") + "€</td>");
+						out.println("<td>" + rs.getString("prix") + "€/u</td>");
 						out.println("</tr>");
 					} while(rs.next());
 				}
@@ -115,8 +115,8 @@
 </table>
 <form id='acheter' method='POST' action='AcheterBons'>
 <%
-				out.println("<input type='hidden' name='id' value='" + request.getParameter("id") + "'/>");
-				out.println("<input type='hidden' name='choix' value='" + choix + "'/>");
+	out.println("<input type='hidden' name='id' value='" + request.getParameter("id") + "'/>");
+	out.println("<input type='hidden' name='choix' value='" + choix + "'/>");
 %>
 <table class="vert">
 	<tr>
@@ -131,7 +131,7 @@
 						out.println("<tr class='info'>");
 						out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
 						out.println("<td>" + rs.getString("somme") + " bons</td>");
-						out.println("<td>" + rs.getString("prix") + "€</td>");
+						out.println("<td>" + rs.getString("prix") + "€/u</td>");
 						out.println("</tr>");
 					} while(rs.next());
 				}		
@@ -151,7 +151,6 @@
 %>
 </table>
 </form>
-// TODO"
 </div>
 
 <%
@@ -161,8 +160,33 @@
 
 %>
 <div class='infoRight right'>
-	<h3><%= rs.getString("nom")%> <%= rs.getString("prenom") %></h3>
-	Argent restant : <%= rs.getString("argent") %>€
+	<h2 class='withSmall'><%= rs.getString("nom")%> <%= rs.getString("prenom") %></h2>
+	<span class='small'>Argent restant : <%= rs.getString("argent") %>€</span>
+	<h4>Vos investissements en attente</h4>
+	<table class='invest'>
+		<tr class='th'>
+			<th>Nombre</th>
+			<th>Prix</th>
+			<th>Suppr</th>
+		</tr>
+
+<%
+	rs 	= st.executeQuery("SELECT idTrans, nombreRestant, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombreRestant<>0 ORDER BY prix ASC, nombreRestant ASC;");
+	if(! rs.next())
+		out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
+	else {
+		do {
+%>
+		<tr>
+			<td><%= rs.getString("nombreRestant") %> bons</td>
+			<td><%= rs.getString("prix") %> euros/u</td>
+			<td><a href='suppTrans?idTrans=<%= rs.getString("idTrans") %>&id=<%= request.getParameter("id") %>'>X</a></td>
+		<tr>
+<%
+		} while(rs.next());
+	}
+%>
+	</table>
 </div>
 <%
 		}

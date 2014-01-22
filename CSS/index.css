@@ -121,7 +121,7 @@ body {
 }
 
 #body .infoLeft {
-    width: 50%;
+    width: 60%;
 }
 
 #body h2 {
@@ -129,6 +129,13 @@ body {
     
     font-size: 1.8em;
     font-weight: bold;
+}
+#body h2.withSmall {
+    margin-bottom: 5px;
+}
+#body h2 + span.small {
+    display: inline-block;
+    margin-bottom: 30px;
 }
 
 #body a + h3 {
@@ -149,6 +156,14 @@ body {
 }
 #body h3 + .small a {
     color: #FF6600;
+}
+
+#body h4 {
+    margin-bottom: 10px;
+    
+    font-size: 1.1em;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 #body #result {
@@ -283,14 +298,24 @@ body {
     color: #777;
 }
 #body tr td:nth-child(1) {
-    width: 80%;
+    width: 70%;
+}
+#body table.invest td:nth-child(1) {
+    width: 45%;
 }
 #body tr td:nth-child(2) {
-    width: 15%;
+    width: 25%;
+}
+#body table.invest td:nth-child(2) {
+    width: 45%;
 }
 #body tr td:nth-child(3) {
     width: 5%;
     text-align: right;
+}
+#body table.invest td:nth-child(3) a{
+    width: 10%;
+    color: red;
 }
 #body td a {
     color: #777;
@@ -387,10 +412,10 @@ body {
 }
 #body .infoRight {
     border-left: 10px solid #4B8CC9;
-    width: calc(50% - 56px);
+    width: calc(40% - 56px);
     padding: 15px;
 
-    background-color: #F2F2F2;
+    background-color: #F6F6F6;
 }
 
 #body .right .menu {
