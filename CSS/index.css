@@ -239,7 +239,7 @@ body {
     margin: 40px 0 40px 20px;
 }
 #body table.rouge, #body table.vert {
-    width: 60%;
+    width: 50%;
 }
 #body table.rouge th {
     background-color: #f02000;

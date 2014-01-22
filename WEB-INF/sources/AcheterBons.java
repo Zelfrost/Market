@@ -12,20 +12,24 @@ public class AcheterBons extends HttpServlet
     public void service( HttpServletRequest req, HttpServletResponse res )
 	throws ServletException, IOException
     {
-	
+
+    boolean valable = true;
 	try{
 	    int prix = (int) Integer.parseInt(req.getParameter("prixBons"));
-	    if (prix <= 0 || prix >= 100)
-		res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=3");
-	    //prix <0 ou >100
+	    if (prix <= 0 || prix >= 100) {
+			res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=3");
+			valable = false;
+	    	//prix <0 ou >100
+	    }
 
 	} catch (Exception e){
-	    res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=2"); 
+	    res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=2");
+	    valable = false;
 	    //format prix invalide
 	}
 
 
-	if (req.getParameter("nbBons") != null && req.getParameter("prixBons") != null)
+	if (req.getParameter("nbBons") != null && req.getParameter("prixBons") != null && valable)
 	    {
 		String login 			= req.getUserPrincipal().getName();
 

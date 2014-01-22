@@ -52,8 +52,14 @@
 				else
 					out.println("<span id='success'>L'évènement a bien été mis à jour.</span>");
 			}
-			if(request.getParameter("error")!=null)
-				out.println("<span id='error'>Vous ne possédez pas suffisamment d'argent</span>");
+			if(request.getParameter("error")!=null) {
+				if(request.getParameter("error").equals("1"))
+					out.println("<span id='error'>Vous ne possédez pas suffisamment d'argent</span>");
+				else if(request.getParameter("error").equals("2"))
+					out.println("<span id='error'>Le prix entré n'est pas un nombre</span>");
+				else
+					out.println("<span id='error'>Le prix entré n'est pas compris entre 1 et 99</span>");
+			}
 
 			out.println("<h3>" + libelle + "</h3>");
 
