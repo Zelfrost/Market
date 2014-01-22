@@ -16,7 +16,7 @@
     Connection con  = ds.getConnection();
 
     Statement st    = con.createStatement();
-	ResultSet rs 	= 	st.executeQuery("SELECT idUser, nom, prenom, mail, argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+	ResultSet rs 	= 	st.executeQuery("SELECT idUser, nom, prenom, mail, argent - argentBloque AS argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 	rs.next();
 	String id 		= rs.getString("idUser");
 

@@ -22,28 +22,31 @@
 
 		Statement st 	= 	con.createStatement();
 		ResultSet rs 	= 	st.executeQuery("SELECT libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat, login FROM markets JOIN users on users.idUser=markets.userID WHERE idMarket='" + id +"';");
+
 		if(!rs.next())
 			response.sendRedirect("information");
 		else {
-			String libelle;
-			if( ! rs.getString("resultat").equals("2") )
-				libelle 	= 	(rs.getString("resultat").equals("0"))
-								?rs.getString("libelle")
-								:rs.getString("libelleInverse");
-			else
-				libelle 	= 	(choix==0)
-								?rs.getString("libelle")
-								:rs.getString("libelleInverse");
+		String libelle;
+		if( ! rs.getString("resultat").equals("2") )
+			libelle 	= 	(rs.getString("resultat").equals("0"))
+							?rs.getString("libelle")
+							:rs.getString("libelleInverse");
+		else
+			libelle 	= 	(choix==0)
+							?rs.getString("libelle")
+							:rs.getString("libelleInverse");
 
-			String[] date 	=	rs.getString("d").split("/");
-			java.util.Date fin 	= 	new java.util.Date(	Integer.parseInt(date[2])-1900,
-															Integer.parseInt(date[1])-1,
-															Integer.parseInt(date[0])
-									);
-			String head 	= 	"header.jsp?titre=" + libelle;
+		String[] date 	=	rs.getString("d").split("/");
+		java.util.Date fin 	= 	new java.util.Date(	Integer.parseInt(date[2])-1900,
+														Integer.parseInt(date[1])-1,
+														Integer.parseInt(date[0])
+								);
+		String head 	= 	"header.jsp?titre=" + libelle;
 %>
 <jsp:include page="<%= head %>" />
 
+
+<div class='infoLeft left'>
 <a id="prev" href='marches'>Retour aux marchés</a>
 <%
 			if(request.getParameter("success")!=null) {
@@ -143,16 +146,27 @@
 					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>Un bon s'achète entre 1 et 99€, le prix doit être un entier</span><input type='submit' value='acheter' /></td></tr>");
 				
 				}
-				
-				con.close();
 			}
 		}
 %>
 </table>
 </form>
+// TODO"
+</div>
+
 <%
+	if(request.getUserPrincipal()!=null) {
+		rs 	= st.executeQuery("SELECT idUser, nom, prenom, argent - argentBloque AS argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+		rs.next();
+
+%>
+<div class='infoRight right'>
+	<h3><%= rs.getString("nom")%> <%= rs.getString("prenom") %></h3>
+	Argent restant : <%= rs.getString("argent") %>€
+</div>
+<%
+		}
+		con.close();
 	}
 %>
-
-
 <jsp:include page="footer.jsp" />

@@ -120,6 +120,10 @@ body {
     margin-right: 10px;
 }
 
+#body .infoLeft {
+    width: 50%;
+}
+
 #body h2 {
     margin-bottom: 30px;
     
@@ -237,9 +241,6 @@ body {
 #body table {
     width: 90%;
     margin: 40px 0 40px 20px;
-}
-#body table.rouge, #body table.vert {
-    width: 50%;
 }
 #body table.rouge th {
     background-color: #f02000;
@@ -384,6 +385,14 @@ body {
     display: inline-block;
     width: calc(25% - 16px);
 }
+#body .infoRight {
+    border-left: 10px solid #4B8CC9;
+    width: calc(50% - 56px);
+    padding: 15px;
+
+    background-color: #F2F2F2;
+}
+
 #body .right .menu {
     margin-top: 15px;
     

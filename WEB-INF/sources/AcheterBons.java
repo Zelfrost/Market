@@ -41,7 +41,7 @@ public class AcheterBons extends HttpServlet
 		    Connection con 	= ds.getConnection();
 
 		    Statement st 	= con.createStatement();
-		    ResultSet rs 	= st.executeQuery("SELECT idUser, argent FROM users WHERE login='" + req.getUserPrincipal().getName() + "'");
+		    ResultSet rs 	= st.executeQuery("SELECT idUser, argent - argentBloque AS argent FROM users WHERE login='" + req.getUserPrincipal().getName() + "'");
 		    rs.next();
 
 		    String idUser	= rs.getString("idUser");
@@ -66,10 +66,13 @@ public class AcheterBons extends HttpServlet
 				if(nbBons == 0)
 				    break;
 			    } while(rs.next());
-			    if(nbBons != 0)
-				st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + nbBons + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
+			    if(nbBons != 0) {
+			    	upST.executeUpdate("UPDATE users SET argentBloque = (argentBloque + " + (Integer.parseInt(req.getParameter("prixBons")) * nbBons) + ") WHERE idUser=" + idUser + ";");
+			    	st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + nbBons + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
+			    }
 			} else {
-			    st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + req.getParameter("nbBons") + ", " + req.getParameter("nbBons") + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
+			    st.executeUpdate("UPDATE users SET argentBloque = (argentBloque + " + (Integer.parseInt(req.getParameter("prixBons")) * nbBons) + ") WHERE idUser=" + idUser + ";");
+			    st.executeUpdate("INSERT INTO transactions SELECT MAX(idtrans)+1, " + req.getParameter("id") + ", " + idUser + ", " + nbBons + ", " + nbBons + ", " + req.getParameter("prixBons") + ", " + req.getParameter("choix") + ", CURRENT_TIMESTAMP FROM transactions;");
 			}
 			con.close();
 			res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&success=1");
