@@ -20,8 +20,15 @@ CREATE TABLE  users (
 INSERT INTO users VALUES(0, 'Admin', '', 'admin', 'Rt6cO9f', 'deconinck.damien@gmail.com', '1000000', '0', 'Admin');
 INSERT INTO users VALUES(1, 'Deconinck', 'Damien', 'deconind', 'moi', 'deconinck.damien@gmail.com', '100000', '0', 'Admin');
 INSERT INTO users VALUES(2, 'Godart', 'Christophe', 'godartc', 'moi', 'godart.christophe@gmail.com', '100000', '0', 'Admin');
-INSERT INTO users VALUES(3, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', 'vanhoutte.mickael@gmail.com', '10000', '0', 'MarketMaker');
-INSERT INTO users VALUES(4, 'Weng', 'Tom', 'wengh', 'moi', 'weng.tom@gmail.com', '10000', '0', 'User');
+INSERT INTO users VALUES(3, 'Vanhoutte', 'Mickael', 'vanhoutm', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Vandenbussche', 'Mathieu', 'vandenbm', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Delerue', 'Axel', 'deleruea', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Boulanger', 'Constantin', 'boulangc', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Caboche', 'Maxime', 'cabochem', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Weng', 'Tom', 'wengh', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Gombert', 'Pierre', 'gombertp', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Delvallee', 'Adrien', 'delvalla', 'moi', '', '10000', '0', 'MarketMaker');
+INSERT INTO users VALUES(3, 'Demode', 'Alexandre', 'demodea', 'moi', '', '10000', '0', 'MarketMaker');
 
 
 CREATE TABLE markets
