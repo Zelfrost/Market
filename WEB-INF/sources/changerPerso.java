@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import java.sql.*;
 import javax.sql.*;
 import javax.naming.*;
+import org.apache.commons.lang.StringEscapeUtils;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -40,7 +41,7 @@ public class changerPerso extends HttpServlet
 		if(ancienPass.equals(rs.getString("pass"))) {
 		    if(nouveauPass.equals(repetePass)) {
 				update   += "pass=?";
-				arg1 	 = nouveauPass;
+				arg1 	 = StringEscapeUtils.escapeHtml(nouveauPass);
 				nbArg++;
 				redirect = "perso?success=1";
 		    } else
@@ -55,10 +56,10 @@ public class changerPerso extends HttpServlet
 		if(m.matches()) {
 		    if(update.charAt(update.length()-1) == '\'') {
 				update += ", mail=?";
-				arg2 	= mail;
+				arg2 	= StringEscapeUtils.escapeHtml(mail);
 			} else {
 		    	update += " mail=?";
-				arg1 	= mail;
+				arg1 	= StringEscapeUtils.escapeHtml(mail);
 		    }
 		    nbArg++;
 		    redirect = "perso?success=1";

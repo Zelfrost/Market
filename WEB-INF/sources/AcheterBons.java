@@ -14,8 +14,12 @@ public class AcheterBons extends HttpServlet
     {
 
     boolean valable = true;
+    int prix 		= 0,
+    	nbBons		= 0;
 	try{
-	    int prix = (int) Integer.parseInt(req.getParameter("prixBons"));
+	    prix 	= Integer.parseInt(req.getParameter("prixBons"));
+	    nbBons 	= Integer.parseInt(req.getParameter("nbBons"));
+	    
 	    if (prix <= 0 || prix >= 100) {
 			res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=3");
 			valable = false;
@@ -46,8 +50,7 @@ public class AcheterBons extends HttpServlet
 
 		    String idUser	= rs.getString("idUser");
 		    
-		    int somme		= Integer.parseInt(req.getParameter("nbBons")) * Integer.parseInt(req.getParameter("prixBons"));
-		    int nbBons		= Integer.parseInt(req.getParameter("nbBons"));
+		    int somme		= prix * nbBons;
 		    
 		   
 		    if(rs.getInt("argent") >= somme) {

@@ -34,9 +34,10 @@ public class AjoutPronostic extends HttpServlet
 	            rs.next();
 
 		        pst = con.prepareStatement(insert);
-		        pst.setString(1, req.getParameter("libelle"));
-		        pst.setString(2, req.getParameter("libelleInverse"));
-		        pst.setString(3, req.getParameter("dateFin"));
+
+		        pst.setString(1, StringEscapeUtils.escapeHtml(req.getParameter("libelle")));
+		        pst.setString(2, StringEscapeUtils.escapeHtml(req.getParameter("libelleInverse")));
+		        pst.setString(3, StringEscapeUtils.escapeHtml(req.getParameter("dateFin")));
 		        pst.setString(4, rs.getString("idUser"));
 
       			pst.executeUpdate();

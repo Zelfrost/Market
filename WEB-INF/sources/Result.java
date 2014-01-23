@@ -26,6 +26,7 @@ public class Result extends HttpServlet
 		    Connection con 	= 	ds.getConnection();
 
 			Statement st 	= 	con.createStatement();
+			Statement upST 	= 	con.createStatement();
 			ResultSet rs 	= 	st.executeQuery("SELECT to_char(dateFin, 'DD/MM/YYYY') AS d, login FROM markets JOIN users ON users.idUser=markets.userID WHERE idMarket=" + id + ";");
 			rs.next();
 
@@ -40,9 +41,13 @@ public class Result extends HttpServlet
 			int rest 	= 	req.getParameter("result").equals("oui")?0:1;
 			st.executeUpdate("UPDATE markets SET resultat=" + rest + " WHERE idMarket=" + id + ";");
 
+			rs 			= 	st.executeQuery("SELECT userID, SUM(nombreRestant * prix) AS argent FROM transactions WHERE marketID=" + id + " AND nombreRestant<>0 GROUP BY userID");
+			while(rs.next())
+				upST.executeUpdate("UPDATE users SET argentBloque = argentBloque - " + rs.getString("argent") + " WHERE idUser = " + rs.getString("userID") + ";");
+
 			rs 			= 	st.executeQuery("SELECT userID, mail, (100 * (nombre - nombreRestant)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + rest + " AND nombreRestant<>nombre;");
 			while(rs.next()) {
-				st.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + " WHERE idUser=" + rs.getString("userID") + ";");
+				upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + " WHERE idUser=" + rs.getString("userID") + ";");
 
 				// TODO : mail
 				// mail : rs.getString("mail");
