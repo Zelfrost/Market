@@ -28,10 +28,11 @@ public class suppTrans extends HttpServlet
 
 		        pst = con.prepareStatement(delete);
 		        pst.setInt(1, Integer.parseInt(req.getParameter("idTrans")));
-      			pst.executeUpdate();
 
-      			/* TODO */
-	            st.executeUpdate("UPDATE users SET argentBloque = argentBloque - ( SELECT (nombreRestant * prix) FROM transactions WHERE idTrans=" + req.getParameter("idTrans") + " ) WHERE login = '" + req.getUserPrincipal().getName() + "';");
+            st.executeUpdate("UPDATE users SET argentBloque = argentBloque - ( SELECT (nombreRestant * prix) FROM transactions WHERE idTrans=" + req.getParameter("idTrans") + " ) WHERE login = '" + req.getUserPrincipal().getName() + "';");
+
+            pst.executeUpdate();
+            st.executeUpdate("DELETE FROM transactions WHERE nombre=0 AND idTrans <> 0;");
 
       			con.close();
 

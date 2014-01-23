@@ -165,6 +165,9 @@ body {
     font-weight: bold;
     text-decoration: underline;
 }
+#body h4.second {
+    margin-top: 40px;
+}
 
 #body #result {
     display: inline-block;
@@ -308,6 +311,9 @@ body {
 }
 #body table.invest td:nth-child(2) {
     width: 45%;
+}
+#body table.invest td:nth-child(2).last {
+    width: 55%;
 }
 #body tr td:nth-child(3) {
     width: 5%;

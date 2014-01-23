@@ -187,6 +187,29 @@
 	}
 %>
 	</table>
+	<h4 class='second'>Vos investissements finalisés</h4>
+	<table class='invest'>
+		<tr class='th'>
+			<th>Nombre</th>
+			<th>Prix</th>
+		</tr>
+
+<%
+	rs 	= st.executeQuery("SELECT idTrans, (nombre - nombreRestant) AS nombre, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombre>nombreRestant ORDER BY prix ASC, nombreRestant ASC;");
+	if(! rs.next())
+		out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
+	else {
+		do {
+%>
+		<tr>
+			<td><%= rs.getString("nombre") %> bons</td>
+			<td class='last'><%= rs.getString("prix") %> euros/u</td>
+		<tr>
+<%
+		} while(rs.next());
+	}
+%>
+	</table>
 </div>
 <%
 		}
