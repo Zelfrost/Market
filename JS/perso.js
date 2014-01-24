@@ -16,7 +16,7 @@ $(document).ready( function() {
 
 			$('.persoInfo').css({display: "block", top: (hX-2)+"px", left: hY+"px", width: hWidth+"px", height: "auto", minHeight: hHeight+"px"});
 
-			$.post("persoInfo", {"id": id, "choix": choix}, function(data) {
+			$.post("PersoInfo", {"id": id, "choix": choix}, function(data) {
 				if( data.split("|")[0].split(";")[0].split(":")[1] != "null" && data.split("|")[0].split(";")[0].split(":")[1] != "0" ) {
 					$('div#achetes').css({display: "block"});
 					$("span#nbA").html( data.split("|")[0].split(";")[0].split(":")[1] );

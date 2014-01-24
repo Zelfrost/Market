@@ -2,27 +2,25 @@
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<jsp:include page="header.jsp?titre=Page personnelle" />
-
-
-<script src="JS/jquery-1.9.1.js"></script>
-<script src="JS/perso.js"></script>
+<jsp:include page="header.jsp?titre=Page utilisateur" />
 
 <%
+	if(request.getParameter("id")==null || request.getParameter("id").equals(""))
+		response.sendRedirect("index");
 	
+	String id 		= request.getParameter("id");
+
     Context initCtx = new InitialContext();
     Context envCtx  = (Context) initCtx.lookup("java:comp/env");
     DataSource ds   = (DataSource) envCtx.lookup("base");
     Connection con  = ds.getConnection();
 
     Statement st    = con.createStatement();
-	ResultSet rs 	= 	st.executeQuery("SELECT idUser, nom, prenom, mail, argent - argentBloque AS argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+	ResultSet rs 	= 	st.executeQuery("SELECT nom, prenom, login, mail, argent - argentBloque AS argent FROM users WHERE idUser='" + id + "';");
 	rs.next();
-	String id 		= rs.getString("idUser");
 %>
 
-<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2>
-<a href='changePerso' class='orange'>Changer mes infos</a>
+<h2 id="perso"><%= rs.getString("nom") %></h2>
 <%
 	if(request.getParameter("success")!=null)
 		out.println("<span id='success'>Vos modifications ont bien été prises en compte.</span>");
@@ -30,7 +28,7 @@
 
 <div class="label">
 	<span>Login : </span>
-	<span><%= request.getUserPrincipal().getName() %></span/>
+	<span><%= rs.getString("login") %></span/>
 </div>
 
 <div class="label">
@@ -39,46 +37,8 @@
 </div>
 
 <div class="label">
-	<span>Argent restant : </span>
+	<span>Argent : </span>
 	<span><%= rs.getString("argent") %>€</span>
-</div>
-
-
-<% 
-	rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle FROM markets WHERE markets.userID=" + id + " AND dateFin=DATE('now') AND resultat=2 GROUP BY idMarket, libelle ORDER BY publication DESC;");
-	if(rs.next() && rs.getInt("nb") != 0 ) {
-%>
-
-<h3>Marchés auxquels vous devez donner un résultat</h3>
-
-<table>
-	<tr class="th">
-		<th>Libellé</th>
-	</tr>
-<%
-		do {
-			out.println("<tr>");
-			out.println( "<td style='text-align: center;'><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></td>" );
-			out.println("</tr>");
-		} while(rs.next());
-%>
-</table>
-
-
-<%
-	}
-%>
-
-<div class="persoInfo">
-	<div id="achetes">
-		Vous avez acheté <span id="nbA"></span> bons 
-		aux prix de <span id="prixA"></span>€
-	</div>
-
-	<div id="restants">
-		Vous avez <span id="nb"></span> bons en attente
-		aux prix de <span id="prix"></span>€
-	</div>
 </div>
 
 <%
@@ -86,7 +46,7 @@
 	if(rs.next() && rs.getInt("nb") != 0 ) {
 %>
 
-<h3>Pronostics dans lesquels vous avez investi</h3>
+<h3>Pronostics dans lesquels il a investi</h3>
 
 <table>
 	<tr class="th">

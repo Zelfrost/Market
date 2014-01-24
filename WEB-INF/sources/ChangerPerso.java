@@ -9,8 +9,8 @@ import org.apache.commons.lang.StringEscapeUtils;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-@WebServlet("/changerPerso")
-public class changerPerso extends HttpServlet
+@WebServlet("/ChangerPerso")
+public class ChangerPerso extends HttpServlet
 {
 	public void service( HttpServletRequest req, HttpServletResponse res )
 	    throws ServletException, IOException

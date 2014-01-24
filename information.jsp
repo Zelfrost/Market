@@ -236,11 +236,10 @@
 con.close();
 }
 %>
-<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+<link rel='stylesheet' href='CSS/morris-0.4.3.min.css' />
 <script src='JS/jquery-1.9.1.js'></script>
 <script src='JS/jquery-ui.js'></script>
+<script src="JS/raphael-min.js"></script>
+<script src="JS/morris-0.4.3.min.js"></script>
 <script src='JS/information.js'></script>
 <jsp:include page="footer.jsp" />

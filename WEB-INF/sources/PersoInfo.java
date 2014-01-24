@@ -6,8 +6,8 @@ import java.sql.*;
 import javax.sql.*;
 import javax.naming.*;
 
-@WebServlet("/persoInfo")
-public class persoInfo extends HttpServlet
+@WebServlet("/PersoInfo")
+public class PersoInfo extends HttpServlet
 {
 	public void service( HttpServletRequest req, HttpServletResponse res )
 		throws ServletException, IOException

@@ -5,7 +5,7 @@
 <jsp:include page="header.jsp?titre=Page personnelle" />
 
 
-<form method="POST" action="changerPerso" id="changePerso">
+<form method="POST" action="ChangerPerso" id="changePerso">
 	<%
 		
 	    Context initCtx = new InitialContext();

@@ -20,7 +20,7 @@
             Rechercher
         </div>
         <div class="body">
-            <form method="POST" action="">
+            <form method="POST" action="recherche">
                 <input type="text" name="search" />
                 <input type="submit" value="Valider" />
             </form>

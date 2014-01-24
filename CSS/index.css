@@ -201,7 +201,7 @@ body {
 #body div.label  {
     margin-bottom: 5px;
 }
-#body form#changePerso div.label span:first-child {
+#body form#changePerso div.label span:first-child, #body form#conn div.label span:first-child {
     width: 200px;
 }
 #body form#changePerso input[type='submit'] {
@@ -284,6 +284,8 @@ body {
 }
 #body tr th {
     padding: 5px;
+
+    border-bottom: 2px solid #CCC;
     
     text-align: left;
     font-weight: bold;
@@ -305,7 +307,6 @@ body {
 #body tr td {
     padding: 5px;
     
-    border-top: 1px solid #CCC;
     color: #777;
 }
 #body tr td:nth-child(1) {
@@ -378,6 +379,9 @@ body {
     color: #3fd16a;
     font-weight: bold;
 }
+#body form#conn span#success {
+    margin-left: 10px;
+}
 #body form div {
     margin-bottom: 3px;
     margin-left: 15px;
@@ -427,6 +431,15 @@ body {
     border-top-right-radius: 5px;
 
     color: #444;
+}
+#body form#conn div:last-child {
+    margin-top: 10px;
+    width: 437px;
+    text-align: right;
+}
+#body form#conn a#insc {
+    color: #4F9FCF;
+    text-decoration: none;
 }
 #body form input[type="text"], #body form input[type="password"] {
     padding: 2px;
@@ -484,7 +497,7 @@ html body #body form#conn input[type="submit"], html body #body form#changePerso
 
     margin-top: 10px;
     margin-bottom: 20px;
-    margin-left: 138px;
+    margin-left: 185px;
     padding: 3px 0;
 
     background-color: #5CB85C;
@@ -499,7 +512,7 @@ html body #body form#changePerso input[type="submit"] {
 }
 html body #body form#conn input[type="submit"]:hover, html body #body form#changePerso input[type="submit"]:hover {
     background-color: #47A447;
-    border-color: 398439;
+    border-color: #398439;
 }
 #body form#pronostic input[type="submit"] {
     width: 80px;

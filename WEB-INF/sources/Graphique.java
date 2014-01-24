@@ -31,7 +31,7 @@ public class Graphique extends HttpServlet
 				
 				retour 			+= 	"[";
 				while(rs.next()) {
-					retour 		+= "{ \"jour\": \"" + rs.getString("date") + "\", \"valeur\": \"" + ((double)Math.round(rs.getDouble("total") * 100000) / 100000) + "\" },";
+					retour 		+= "{ \"jour\": \"" + rs.getString("date") + "\", \"valeur\": \"" + ((double)Math.round(rs.getDouble("total") * 100) / 100) + "\" },";
 				}
 				if(retour.charAt(retour.length()-1) == ',')
 					retour 		= retour.substring(0, retour.length()-1);

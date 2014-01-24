@@ -7,16 +7,21 @@
 	<%
 		if(request.getParameter("error")!=null)
 			out.println("<span id='error'>Erreur dans le login ou le mot de passe</span>");
+		if(request.getParameter("success")!=null)
+			out.println("<span id='success'>Vous voila inscrit. Lancez vous !</span>");
 	%>
 
 	<div class="label">
-		<span>Login :</span><span><input type="text" 		id="j_username" name="j_username" placeholder="_______" /></span>
+		<span>Login :</span><span><input type="text" 		id="j_username" name="j_username" placeholder="-" /></span>
 	</div>
 
 	<div class="label">
-		<span>Mot de passe :</span><span><input type="password" 	id="j_password" name="j_password" placeholder="_______" /></span>
+		<span>Mot de passe :</span><span><input type="password" 	id="j_password" name="j_password" placeholder="-" /></span>
+	</div>
+
+	<div>
+		<a href='inscription' id='insc'>S'inscrire ?</a>
 	</div>
 </form>
-
 
 <jsp:include page="footer.jsp" />

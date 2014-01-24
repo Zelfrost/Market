@@ -47,6 +47,21 @@
         <servlet-name>changePerso</servlet-name>
         <jsp-file>/changePerso.jsp</jsp-file>
     </servlet>
+        
+    <servlet>
+        <servlet-name>recherche</servlet-name>
+        <jsp-file>/recherche.jsp</jsp-file>
+    </servlet>
+        
+    <servlet>
+        <servlet-name>utilisateur</servlet-name>
+        <jsp-file>/utilisateur.jsp</jsp-file>
+    </servlet>
+        
+    <servlet>
+        <servlet-name>inscription</servlet-name>
+        <jsp-file>/inscription.jsp</jsp-file>
+    </servlet>
     
     
     <servlet-mapping>
@@ -87,6 +102,21 @@
     <servlet-mapping>
         <servlet-name>changePerso</servlet-name>
         <url-pattern>/changePerso</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>recherche</servlet-name>
+        <url-pattern>/recherche</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>utilisateur</servlet-name>
+        <url-pattern>/utilisateur</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>inscription</servlet-name>
+        <url-pattern>/inscription</url-pattern>
     </servlet-mapping>
 
 
