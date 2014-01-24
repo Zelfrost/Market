@@ -50,6 +50,8 @@
 <div class='infoLeft left'>
 <a id="prev" href='marches'>Retour aux marchés</a>
 <%
+			out.println("<h3>" + libelle + "</h3>");
+
 			if(request.getParameter("success")!=null) {
 				if(rs.getString("resultat").equals("2"))
 					out.println("<span id='success'>Votre transaction s'est bien déroulée</span>");
@@ -65,10 +67,8 @@
 					out.println("<span id='error'>Le prix entré n'est pas compris entre 1 et 99</span>");
 			}
 
-			out.println("<h3>" + libelle + "</h3>");
-
 			if(rs.getString("resultat").equals("2"))
-				out.println("<span class='small'>Si vous ne croyez pas en cette information, investissez dans <a href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
+				out.println("<span class='small'>Si vous ne croyez pas en cette information, investissez dans <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
 %>
 
 <p>Date de fin : <strong><%= rs.getString("d") %></strong>
@@ -144,7 +144,7 @@
 				    out.println("<tr class='form'><td id='nom'>" + rs.getString("n") + "</td>");
 					out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
 					out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
-					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>Un bon s'achète entre 1 et 99€, le prix doit être un entier</span><input type='submit' value='acheter' /></td></tr>");
+					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>Un bon s'achète entre 1 et 99€, le prix doit être un entier</span><input type='submit' value='Acheter' id='achat' /></td></tr>");
 				
 				}
 			}

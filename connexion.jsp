@@ -10,11 +10,11 @@
 	%>
 
 	<div class="label">
-		<span>Login :</span><span><input type="text" 		id="j_username" name="j_username" /></span>
+		<span>Login :</span><span><input type="text" 		id="j_username" name="j_username" placeholder="_______" /></span>
 	</div>
 
 	<div class="label">
-		<span>Mot de passe :</span><span><input type="password" 	id="j_password" name="j_password" /></span>
+		<span>Mot de passe :</span><span><input type="password" 	id="j_password" name="j_password" placeholder="_______" /></span>
 	</div>
 </form>
 

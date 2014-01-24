@@ -19,13 +19,14 @@
 	ResultSet rs 	= 	st.executeQuery("SELECT idUser, nom, prenom, mail, argent - argentBloque AS argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 	rs.next();
 	String id 		= rs.getString("idUser");
-
-	if(request.getParameter("success")!=null)
-		out.println("<span id='success'>Vos modifications ont bien été prises en compte.</span>");
 %>
 
 <h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2>
 <a href='changePerso' class='orange'>Changer mes infos</a>
+<%
+	if(request.getParameter("success")!=null)
+		out.println("<span id='success'>Vos modifications ont bien été prises en compte.</span>");
+%>
 
 <div class="label">
 	<span>Login : </span>

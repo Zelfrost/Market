@@ -5,32 +5,32 @@
 <jsp:include page="header.jsp?titre=Page personnelle" />
 
 
-<%
-	
-    Context initCtx = new InitialContext();
-    Context envCtx  = (Context) initCtx.lookup("java:comp/env");
-    DataSource ds   = (DataSource) envCtx.lookup("base");
-    Connection con  = ds.getConnection();
-
-    Statement st    = con.createStatement();
-	ResultSet rs 	= st.executeQuery("SELECT idUser, nom, prenom, mail, argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-	rs.next();
-	String id 		= rs.getString("idUser");
-
-	if(request.getParameter("error")!=null) {
-		out.println("<span id='error'>");
-		if(request.getParameter("error").equals("1"))
-			out.println("Votre mot de passe actuel ne correspond pas");
-		else if(request.getParameter("error").equals("2"))
-			out.println("Les deux nouveaux mots de passe ne correspondent pas");
-		else
-			out.println("L'adresse mail n'est pas valide");
-		out.println("</span>");
-	}
-%>
-
 <form method="POST" action="changerPerso" id="changePerso">
-<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2><input type="submit" value="Valider" />
+	<%
+		
+	    Context initCtx = new InitialContext();
+	    Context envCtx  = (Context) initCtx.lookup("java:comp/env");
+	    DataSource ds   = (DataSource) envCtx.lookup("base");
+	    Connection con  = ds.getConnection();
+
+	    Statement st    = con.createStatement();
+		ResultSet rs 	= st.executeQuery("SELECT nom, prenom, mail, argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+		rs.next();
+	%>
+	<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2><input type="submit" value="Valider" />
+	<%
+		if(request.getParameter("error")!=null) {
+			out.println("<span id='error'>");
+			if(request.getParameter("error").equals("1"))
+				out.println("Votre mot de passe actuel ne correspond pas");
+			else if(request.getParameter("error").equals("2"))
+				out.println("Les deux nouveaux mots de passe ne correspondent pas");
+			else
+				out.println("L'adresse mail n'est pas valide");
+			out.println("</span>");
+		}
+	%>
+
 	<div class="label">
 		<span>Ancien mot de passe : </span><span><input type="password" name="ancienPass" placeholder="******" /></span/>
 	</div>
