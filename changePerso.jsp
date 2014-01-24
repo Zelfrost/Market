@@ -28,35 +28,24 @@
 		out.println("</span>");
 	}
 %>
-<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2>
 
 <form method="POST" action="changerPerso" id="changePerso">
+<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2><input type="submit" value="Valider" />
 	<div class="label">
-		<span>Login : </span>
-		<span><%= request.getUserPrincipal().getName() %></span/>
+		<span>Ancien mot de passe : </span><span><input type="password" name="ancienPass" placeholder="******" /></span/>
 	</div>
 
 	<div class="label">
-		<span>Ancien mot de passe : </span>
-		<span><input type="password" name="ancienPass" /></span/>
+		<span>Nouveau mot de passe : </span><span><input type="password" name="nouveauPass" placeholder="******"/></span/>
 	</div>
 
 	<div class="label">
-		<span>Nouveau mot de passe : </span>
-		<span><input type="password" name="nouveauPass" /></span/>
+		<span>Répéter le mot de passe : </span><span><input type="password" name="repetePass" placeholder="******"/></span/>
 	</div>
 
 	<div class="label">
-		<span>Répéter le mot de passe : </span>
-		<span><input type="password" name="repetePass" /></span/>
+		<span>Adresse Mail : </span><span><input type="text" name="mail" value="<%= rs.getString("mail") %>" /></span>
 	</div>
-
-	<div class="label">
-		<span>Adresse Mail : </span>
-		<span><input type="text" name="mail" value="<%= rs.getString("mail") %>" /></span>
-	</div>
-
-	<input type="submit" value="Valider" />
 </form>
 <%
     con.close();

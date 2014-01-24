@@ -150,6 +150,9 @@ body {
     font-size: 1.4em;
     font-weight: bold;
 }
+#body form + h3 {
+    margin-top: 60px;
+}
 #body h3 + .small {
     display: inline-block;
     margin-bottom: 15px;
@@ -207,7 +210,6 @@ body {
 }
 #body div.label span:last-child {
     width: auto;
-    margin-bottom: 5px;
 
     color: #444;
     font-weight: bold;
@@ -259,6 +261,9 @@ body {
 #body table {
     width: 90%;
     margin: 40px 0 40px 20px;
+}
+#body table.rouge, #body table.vert {
+    width: 95%;
 }
 #body table.rouge th {
     background-color: #f02000;
@@ -378,15 +383,85 @@ body {
     width: 40%;
     height: 50px;
 }
+#body form#changePerso .label span:first-child, #body form#conn .label span:first-child {
+    height: 25px;
+    line-height: 25px;
+
+    padding: 5px;
+    padding-left: 20px;
+    vertical-align:top;
+
+    background-color: #FCFCFC;
+    box-shadow: 10px 0 10px rgba(33, 33, 33, 0.1) inset;
+
+    border: 1px solid #999;
+    border-right: 0;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+
+    color: #444;
+}
+#body form#changePerso input[type="text"], #body form#conn input[type="text"], #body form#changePerso input[type="password"], #body form#conn input[type="password"] {
+    height: 25px;
+    width: 200px;
+
+    margin: 0;
+    padding: 5px;
+
+    background-color: #FCFCFC;
+    box-shadow: -10px 0 10px rgba(33, 33, 33, 0.1) inset;
+
+    border: 1px solid #999;
+    border-left: 0;
+    border-bottom-right-radius: 12px;
+    border-top-right-radius: 12px;
+
+    color: #444;
+}
 #body form input.number {
-    width: 100%;
+    width: calc(100% - 4px);
 }
 #body form input.number.first {
-    width: 33%;
+    width: calc(33% - 4px);
 }
 #body form#conn input, #body form#pronostic input {
     display: inline-block;
     width: 175px;
+}
+html body #body form#conn, html body #body form#changePerso {
+    display: block;
+    width: 600px;
+    margin: 0 auto;
+}
+html body #body form h3, html body #body form h2 {
+    display: inline-block;
+    margin-left: 10px;
+}
+html body #body form#conn input[type="submit"], html body #body form#changePerso input[type="submit"] {
+    width: 130px;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 138px;
+    padding: 3px 0;
+
+    background-color: #4CC26B;
+    box-shadow: 0 0 10px rgba(33, 33, 33, 0.3) inset;
+
+    border: 1px solid #3FA158;
+    border-radius: 20px;
+
+    color: #FFF;
+}
+html body #body form#changePerso input[type="submit"] {
+    margin-left: 50px;
+}
+html body #body form#conn input[type="submit"]:hover, html body #body form#changePerso input[type="submit"]:hover {
+    box-shadow: 0 0 10px rgba(33, 33, 33, 0.05) inset;
+
+    color: #EEE;
+
+    cursor: pointer;
 }
 #body form#pronostic input[type="submit"] {
     width: 80px;

@@ -18,7 +18,7 @@ public class Graphique extends HttpServlet
 
 				String id 		= 	req.getParameter("id");
 				String choix	=	req.getParameter("choix");
-				String retour;
+				String retour	= 	"";
 				
 			    Context initCtx = 	new InitialContext();
 			    Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
@@ -27,21 +27,18 @@ public class Graphique extends HttpServlet
 
 				Statement st 	= 	con.createStatement();
 				Statement upST 	= 	con.createStatement();
-				ResultSet rs 	= 	st.executeQuery("SELECT SUM(nombre*prix) AS total, to_char(dateTrans, 'DD/MM/YYYY') AS date FROM transactions WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY date ORDER BY date ASC;");
+				ResultSet rs 	= 	st.executeQuery("SELECT SUM(prix * nombre) / SUM(nombre) AS total, to_char(dateTrans, 'YYYY-MM-DD') AS date FROM transactions WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY date ORDER BY date ASC;");
 				
-
-				retour 			= "[";
+				retour 			+= 	"[";
 				while(rs.next()) {
-					retour 		+= "{ jour: '" + rs.getString("date") + "', valeur: '" + rs.getString("total") + "' },";
+					retour 		+= "{ \"jour\": \"" + rs.getString("date") + "\", \"valeur\": \"" + ((double)Math.round(rs.getDouble("total") * 100000) / 100000) + "\" },";
 				}
 				if(retour.charAt(retour.length()-1) == ',')
 					retour 		= retour.substring(0, retour.length()-1);
-				retour 			+= "]";
-				
+				retour			+= "]";
+
 				res.getWriter().println(retour);
 			}
-		} catch(Exception e) {
-			e.printStackTrace(res.getWriter());
-		}
+		} catch(Exception e) {}
 	}
 }

@@ -116,8 +116,8 @@
 </table>
 <form id='acheter' method='POST' action='AcheterBons'>
 <%
-	out.println("<input type='hidden' name='id' value='" + request.getParameter("id") + "'/>");
-	out.println("<input type='hidden' name='choix' value='" + choix + "'/>");
+	out.println("<input type='hidden' id='id' name='id' value='" + request.getParameter("id") + "'/>");
+	out.println("<input type='hidden' id='choix' name='choix' value='" + choix + "'/>");
 %>
 <table class="vert">
 	<tr>
@@ -151,25 +151,34 @@
 %>
 </table>
 </form>
-<div id="graphique" style="height: 250px;"></div>
+<%
+			rs = st.executeQuery("SELECT count(*) AS nb FROM transactions WHERE marketID=" + id + " AND choix=" + choix + ";");
+			int nb = 0;
+			if(rs.next())
+				nb = rs.getInt("nb");
+			if(nb > 0) {
+%>
+
+<h3>Évolution du marché</h3>
+<div id="graphique" style="width: auto; height: 250px;"></div>
 
 <%
-
+			}
 %>
 
 </div>
 
 <%
-	if(request.getUserPrincipal()!=null) {
-		rs 	= st.executeQuery("SELECT idUser, nom, prenom, argent - argentBloque AS argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-		rs.next();
+			if(request.getUserPrincipal()!=null) {
+				rs 	= st.executeQuery("SELECT idUser, nom, prenom, argent - argentBloque AS argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
+				rs.next();
 
 %>
 <div class='infoRight right'>
 	<h2 class='withSmall'><%= rs.getString("nom")%> <%= rs.getString("prenom") %></h2>
 	<span class='small'>Argent restant : <%= rs.getString("argent") %>€</span>
 <%
-	if( fin.compareTo(new java.util.Date()) > 0 && resultat.equals("2") ) {
+				if( fin.compareTo(new java.util.Date()) > 0 && resultat.equals("2") ) {
 %>
 	<h4>Vos investissements en attente</h4>
 	<table class='invest'>
@@ -180,11 +189,11 @@
 		</tr>
 
 <%
-		rs 	= st.executeQuery("SELECT idTrans, nombreRestant, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombreRestant<>0 ORDER BY prix ASC, nombreRestant ASC;");
-		if(! rs.next())
-			out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
-		else {
-			do {
+					rs 	= st.executeQuery("SELECT idTrans, nombreRestant, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombreRestant<>0 ORDER BY prix ASC, nombreRestant ASC;");
+					if(! rs.next())
+						out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
+					else {
+						do {
 %>
 		<tr>
 			<td><%= rs.getString("nombreRestant") %> bons</td>
@@ -192,8 +201,8 @@
 			<td><a href='suppTrans?idTrans=<%= rs.getString("idTrans") %>&id=<%= request.getParameter("id") %>'>X</a></td>
 		<tr>
 <%
-			} while(rs.next());
-		}
+					} while(rs.next());
+				}
 %>
 	</table>
 	<h4 class='second'>Vos investissements finalisés</h4>
@@ -204,28 +213,28 @@
 		</tr>
 
 <%
-		rs 	= st.executeQuery("SELECT idTrans, (nombre - nombreRestant) AS nombre, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombre>nombreRestant ORDER BY prix ASC, nombreRestant ASC;");
-		if(! rs.next())
-			out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
-		else {
-			do {
+				rs 	= st.executeQuery("SELECT idTrans, (nombre - nombreRestant) AS nombre, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombre>nombreRestant ORDER BY prix ASC, nombreRestant ASC;");
+				if(! rs.next())
+					out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
+				else {
+					do {
 %>
 		<tr>
 			<td><%= rs.getString("nombre") %> bons</td>
 			<td class='last'><%= rs.getString("prix") %> euros/u</td>
 		<tr>
 <%
-			} while(rs.next());
+				} while(rs.next());
+			}
 		}
-	}
 %>
 	</table>
 </div>
 <%
-		}
-		}
-		con.close();
 	}
+}
+con.close();
+}
 %>
 <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
