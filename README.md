@@ -18,9 +18,6 @@ TODO
 ====
 
 	- Bean
-	- Le champs de recherche
-	- Courbes
 	- Internationalisation
 
-	- Une liste d'utilisateur ?
 	- La gestion des utilisateurs ( admin ) ?
