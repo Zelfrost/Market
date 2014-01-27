@@ -3,7 +3,7 @@
 
 
 <form id="conn" method="POST" action="j_security_check">
-	<h3>Connexion :</h3><input type="submit" 	value="Confirmer" />
+	<h3>Connexion :</h3>
 	<%
 		if(request.getParameter("error")!=null)
 			out.println("<span id='error'>Erreur dans le login ou le mot de passe</span>");
@@ -18,6 +18,8 @@
 	<div class="label">
 		<span>Mot de passe :</span><span><input type="password" 	id="j_password" name="j_password" placeholder="-" /></span>
 	</div>
+
+	<input type="submit" value="Confirmer" />
 
 	<div>
 		<a href='inscription' id='insc'>S'inscrire ?</a>

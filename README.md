@@ -9,15 +9,14 @@ Marché de l'information en JEE
 INFO
 ====
 
-Placer le jar commons-lang qui se trouve dans WEB-INF/LIB dans $CLASSPATH
 
-
-
-
+ef
 TODO
 ====
-
-	- Bean
+	
+	- Mail
 	- Internationalisation
 
 	- La gestion des utilisateurs ( admin ) ?
+
+	- Bean

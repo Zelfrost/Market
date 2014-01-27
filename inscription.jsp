@@ -3,7 +3,7 @@
 
 
 <form id="conn" method="POST" action="Inscrire">
-	<h3>Inscription :</h3><input type="submit" 	value="Confirmer" />
+	<h3>Inscription :</h3>
 	<%
 		if(request.getParameter("error")!=null) {
 			if(request.getParameter("error").equals("1"))
@@ -38,6 +38,8 @@
 	<div class="label">
 		<span>Prénom :</span><span><input type="text" name="prenom" placeholder="-" /></span>
 	</div>
+
+	<input type="submit" value="Confirmer" />
 
 	<div>
 		<a href='connexion' id='insc'>Connexion</a>

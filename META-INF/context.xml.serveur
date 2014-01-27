@@ -6,6 +6,12 @@
                 username="damdev" password="pw:rcZtlm" driverClassName="org.postgresql.Driver"
                 url="jdbc:postgresql:dev" />
 
+    <Resource   name="mail/Session" auth="Container"
+    			type="java.mail.Session"
+    			mail.smtp.host="mailserv.univ-lille1.fr"
+    			username="deconind"
+    			password="moi" />
+
     <Realm className="org.apache.catalina.realm.DataSourceRealm" name="realmBase" localDataSource="true"
 			    dataSourceName="base" userTable="users" userNameCol="login"
 			    userCredCol="pass" userRoleTable="users" roleNameCol="role" />

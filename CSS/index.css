@@ -40,8 +40,16 @@ body {
     position: relative;
     right: 8%;
     
-    max-width: 30%;
-    margin-top: 1.4em;
+    max-width: 35%;
+    margin-top: 1.2em;
+
+    text-align: right;
+}
+#header .right select {
+    font-size: 12px;
+}
+#header .right #persoTop {
+    margin-top: 5px;
     padding: 6px 5px;
     
     background-color: #025C73;
@@ -62,8 +70,6 @@ body {
 
 #body {
     padding: 1% 8%;
-    
-    text-align: justify;
 }
 #body .persoInfo {
     display: none;
@@ -118,6 +124,8 @@ body {
 
     width: 75%;
     margin-right: 10px;
+
+    text-align: justify;
 }
 
 #body .infoLeft {
@@ -493,12 +501,11 @@ html body #body form h3, html body #body form h2 {
     margin-left: 10px;
 }
 html body #body form#conn input[type="submit"], html body #body form#changePerso input[type="submit"] {
-    width: 130px;
+    width: 437px;
 
-    margin-top: 10px;
     margin-bottom: 20px;
-    margin-left: 185px;
-    padding: 3px 0;
+    margin-left: 15px;
+    padding: 7px 0;
 
     background-color: #5CB85C;
 
@@ -507,9 +514,6 @@ html body #body form#conn input[type="submit"], html body #body form#changePerso
 
     color: #FFF;
 }
-html body #body form#changePerso input[type="submit"] {
-    margin-left: 50px;
-}
 html body #body form#conn input[type="submit"]:hover, html body #body form#changePerso input[type="submit"]:hover {
     background-color: #47A447;
     border-color: #398439;
@@ -517,10 +521,6 @@ html body #body form#conn input[type="submit"]:hover, html body #body form#chang
 #body form#pronostic input[type="submit"] {
     width: 80px;
     margin-left: 265px;
-}
-#body form#conn input[type="submit"] {
-    width: 80px;
-    margin-left: 250px;
 }
 #body form#resultat {
     display: inline-block;

@@ -17,7 +17,7 @@
 		ResultSet rs 	= st.executeQuery("SELECT nom, prenom, mail, argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 		rs.next();
 	%>
-	<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2><input type="submit" value="Valider" />
+	<h2 id="perso"><%= rs.getString("prenom") + " " + rs.getString("nom") %></h2>
 	<%
 		if(request.getParameter("error")!=null) {
 			out.println("<span id='error'>");
@@ -46,6 +46,8 @@
 	<div class="label">
 		<span>Adresse Mail : </span><span><input type="text" name="mail" value="<%= rs.getString("mail") %>" /></span>
 	</div>
+	
+	<input type="submit" value="Valider" />
 </form>
 <%
     con.close();
