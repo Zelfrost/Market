@@ -127,6 +127,14 @@ body {
 
     text-align: justify;
 }
+#body .left div {
+    text-align: right;
+    color: #4F9FCF;
+}
+
+#body .underline {
+    text-decoration: underline;
+}
 
 #body .infoLeft {
     width: 60%;
