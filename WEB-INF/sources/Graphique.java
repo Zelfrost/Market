@@ -38,6 +38,8 @@ public class Graphique extends HttpServlet
 				retour			+= "]";
 
 				res.getWriter().println(retour);
+
+				con.close();
 			}
 		} catch(Exception e) {}
 	}

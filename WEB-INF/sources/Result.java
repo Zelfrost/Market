@@ -31,7 +31,7 @@ public class Result extends HttpServlet
 			
 		    Context initCtx = 	new InitialContext();
 		    Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
-		    DataSource ds 	= 	(DataSource) envCtx.lookup("base");
+		    javax.sql.DataSource ds 	= 	(javax.sql.DataSource) envCtx.lookup("base");
 		    Connection con 	= 	ds.getConnection();
 
 			Statement st 	= 	con.createStatement();
@@ -61,7 +61,6 @@ public class Result extends HttpServlet
 					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + " WHERE idUser=" + rs.getString("userID") + ";");
 
 					// Envoi d'un mail
-
 			      	String to = rs.getString("mail");
 			      	String from = "market@damien-deconinck.fr";
 
@@ -89,7 +88,7 @@ public class Result extends HttpServlet
 		         	// Part two is attachment
 		         	messageBodyPart = new MimeBodyPart();
 		         	String filename = "file.txt";
-		         	DataSource source = new FileDataSource(filename);
+		         	javax.activation.DataSource source = new FileDataSource(filename);
 		         	messageBodyPart.setDataHandler(new DataHandler(source));
 		         	messageBodyPart.setFileName(filename);
 		         	multipart.addBodyPart(messageBodyPart);

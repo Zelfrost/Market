@@ -78,6 +78,8 @@ public class ChangerPerso extends HttpServlet
 
 			pst.executeUpdate();
 		}
+
+		con.close();
 	    res.sendRedirect(redirect);
 	} catch (Exception e) {
 	    e.printStackTrace(res.getWriter());
