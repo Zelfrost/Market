@@ -58,8 +58,8 @@
       </div>
       <div class="body">
          <ul>
-<%
-    rs=st.executeQuery(
+
+    
 </div>
 
 <jsp:include page="footer.jsp" />
