@@ -52,7 +52,7 @@
 				<%= res.getString("dateF") %> : <strong><%= rs.getString("dateFin") %></strong>
 			</p>
 
-			<span id="resultat">
+			<span id="rsltt">
 <%
 			if(rs.getString("resultat").equals("0"))
 				out.println(res.getString("gagne"));

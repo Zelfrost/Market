@@ -33,7 +33,7 @@
 		if(!rs.next())
 			response.sendRedirect("information");
 		else {
-			if(rs.getString("resultat").equals("2"))
+			if(! rs.getString("resultat").equals("2"))
 				response.sendRedirect("informationFinit?id=" + id);
 			else {
 				String libelle;
@@ -83,9 +83,8 @@
 
 <p><%= res.getString("date") %> : <strong><%= rs.getString("d") %></strong>
 <%
-				if( fin.compareTo(new java.util.Date()) <= 0 && request.getUserPrincipal()!=null && rs.getString("login").equals(request.getUserPrincipal().getName()) && rs.getString("resultat").equals("2")) {
+				if( fin.compareTo(new java.util.Date()) <= 0 && request.getUserPrincipal()!=null && rs.getString("login").equals(request.getUserPrincipal().getName()) && rs.getString("resultat").equals("2"))
 					out.println("<span id='result'><a href='resultat?id=" + request.getParameter("id") + "'>" + res.getString("resultat") + " ?</a></span>");
-				}
 %>
 </p>
 <%
@@ -97,7 +96,7 @@
 		<th colspan="3"><%= res.getString("vend") %></th>
 	</tr>
 <%
-					rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
+					rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " AND nombreRestant <> 0 AND etat = 0 GROUP BY prix ORDER BY prix DESC");
 
 					if(!rs.next())
 						out.println("<tr class='empty info'><td colspan='3'>" + res.getString("pasVend") + "</td></tr>");
@@ -122,7 +121,7 @@
 		<th colspan="3"><%= res.getString("ach") %></th>
 	</tr>
 <%
-					rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
+					rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " AND nombreRestant <> 0 AND etat = 0 GROUP BY prix ORDER BY prix DESC");
 					if(!rs.next())
 						out.println("<tr class='empty info'><td colspan='3'>" + res.getString("pasAch") + "</td></tr>");
 					else {
@@ -142,7 +141,7 @@
 					    out.println("<tr class='form'><td id='nom'>" + rs.getString("n") + "</td>");
 						out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
 						out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
-						out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' value='" + res.getString("acheter") + "' id='achat' /></td></tr>");
+						out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' name='valider' value='" + res.getString("acheter") + "' class='achat' /><input type='submit' name='valider' value='" + res.getString("vendre") + "' class='achat' /></td></tr>");
 					
 					}
 				}
@@ -222,17 +221,18 @@
 			<td class='last'><%= rs.getString("prix") %> euros/u</td>
 		<tr>
 <%
-					} while(rs.next());
+						} while(rs.next());
+					}
 				}
-			}
 %>
 	</table>
 </div>
 <%
+			}
 		}
+		con.close();
 	}
-	con.close();
-}
+}	
 %>
 <link rel='stylesheet' href='CSS/morris-0.4.3.min.css' />
 <script src='JS/jquery-1.9.1.js'></script>

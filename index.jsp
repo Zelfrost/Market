@@ -75,17 +75,17 @@
           } while (rs.next());
 %>
 <li class="all"><a href="mesmarches"><%= res.getString("tous_mes_marches") %></a></li>
-	</ul>
+	       </ul>
       </div>
     </div>
-</div>
-
-<jsp:include page="footer.jsp" />
 <%
-        }
       }
-    } catch(SQLException e) {
-    } finally {
-      try { con.close(); } catch(Exception e) { /* Ignored */ }
     }
+  } catch(SQLException e) {
+    // Ignored
+  } finally {
+    try { con.close(); } catch(Exception e) { /* Ignored */ }
+  }
 %>
+</div>
+<jsp:include page="footer.jsp" />

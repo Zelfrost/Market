@@ -179,7 +179,7 @@ hr {
     color: #FF6600;
 }
 
-#body #resultat {
+#body #rsltt {
     margin-left: 45px;
     color: #008822;
 }
@@ -478,7 +478,7 @@ hr {
 
     color: #555;
 }
-#body form input[type="submit"]#achat {
+#body form input[type="submit"].achat {
     padding: 2px 15px;
 
     background-color: #428BCA;
@@ -486,13 +486,16 @@ hr {
 
     color: #FFF;
 }
+#body form input[type="submit"].achat:first-of-type {
+    margin-left: 5px;
+}
 #body form input[type="submit"]:hover {
     background-color: #EEE;
     border-color: #AAA;
 
     cursor: pointer;
 }
-#body form input[type="submit"]#achat:hover {
+#body form input[type="submit"].achat:hover {
     background-color: #3276B1;
     border-color: #285E8E;
 }

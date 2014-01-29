@@ -55,7 +55,7 @@
 	</tr>
 	<%
 			rs 			= st.executeQuery("SELECT idMarket, libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM markets WHERE " + 
-				((old==null)?"dateFin >= date('now') AND resultat=2":"(dateFin < date('now') OR resultat <> 2)") + " AND idMarket<>0 ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
+				((old==null)?"dateFin >= date('now') AND resultat=2":"(dateFin < date('now') OR resultat <> 2)") + " AND idMarket<>0 ORDER BY " + ((old==null)?"publication":"dateFin") + " DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
 			String id;
 			Statement stTaux;
 			ResultSet rsTaux;

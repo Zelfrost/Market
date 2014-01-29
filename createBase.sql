@@ -49,8 +49,10 @@ CREATE TABLE transactions
     userID                      INT,
     nombre                      NUMERIC(10),
     nombreRestant               NUMERIC(10),
+    nombreBloque                NUMERIC(10),
     prix                        NUMERIC(10),
     choix                       NUMERIC(1),
+    etat                        NUMERIC(1),
     dateTrans                   TIMESTAMP,
 
     CONSTRAINT pk_transactions  PRIMARY KEY (idTrans),
@@ -62,4 +64,4 @@ CREATE TABLE transactions
                                 ON DELETE SET NULL
 );
 
-INSERT INTO transactions VALUES(0, 0, 0, 0, 0, 0, 0, CURRENT_TIMESTAMP);
+INSERT INTO transactions VALUES(0, 0, 0, 0, 0, 0, 0, 0, 0, CURRENT_TIMESTAMP);
