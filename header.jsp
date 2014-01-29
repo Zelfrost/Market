@@ -50,7 +50,7 @@
 	                <a href='index'><img src="Images/titre.png" alt="<%= res.getString("titre") %>" /></a>
 	            </div>
 	            <div class="right">
-	            	<form method="POST" action="" id="loc">
+	            	<form method="POST" action="index" id="loc">
 		            	<select name="loc" onchange="document.getElementById('loc').submit();">
 		            		<option value="en">English (en)</option>
 		            		<option value="fr" <%= ((fr==0)?"selected": "") %>>Français (fr)</option>

@@ -54,7 +54,7 @@
 	</tr>
 	<%
 		rs 			= st.executeQuery("SELECT idMarket, libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM markets WHERE " + 
-			((old==null)?"dateFin >= date('now') AND resultat=2":"(dateFin < date('now') OR resultat <> 2)") + " AND idMarket<>0 ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
+			((old==null)?"dateFin >= date('now') AND resultat==2":"(dateFin < date('now') OR resultat <> 2)") + " AND idMarket<>0 ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
 		String id;
 		Statement stTaux;
 		ResultSet rsTaux;
@@ -62,7 +62,7 @@
 		while (rs.next()) {
 			id 		= rs.getString("idMarket");
 		    out.println("<tr>");
-		    out.println("<td><a " + ((!rs.getString("resultat").equals("2"))?"style='color: #3322CC;'":"") + " href='information?id=" + id + "'>" + ((rs.getString("resultat").equals("1"))?rs.getString("libelleInverse"): rs.getString("libelle")) + "</a></td>");
+		    out.println("<td><a " + ((!rs.getString("resultat").equals("2"))?"style='color: #3322CC;'":"") + " href='information" + ((old!=null && !rs.getString("resultat").equals("2"))?"Finit":"") + "?id=" + id + "'>" + ((rs.getString("resultat").equals("1"))?rs.getString("libelleInverse"): rs.getString("libelle")) + "</a></td>");
 		    out.println("<td>" + rs.getString("d") + "</td>");
 
 		    stTaux 	= con.createStatement();

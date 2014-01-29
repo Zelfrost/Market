@@ -27,6 +27,11 @@
         <servlet-name>information</servlet-name>
         <jsp-file>/information.jsp</jsp-file>
     </servlet>
+
+    <servlet>
+        <servlet-name>informationFinit</servlet-name>
+        <jsp-file>/informationFinit.jsp</jsp-file>
+    </servlet>
     
     <servlet>
         <servlet-name>connexion</servlet-name>
@@ -87,6 +92,11 @@
     <servlet-mapping>
         <servlet-name>information</servlet-name>
         <url-pattern>/information</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>informationFinit</servlet-name>
+        <url-pattern>/informationFinit</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>
