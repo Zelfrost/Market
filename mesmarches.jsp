@@ -1,3 +1,5 @@
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>
@@ -5,11 +7,13 @@
 <jsp:include page="header.jsp?titre=Mes marchés" />
 
 <%
+        Locale loc = (Locale) session.getAttribute("loc");
+        ResourceBundle res  = ResourceBundle.getBundle("prop.index", loc);
 	String old = request.getParameter("old");
 	String toOld = "old=1&";
-	
-	out.println( "<h2>Mes marchés</h2>" );
-%>
+%>	
+        <h2> <%=res.getString("mes_marches")%></h2>
+
 
 <div id="selectpage">
     <%
