@@ -70,7 +70,7 @@
    while (rs.next())
    out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
 %>
-<li class="all"><a href="marches"><%= (String)res.getObject("tous_marches") %></a></li>
+<li class="all"><a href="marches"><%= (String)res.getObject("tous_mes_marches") %></a></li>
 	</ul>
       </div>
     </div>
