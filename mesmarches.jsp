@@ -7,11 +7,8 @@
 <%
 	String old = request.getParameter("old");
 	String toOld = "old=1&";
-
-	if((request.isUserInRole("Admin") || request.isUserInRole("MarketMaker")) && old==null)
-		out.println("<div id='prono'><a href='creerPronostic'>Créer un marché</a></div>");
 	
-	out.println( (old==null)?"<h2>Marchés en cours</h2>":"<h2>Marchés terminés</h2>" );
+	out.println( "<h2>Mes marchés</h2>" );
 %>
 
 <div id="selectpage">
@@ -33,7 +30,7 @@ if (request.getUserPrincipal()!=null){
     rs = st.executeQuery("SELECT idUser from users where login='" + request.getUserPrincipal().getName() + "'");
     rs.next();
     String id = rs.getString("idUser");
-    rs	= st.executeQuery("SELECT count(*) as c FROM markets where userid=" + id + " dateFin " + ((old==null)?">=":"<") + " date('now');");
+    rs	= st.executeQuery("SELECT count(*) as c FROM markets where userid=" + id + " AND dateFin " + ((old==null)?">=":"<") + " date('now');");
     rs.next();
 
     int nbpages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
@@ -41,15 +38,15 @@ if (request.getUserPrincipal()!=null){
     if( nbpages > 0 )
 	out.println("pages : ");
     if( pages != 1 )
-	out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
+	out.println("(<a class='orange' href='mesmarches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
     for( int i = 1; i <= nbpages; i++ ) {
 	if( i != pages )
-	    out.println("<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
+	    out.println("<a class='orange' href='mesmarches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
 	else
 	    out.println("<span>" + i + "</span>");
     }
     if( pages != nbpages )
-	out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
+	out.println("(<a class='orange' href='mesmarches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
 	%>
 	</div>
 
@@ -60,8 +57,7 @@ if (request.getUserPrincipal()!=null){
 	<th>Taux</th>
 	</tr>
 	<%
-	rs 			= st.executeQuery("SELECT idMarket, libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM markets WHERE userid=" + id + " " +  
-						  ((old==null)?"dateFin >= date('now') AND resultat=2":"(dateFin < date('now') OR resultat <> 2)") + " AND idMarket<>0 ORDER BY idMarket DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
+	rs= st.executeQuery("SELECT idMarket, libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " AND dateFin>=DATE('now') GROUP BY idMarket, choix ORDER BY publication DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
     
     Statement stTaux;
     ResultSet rsTaux;
@@ -102,12 +98,6 @@ if (request.getUserPrincipal()!=null){
 	out.println("</tr>");
     }
     out.println("</table>");
-    if(old!=null)
-	out.println("En <span style='color: #3322CC;'>bleu</span>, les pronostics dont le résultat a été ajouté<br/>");
-
-    rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE " + ((old==null)?"dateFin<DATE('now')":"dateFin>=DATE('now')") + ";");
-    if( rs.next() && rs.getInt("c")>0 )
-	out.println("<a href='marches?" + ((old==null)?"old=1":"") + "' class='orange next' >Voir les marchés " + ((old==null)?"terminés":"en cours") + "</a>");
 }
 con.close();
 	%>

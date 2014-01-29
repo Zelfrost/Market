@@ -19,6 +19,11 @@
     </servlet>
     
     <servlet>
+      <servlet-name>mesmarches</servlet-name>
+      <jsp-file>/mesmarches.jsp</jsp-file>
+    </servlet>
+
+    <servlet>
         <servlet-name>information</servlet-name>
         <jsp-file>/information.jsp</jsp-file>
     </servlet>
@@ -74,6 +79,11 @@
         <url-pattern>/marches</url-pattern>
     </servlet-mapping>
     
+    <servlet-mapping>
+        <servlet-name>mesmarches</servlet-name>
+        <url-pattern>/mesmarches</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>information</servlet-name>
         <url-pattern>/information</url-pattern>
