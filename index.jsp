@@ -12,26 +12,26 @@
 %>
 
 <div class="left">
-    <h2><%= (String)res.getObject("titre") %></h2>
-    <%= (String)res.getObject("contenu") %>
+    <h2><%= res.getString("titre") %></h2>
+    <%= res.getString("contenu") %>
 </div>
 
 <div class="right">
     <div class="menu">
         <div class="header">
-            <%= (String)res.getObject("rechercher") %>
+            <%= res.getString("rechercher") %>
         </div>
         <div class="body">
             <form method="POST" action="recherche">
                 <input type="text" name="search" />
-                <input type="submit" value="<%= (String)res.getObject("valider") %>" />
+                <input type="submit" value="<%= res.getString("valider") %>" />
             </form>
         </div>
     </div>
      
     <div class="menu">
         <div class="header">
-            <%= (String)res.getObject("dern_marches") %>
+            <%= res.getString("dern_marches") %>
         </div>
         <div class="body">
             <ul>
@@ -48,7 +48,7 @@
         out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
   
 %>
-                <li class="all"><a href="marches"><%= (String)res.getObject("tous_marches") %></a></li>
+                <li class="all"><a href="marches"><%= res.getString("tous_marches") %></a></li>
             </ul>
         </div>
     </div>
@@ -57,7 +57,7 @@
 %>
     <div class="menu">
       <div class="header">
-	<%= (String)res.getObject("mes_marches") %>
+	<%= res.getString("mes_marches") %>
       </div>
       <div class="body">
         <ul>
@@ -70,7 +70,7 @@
    while (rs.next())
    out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
 %>
-<li class="all"><a href="mesmarches"><%= (String)res.getObject("tous_mes_marches") %></a></li>
+<li class="all"><a href="mesmarches"><%= res.getString("tous_mes_marches") %></a></li>
 	</ul>
       </div>
     </div>
