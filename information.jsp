@@ -75,7 +75,7 @@
 			}
 
 			if(rs.getString("resultat").equals("2"))
-				out.println("<span class='small'>Si vous ne croyez pas en cette information, investissez dans <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
+				out.println("<span class='small'>" + (String)res.getObject("inverse") + " <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>" + (String)res.getObject("inverseLien") + "</a></span>");
 %>
 
 <p><%= (String)res.getObject("date") %> : <strong><%= rs.getString("d") %></strong>
@@ -97,7 +97,7 @@
 				rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
 
 				if(!rs.next())
-					out.println("<tr class='empty info'><td colspan='3'>Pas de vendeurs</td></tr>");
+					out.println("<tr class='empty info'><td colspan='3'>" + (String)res.getObject("pasVend") + "</td></tr>");
 				else {
 					do {
 						out.println("<tr>");
@@ -121,7 +121,7 @@
 <%
 				rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
 				if(!rs.next())
-					out.println("<tr class='empty info'><td colspan='3'>Pas d'acheteurs</td></tr>");
+					out.println("<tr class='empty info'><td colspan='3'>" + (String)res.getObject("pasAch") + "</td></tr>");
 				else {
 					do {
 						out.println("<tr class='info'>");
@@ -139,7 +139,7 @@
 				    out.println("<tr class='form'><td id='nom'>" + rs.getString("n") + "</td>");
 					out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
 					out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
-					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + (String)res.getObject("info") + "</span><input type='submit' value='Acheter' id='achat' /></td></tr>");
+					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' value='" + res.getString("acheter") + "' id='achat' /></td></tr>");
 				
 				}
 			}
