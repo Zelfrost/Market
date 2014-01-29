@@ -1,14 +1,21 @@
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%
+    Locale loc          = (Locale) session.getAttribute("loc");
+    ResourceBundle res  = ResourceBundle.getBundle("prop.information", loc);
+%>
+
+<%
 	if(request.getParameter("id")==null || request.getParameter("id").equals("") || request.getParameter("id").equals("0")) {
 %>
 <jsp:include page="header.jsp?titre=Error" />
 <%
-		out.println("<span id='error'>Page non trouvée : <a href='index'>Retourner à l'accueil</a></span>");
+		out.println("<span id='error'>" + (String)res.getObject("erreur") + "</span>");
 	} else {
 		int id 			= 	Integer.parseInt(request.getParameter("id"));
 		int choix 		= 	(request.getParameter("choix")!=null)
@@ -48,45 +55,45 @@
 
 
 <div class='infoLeft left'>
-<a id="prev" href='marches'>Retour aux marchés</a>
+<a id="prev" href='marches'><%= (String)res.getObject("lienRetour") %></a>
 <%
 			out.println("<h3>" + libelle + "</h3>");
 
 			if(request.getParameter("success")!=null) {
 				if(rs.getString("resultat").equals("2"))
-					out.println("<span id='success'>Votre transaction s'est bien déroulée</span>");
+					out.println("<span id='success'>" + (String)res.getObject("succes2") + "</span>");
 				else
-					out.println("<span id='success'>L'évènement a bien été mis à jour.</span>");
+					out.println("<span id='success'>" + (String)res.getObject("succes") + "</span>");
 			}
 			if(request.getParameter("error")!=null) {
 				if(request.getParameter("error").equals("1"))
-					out.println("<span id='error'>Vous ne possédez pas suffisamment d'argent</span>");
+					out.println("<span id='error'>" + (String)res.getObject("erreur1") + "</span>");
 				else if(request.getParameter("error").equals("2"))
-					out.println("<span id='error'>Le prix ( ou le nombre de bons ) entré n'est pas un nombre</span>");
+					out.println("<span id='error'>" + (String)res.getObject("erreur2") + "</span>");
 				else
-					out.println("<span id='error'>Le prix entré n'est pas compris entre 1 et 99</span>");
+					out.println("<span id='error'>" + (String)res.getObject("erreur3") + "</span>");
 			}
 
 			if(rs.getString("resultat").equals("2"))
 				out.println("<span class='small'>Si vous ne croyez pas en cette information, investissez dans <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
 %>
 
-<p>Date de fin : <strong><%= rs.getString("d") %></strong>
+<p><%= (String)res.getObject("erreur3") %> : <strong><%= rs.getString("d") %></strong>
 <%
 			if( fin.compareTo(new java.util.Date()) <= 0 && request.getUserPrincipal()!=null && rs.getString("login").equals(request.getUserPrincipal().getName()) && rs.getString("resultat").equals("2")) {
-				out.println("<span id='result'><a href='resultat?id=" + request.getParameter("id") + "'>Résultat ?</a></span>");
+				out.println("<span id='result'><a href='resultat?id=" + request.getParameter("id") + "'>" + (String)res.getObject("resultat") + " ?</a></span>");
 			}
 %>
 </p>
-<p>État de l'offre : <strong>
+<p><%= (String)res.getObject("etat") %> : <strong>
 	<%
 			if(! resultat.equals("2"))
-				out.println("Terminé</strong> - <span style='color: green'>Le libellé affiché est celui qui s'est avéré vrai</span>");
+				out.println((String)res.getObject("etatFin1"));
 			else {
 				if(fin.compareTo(new java.util.Date()) <= 0)
-					out.println("Terminé</strong> - Résultat en attente</span>");
+					out.println((String)res.getObject("etatFin2"));
 				else
-					out.println("En cours</strong>");
+					out.println((String)res.getObject("etatFin3"));
 			}
 %>
 </p>
@@ -96,7 +103,7 @@
 
 <table class="rouge">
 	<tr>
-		<th colspan="3">Vendeurs</th>
+		<th colspan="3"><%= (String)res.getObject("vend") %></th>
 	</tr>
 <%
 				rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
@@ -121,7 +128,7 @@
 %>
 <table class="vert">
 	<tr>
-		<th colspan="3">Acheteurs</th>
+		<th colspan="3"><%= (String)res.getObject("ach") %></th>
 	</tr>
 <%
 				rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " AND nombreRestant <> 0 GROUP BY prix ORDER BY prix DESC");
@@ -144,7 +151,7 @@
 				    out.println("<tr class='form'><td id='nom'>" + rs.getString("n") + "</td>");
 					out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
 					out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
-					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>Un bon s'achète entre 1 et 99€, le prix doit être un entier</span><input type='submit' value='Acheter' id='achat' /></td></tr>");
+					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + (String)res.getObject("info") + "</span><input type='submit' value='Acheter' id='achat' /></td></tr>");
 				
 				}
 			}
@@ -159,7 +166,7 @@
 			if(nb > 0) {
 %>
 
-<h3>Évolution du marché</h3>
+<h3><%= (String)res.getObject("etatMarche") %></h3>
 <div id="graphique" style="width: auto; height: 250px;"></div>
 
 <%
@@ -180,7 +187,7 @@
 <%
 				if( fin.compareTo(new java.util.Date()) > 0 && resultat.equals("2") ) {
 %>
-	<h4>Vos investissements en attente</h4>
+	<h4><%= (String)res.getObject("invest") %></h4>
 	<table class='invest'>
 		<tr class='th'>
 			<th>Nombre</th>
@@ -191,7 +198,7 @@
 <%
 					rs 	= st.executeQuery("SELECT idTrans, nombreRestant, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombreRestant<>0 ORDER BY prix ASC, nombreRestant ASC;");
 					if(! rs.next())
-						out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
+						out.println("<tr class='empty info'><td colspan='3'>" + (String)res.getObject("invest") + "</td></tr>");
 					else {
 						do {
 %>
@@ -205,7 +212,7 @@
 				}
 %>
 	</table>
-	<h4 class='second'>Vos investissements finalisés</h4>
+	<h4 class='second'><%= (String)res.getObject("investA") %></h4>
 	<table class='invest'>
 		<tr class='th'>
 			<th>Nombre</th>
@@ -215,7 +222,7 @@
 <%
 				rs 	= st.executeQuery("SELECT idTrans, (nombre - nombreRestant) AS nombre, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombre>nombreRestant ORDER BY prix ASC, nombreRestant ASC;");
 				if(! rs.next())
-					out.println("<tr class='empty info'><td colspan='3'>Pas d'investissement dans cette action</td></tr>");
+					out.println("<tr class='empty info'><td colspan='3'>" + (String)res.getObject("invest0") + "</td></tr>");
 				else {
 					do {
 %>
