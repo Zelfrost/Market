@@ -46,20 +46,38 @@
 
     while (rs.next())
         out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
-    con.close();
+  
 %>
                 <li class="all"><a href="marches"><%= (String)res.getObject("tous_marches") %></a></li>
             </ul>
         </div>
-     </div>
+    </div>
+<% 
+   if (request.getUserPrincipal()!=null){
+%>
     <div class="menu">
       <div class="header">
-    <%= (String)res.getObject("mes_marches") %>
+	<%= (String)res.getObject("mes_marches") %>
       </div>
       <div class="body">
-         <ul>
-
-    
+        <ul>
+<%
+   rs = st.executeQuery("SELECT idUser from users where login='" + request.getUserPrincipal().getName() + "'");
+   rs.next();
+   String id = rs.getString("idUser");
+   rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " AND dateFin>=DATE('now') GROUP BY idMarket, choix ORDER BY publication DESC;");
+   
+   while (rs.next())
+   out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
+%>
+<li class="all"><a href="marches"><%= (String)res.getObject("tous_marches") %></a></li>
+	</ul>
+      </div>
+    </div>
+<%
+   }
+   con.close();
+%>
 </div>
 
 <jsp:include page="footer.jsp" />
