@@ -65,12 +65,12 @@
    rs = st.executeQuery("SELECT idUser from users where login='" + request.getUserPrincipal().getName() + "'");
    rs.next();
    String id = rs.getString("idUser");
-   rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " AND dateFin>=DATE('now') GROUP BY idMarket, choix ORDER BY publication DESC;");
+   rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " AND dateFin>=DATE('now') GROUP BY idMarket, choix ORDER BY publication DESC LIMIT 10;");
    
    while (rs.next())
    out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
 %>
-<li class="all"><a href="marches"><%= (String)res.getObject("tous_mes_marches") %></a></li>
+<li class="all"><a href="mesmarches"><%= (String)res.getObject("tous_mes_marches") %></a></li>
 	</ul>
       </div>
     </div>
