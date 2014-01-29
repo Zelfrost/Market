@@ -7,9 +7,9 @@
                 url="jdbc:postgresql://sqlserv/da2i" />
 
     <Resource   name="mail/Session" auth="Container"
-    			type="java.mail.Session"
+    			type="javax.mail.Session"
     			mail.smtp.host="mailserv.univ-lille1.fr"
-    			username="deconind"
+    			username="deconinck.damien"
     			password="moi" />
 
     <Realm className="org.apache.catalina.realm.DataSourceRealm" name="realmBase" localDataSource="true"

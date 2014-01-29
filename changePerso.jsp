@@ -1,8 +1,16 @@
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:include page="header.jsp?titre=Page personnelle" />
+
+
+<%
+    Locale loc          = (Locale) session.getAttribute("loc");
+    ResourceBundle res  = ResourceBundle.getBundle("prop.changeperso", loc);
+%>
 
 
 <form method="POST" action="ChangerPerso" id="changePerso">
@@ -22,32 +30,32 @@
 		if(request.getParameter("error")!=null) {
 			out.println("<span id='error'>");
 			if(request.getParameter("error").equals("1"))
-				out.println("Votre mot de passe actuel ne correspond pas");
+				out.println((String)res.getObject("erreur1"));
 			else if(request.getParameter("error").equals("2"))
-				out.println("Les deux nouveaux mots de passe ne correspondent pas");
+				out.println((String)res.getObject("erreur2"));
 			else
-				out.println("L'adresse mail n'est pas valide");
+				out.println((String)res.getObject("erreur3"));
 			out.println("</span>");
 		}
 	%>
 
 	<div class="label">
-		<span>Ancien mot de passe : </span><span><input type="password" name="ancienPass" placeholder="******" /></span/>
+		<span><%= (String)res.getObject("pass") %> : </span><span><input type="password" name="ancienPass" placeholder="******" /></span/>
 	</div>
 
 	<div class="label">
-		<span>Nouveau mot de passe : </span><span><input type="password" name="nouveauPass" placeholder="******"/></span/>
+		<span><%= (String)res.getObject("nouvPass") %> : </span><span><input type="password" name="nouveauPass" placeholder="******"/></span/>
 	</div>
 
 	<div class="label">
-		<span>Répéter le mot de passe : </span><span><input type="password" name="repetePass" placeholder="******"/></span/>
+		<span><%= (String)res.getObject("repeterPass") %> : </span><span><input type="password" name="repetePass" placeholder="******"/></span/>
 	</div>
 
 	<div class="label">
-		<span>Adresse Mail : </span><span><input type="text" name="mail" value="<%= rs.getString("mail") %>" /></span>
+		<span><%= (String)res.getObject("mail") %> : </span><span><input type="text" name="mail" value="<%= rs.getString("mail") %>" /></span>
 	</div>
 	
-	<input type="submit" value="Valider" />
+	<input type="submit" value="<%= (String)res.getObject("valider") %>" />
 </form>
 <%
     con.close();
