@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:include page="header.jsp" />
 
+
 <%
     Locale loc          = (Locale) session.getAttribute("loc");
     ResourceBundle res  = ResourceBundle.getBundle("prop.index", loc);

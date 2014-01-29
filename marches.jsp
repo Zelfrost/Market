@@ -66,11 +66,11 @@
 		    out.println("<td>" + rs.getString("d") + "</td>");
 
 		    stTaux 	= con.createStatement();
-		    rsTaux 	= stTaux.executeQuery("SELECT sum(nombre * prix) AS t0 FROM transactions WHERE marketID = " + id + " AND choix = 0;");
+		    rsTaux 	= stTaux.executeQuery("SELECT sum((nombre - nombreRestant) * prix) AS t0 FROM transactions WHERE marketID = " + id + " AND choix = 0;");
 		    rsTaux.next();
 		    t0 		= rsTaux.getInt("t0");
 
-		    rsTaux 	= stTaux.executeQuery("SELECT sum(nombre * prix) AS t1 FROM transactions WHERE marketID = " + id + " AND choix = 1;");
+		    rsTaux 	= stTaux.executeQuery("SELECT sum((nombre - nombreRestant) * prix) AS t1 FROM transactions WHERE marketID = " + id + " AND choix = 1;");
 		    rsTaux.next();
 		    t1 		= rsTaux.getInt("t1");
 

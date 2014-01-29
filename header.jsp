@@ -35,7 +35,7 @@
 		<link rel="stylesheet" href="CSS/jquery-ui.css" />
 		<link rel="stylesheet" href="CSS/index.css" />
 <%
-	String titre 	= (String)res.getObject("titre");
+	String titre 	= res.getString("titre");
 	if(request.getParameter("titre")!=null)
 		titre 		= request.getParameter("titre");
 	titre 		   +=  " - Lille 1 - " + session.getAttribute("loc");
@@ -47,7 +47,7 @@
 	    <div id="wrapper">
 	        <div id="header">
 	            <div class="left">
-	                <a href='index'><img src="Images/titre.png" alt="<%= (String)res.getObject("titre") %>" /></a>
+	                <a href='index'><img src="Images/titre.png" alt="<%= res.getString("titre") %>" /></a>
 	            </div>
 	            <div class="right">
 	            	<form method="POST" action="" id="loc">
@@ -61,7 +61,7 @@
 		                <img src="Images/user-group.gif" alt="icone" />
 		                <%
 		                	if( ! (request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User") ) )
-		                		out.println((String)res.getObject("deconnecte") + " (<a href='Conn?url=" + URLEncoder.encode((request.getRequestURL().append('?').append(request.getQueryString())).toString()) + "'>" + (String)res.getObject("deconnecte_link") + "</a>)");
+		                		out.println(res.getString("deconnecte") + " (<a href='Conn?url=" + URLEncoder.encode((request.getRequestURL().append('?').append(request.getQueryString())).toString()) + "'>" + res.getString("deconnecte_link") + "</a>)");
 		            		else {
 	            				Context initCtx = 	new InitialContext();
 					            Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
@@ -72,7 +72,7 @@
 					       		ResultSet rs 	= 	st.executeQuery("SELECT (prenom || ' ' || nom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
 					       		
 					       		rs.next();
-		            			out.print((String)res.getObject("connecte") + " « <a style='text-decoration: underline;' href='perso'>" + rs.getString("n") + "</a> » (<a href='Conn?deco=1'>" + (String)res.getObject("connecte_link") +"</a>)");
+		            			out.print(res.getString("connecte") + " « <a style='text-decoration: underline;' href='perso'>" + rs.getString("n") + "</a> » (<a href='Conn?deco=1'>" + res.getString("connecte_link") +"</a>)");
 								con.close();
 		            		}
 		            	%>

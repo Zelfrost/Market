@@ -13,23 +13,23 @@
 	<h3>Connexion :</h3>
 	<%
 		if(request.getParameter("error")!=null)
-			out.println("<span id='error'>" + (String)res.getObject("erreur") + "</span>");
+			out.println("<span id='error'>" + res.getString("erreur") + "</span>");
 		if(request.getParameter("success")!=null)
-			out.println("<span id='success'>" + (String)res.getObject("succes") + "</span>");
+			out.println("<span id='success'>" + res.getString("succes") + "</span>");
 	%>
 
 	<div class="label">
-		<span><%= (String)res.getObject("login") %> :</span><span><input type="text" id="j_username" name="j_username" placeholder="-" /></span>
+		<span><%= res.getString("login") %> :</span><span><input type="text" id="j_username" name="j_username" placeholder="-" /></span>
 	</div>
 
 	<div class="label">
-		<span><%= (String)res.getObject("pass") %> :</span><span><input type="password" 	id="j_password" name="j_password" placeholder="-" /></span>
+		<span><%= res.getString("pass") %> :</span><span><input type="password" 	id="j_password" name="j_password" placeholder="-" /></span>
 	</div>
 
-	<input type="submit" value="<%= (String)res.getObject("conf") %>" />
+	<input type="submit" value="<%= res.getString("conf") %>" />
 
 	<div>
-		<a href='inscription' id='insc'><%= (String)res.getObject("insc") %> ?</a>
+		<a href='inscription' id='insc'><%= res.getString("insc") %> ?</a>
 	</div>
 </form>
 
