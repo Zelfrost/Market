@@ -67,7 +67,7 @@
         if(nbRes == 0)
             out.println("Aucun résultat ne correspond à votre recherche");
     } catch( SQLException e ) {
-        out.println("Exception Throw");
+        out.println("Aucun résultat ne correspond à votre recherche");
     }
     con.close();
 %>

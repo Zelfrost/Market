@@ -61,43 +61,31 @@ public class Result extends HttpServlet
 					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + " WHERE idUser=" + rs.getString("userID") + ";");
 
 					// Envoi d'un mail
-			      	String to = rs.getString("mail");
-			      	String from = "market@damien-deconinck.fr";
 
-			      	String host = "localhost";
+					// Récupération de la session
+					Context iniCont = new InitialContext();
+			        Context envCont = (Context) iniCont.lookup("java:/comp/env");
+			      	javax.mail.Session sess = (javax.mail.Session)envCont.lookup("mail/Session");
 
-			      	Properties properties = System.getProperties();
-			      	properties.setProperty("mail.smtp.host", host);
+			      	// Création du message
+			      	Message message = new MimeMessage(sess);
 
-			      	Session session = Session.getDefaultInstance(properties);
-		         	MimeMessage message = new MimeMessage(session);
+			      	// From
+			      	message.setFrom(new InternetAddress("market@dammien-deconinck.fr"));
 
-		         	message.setFrom(new InternetAddress(from));
-		         	message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			      	// To
+			      	InternetAddress to[] = new InternetAddress[1];
+			      	to[0] = new InternetAddress(rs.getString("mail"));
+			      	message.setRecipients(Message.RecipientType.TO, to);
+
+			      	// Sujet
 		         	message.setSubject("Vous avez misé sur le bon cheval !");
 
-		         	BodyPart messageBodyPart = new MimeBodyPart();
-		         	messageBodyPart.setText("Bravo ! Le pronostic \"" + lib + "\" sur lequel vous aviez parié vient d'être confirmé. Vous êtes donc l'heureux vainqueurs de " + rs.getString("somme") + "€, qui viennent d'être ajouté à votre argent sur le site.");
-		         
-		         	// Create a multipar message
-		         	Multipart multipart = new MimeMultipart();
+		         	// Contenu
+			      	message.setContent("Bravo ! Le pronostic \"" + lib + "\" sur lequel vous aviez parié vient d'être confirmé. Vous êtes donc l'heureux vainqueurs de " + rs.getString("somme") + "€, qui viennent d'être ajouté à votre argent sur le site.", "text/plain");
 
-		         	// Set text message part
-		         	multipart.addBodyPart(messageBodyPart);
-
-		         	// Part two is attachment
-		         	messageBodyPart = new MimeBodyPart();
-		         	String filename = "file.txt";
-		         	javax.activation.DataSource source = new FileDataSource(filename);
-		         	messageBodyPart.setDataHandler(new DataHandler(source));
-		         	messageBodyPart.setFileName(filename);
-		         	multipart.addBodyPart(messageBodyPart);
-
-		         	// Send the complete message parts
-		         	message.setContent(multipart );
-
-		         	// Send message
-		         	Transport.send(message);
+			      	// Envoi
+			      	Transport.send(message);
 			    }
 				//res.sendRedirect("information?id=" + id + "&success=1");
 			}
