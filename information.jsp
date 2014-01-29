@@ -78,7 +78,7 @@
 				out.println("<span class='small'>Si vous ne croyez pas en cette information, investissez dans <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>le pronostic inverse</a></span>");
 %>
 
-<p><%= (String)res.getObject("erreur3") %> : <strong><%= rs.getString("d") %></strong>
+<p><%= (String)res.getObject("date") %> : <strong><%= rs.getString("d") %></strong>
 <%
 			if( fin.compareTo(new java.util.Date()) <= 0 && request.getUserPrincipal()!=null && rs.getString("login").equals(request.getUserPrincipal().getName()) && rs.getString("resultat").equals("2")) {
 				out.println("<span id='result'><a href='resultat?id=" + request.getParameter("id") + "'>" + (String)res.getObject("resultat") + " ?</a></span>");
