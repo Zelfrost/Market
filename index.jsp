@@ -52,6 +52,14 @@
             </ul>
         </div>
      </div>
+    <div class="menu">
+      <div class="header">
+    <%= (String)res.getObject("mes_marches") %>
+      </div>
+      <div class="body">
+         <ul>
+<%
+    rs=st.executeQuery(
 </div>
 
 <jsp:include page="footer.jsp" />
