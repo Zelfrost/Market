@@ -5,7 +5,7 @@
 
 <%
     Locale loc          = (Locale) session.getAttribute("loc");
-    ResourceBundle res  = ResourceBundle.getBundle("prop.index", loc);
+    ResourceBundle res  = ResourceBundle.getBundle("prop.creerPronostic", loc);
 %>
 
 
@@ -38,21 +38,21 @@
 %>
 
 <div>
-	<label for="libelle"> :</label>
+	<label for="libelle"><%= (String)res.getObject("libelle") %> :</label>
 	<textarea name="libelle"></textarea>
 </div>
 
 <div>
-	<label for="libelleInverse"> :</label>
+	<label for="libelleInverse"><%= (String)res.getObject("libelleInverse") %> :</label>
 	<textarea name="libelleInverse"></textarea>
 </div>
 
 <div>
-	<label for="dateFin"> :</label>
+	<label for="dateFin"><%= (String)res.getObject("date") %> :</label>
 	<input type="text" id="datepicker" name="dateFin" onchange="sub();" />
 </div>
 
-<input type="submit" value="" />
+<input type="submit" value="<%= (String)res.getObject("valider") %>" />
 
 </form>
 
