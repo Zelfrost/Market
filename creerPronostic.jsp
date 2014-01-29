@@ -26,33 +26,33 @@
 	});
 </script>
 
-<a id="prev" href='marches'><%= (String)res.getObject("lienRetour") %></a>
+<a id="prev" href='marches'><%= res.getString("lienRetour") %></a>
 
-<h3><%= (String)res.getObject("titre") %></h3>
+<h3><%= res.getString("titre") %></h3>
 
 <form accept-charset="ISO-8859-1" id="pronostic" method="POST" action="AjoutPronostic">
 
 <%
 	if(request.getParameter("succes")!=null)
-		out.println("<span id='success'>" + (String)res.getObject("succes") + "</span>");
+		out.println("<span id='success'>" + res.getString("succes") + "</span>");
 %>
 
 <div>
-	<label for="libelle"><%= (String)res.getObject("libelle") %> :</label>
+	<label for="libelle"><%= res.getString("libelle") %> :</label>
 	<textarea name="libelle"></textarea>
 </div>
 
 <div>
-	<label for="libelleInverse"><%= (String)res.getObject("libelleInverse") %> :</label>
+	<label for="libelleInverse"><%= res.getString("libelleInverse") %> :</label>
 	<textarea name="libelleInverse"></textarea>
 </div>
 
 <div>
-	<label for="dateFin"><%= (String)res.getObject("date") %> :</label>
+	<label for="dateFin"><%= res.getString("date") %> :</label>
 	<input type="text" id="datepicker" name="dateFin" onchange="sub();" />
 </div>
 
-<input type="submit" value="<%= (String)res.getObject("valider") %>" />
+<input type="submit" value="<%= res.getString("valider") %>" />
 
 </form>
 

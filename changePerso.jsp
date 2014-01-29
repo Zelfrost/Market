@@ -30,32 +30,32 @@
 		if(request.getParameter("error")!=null) {
 			out.println("<span id='error'>");
 			if(request.getParameter("error").equals("1"))
-				out.println((String)res.getObject("erreur1"));
+				out.println(res.getString("erreur1"));
 			else if(request.getParameter("error").equals("2"))
-				out.println((String)res.getObject("erreur2"));
+				out.println(res.getString("erreur2"));
 			else
-				out.println((String)res.getObject("erreur3"));
+				out.println(res.getString("erreur3"));
 			out.println("</span>");
 		}
 	%>
 
 	<div class="label">
-		<span><%= (String)res.getObject("pass") %> : </span><span><input type="password" name="ancienPass" placeholder="******" /></span/>
+		<span><%= res.getString("pass") %> : </span><span><input type="password" name="ancienPass" placeholder="******" /></span/>
 	</div>
 
 	<div class="label">
-		<span><%= (String)res.getObject("nouvPass") %> : </span><span><input type="password" name="nouveauPass" placeholder="******"/></span/>
+		<span><%= res.getString("nouvPass") %> : </span><span><input type="password" name="nouveauPass" placeholder="******"/></span/>
 	</div>
 
 	<div class="label">
-		<span><%= (String)res.getObject("repeterPass") %> : </span><span><input type="password" name="repetePass" placeholder="******"/></span/>
+		<span><%= res.getString("repeterPass") %> : </span><span><input type="password" name="repetePass" placeholder="******"/></span/>
 	</div>
 
 	<div class="label">
-		<span><%= (String)res.getObject("mail") %> : </span><span><input type="text" name="mail" value="<%= rs.getString("mail") %>" /></span>
+		<span><%= res.getString("mail") %> : </span><span><input type="text" name="mail" value="<%= rs.getString("mail") %>" /></span>
 	</div>
 	
-	<input type="submit" value="<%= (String)res.getObject("valider") %>" />
+	<input type="submit" value="<%= res.getString("valider") %>" />
 </form>
 <%
     con.close();

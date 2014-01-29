@@ -1,5 +1,13 @@
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:include page="header.jsp?titre=Connexion" />
+
+
+<%
+    Locale loc          = (Locale) session.getAttribute("loc");
+    ResourceBundle res  = ResourceBundle.getBundle("prop.inscription", loc);
+%>
 
 
 <form id="conn" method="POST" action="Inscrire">
@@ -7,42 +15,42 @@
 	<%
 		if(request.getParameter("error")!=null) {
 			if(request.getParameter("error").equals("1"))
-				out.println("<span id='error'>Erreur, Vous avez oublié des informations</span>");
+				out.println("<span id='error'>" + res.getString("erreur1") + "</span>");
 			else if(request.getParameter("error").equals("2"))
-				out.println("<span id='error'>Erreur, les mots de passe ne sont les mêmes</span>");
+				out.println("<span id='error'>" + res.getString("erreur2") + "</span>");
 			else
-				out.println("<span id='error'>Erreur, ce login existe déjà</span>");
+				out.println("<span id='error'>" + res.getString("erreur3") + "</span>");
 		}
 	%>
 
 	<div class="label">
-		<span>Login :</span><span><input type="text" name="login" placeholder="-" /></span>
+		<span><%= res.getString("login") %> :</span><span><input type="text" name="login" placeholder="-" /></span>
 	</div>
 
 	<div class="label">
-		<span>Mot de passe :</span><span><input type="password" name="pass" placeholder="-" /></span>
+		<span><%= res.getString("pass") %> :</span><span><input type="password" name="pass" placeholder="-" /></span>
 	</div>
 
 	<div class="label">
-		<span>Confirmer le mot de passe :</span><span><input type="password" name="passConf" placeholder="-" /></span>
+		<span><%= res.getString("repetPass") %> :</span><span><input type="password" name="passConf" placeholder="-" /></span>
 	</div>
 
 	<div class="label">
-		<span>Adresse mail :</span><span><input type="text" name="mail" placeholder="-" /></span>
+		<span><%= res.getString("mail") %> :</span><span><input type="text" name="mail" placeholder="-" /></span>
 	</div>
 
 	<div class="label">
-		<span>Nom :</span><span><input type="text" name="nom" placeholder="-" /></span>
+		<span><%= res.getString("nom") %> :</span><span><input type="text" name="nom" placeholder="-" /></span>
 	</div>
 
 	<div class="label">
-		<span>Prénom :</span><span><input type="text" name="prenom" placeholder="-" /></span>
+		<span><%= res.getString("prenom") %> :</span><span><input type="text" name="prenom" placeholder="-" /></span>
 	</div>
 
-	<input type="submit" value="Confirmer" />
+	<input type="submit" value="<%= res.getString("conf") %>" />
 
 	<div>
-		<a href='connexion' id='insc'>Connexion</a>
+		<a href='connexion' id='insc'><%= res.getString("conn") %> ?</a>
 	</div>
 </form>
 
