@@ -179,6 +179,11 @@ hr {
     color: #FF6600;
 }
 
+#body #resultat {
+    margin-left: 45px;
+    color: #008822;
+}
+
 #body h4 {
     margin-bottom: 10px;
     
@@ -586,6 +591,9 @@ html body #body form#conn input[type="submit"]:hover, html body #body form#chang
 #body .right input[type="submit"] {
     display: inline-block;
     max-width: 30%;
+}
+#body .right ul {
+    margin-top: 5px;
 }
 #body .right li {
     margin-left: 15px;

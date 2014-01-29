@@ -87,7 +87,7 @@ public class Result extends HttpServlet
 			      	// Envoi
 			      	Transport.send(message);
 			    }
-				//res.sendRedirect("information?id=" + id + "&success=1");
+				res.sendRedirect("informationFinit?id=" + id + "&success=1");
 			}
 			con.close();
 		} catch(Exception e) {
