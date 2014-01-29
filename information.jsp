@@ -85,18 +85,6 @@
 			}
 %>
 </p>
-<p><%= (String)res.getObject("etat") %> : <strong>
-	<%
-			if(! resultat.equals("2"))
-				out.println((String)res.getObject("etatFin1"));
-			else {
-				if(fin.compareTo(new java.util.Date()) <= 0)
-					out.println((String)res.getObject("etatFin2"));
-				else
-					out.println((String)res.getObject("etatFin3"));
-			}
-%>
-</p>
 <%
 			if( fin.compareTo(new java.util.Date()) > 0 && resultat.equals("2") ) {
 %>
