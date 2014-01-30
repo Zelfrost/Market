@@ -1,3 +1,4 @@
+<%@ page import="tools.Personne" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>

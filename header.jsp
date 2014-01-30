@@ -1,3 +1,4 @@
+<%@ page import="tools.Personne" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.util.MissingResourceException" %>
@@ -7,6 +8,11 @@
 <%@ page import="javax.naming.*" %>
 
 <%
+	if(request.getUserPrincipal()!=null && session.getAttribute("Personne")==null) {
+		Personne util 	= new Personne(request.getUserPrincipal().getName());
+		session.setAttribute("Personne", util);
+	}
+
 	Locale loc 	= (Locale) session.getAttribute("loc");
 	if(request.getParameter("loc")!=null) {
 		if(request.getParameter("loc").equals("fr"))
