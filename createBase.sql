@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS    users;
 
 
 CREATE TABLE  users (
-    idUser                      INT,
+    idUser                      SERIAL,
     nom                         VARCHAR(30),
     prenom                      VARCHAR(30),
     login                       VARCHAR(20),
@@ -17,14 +17,13 @@ CREATE TABLE  users (
     CONSTRAINT pk_user          PRIMARY KEY (idUser)
 );
 
-INSERT INTO users VALUES(0, 'Admin', '', 'admin', 'Rt6cO9f', 'deconinck.damien@gmail.com', '1000000', '0', 'Admin');
-INSERT INTO users VALUES(1, 'Deconinck', 'Damien', 'deconind', 'vrpCLZ', 'deconinck.damien@gmail.com', '100000', '0', 'Admin');
-INSERT INTO users VALUES(2, 'Godart', 'Christophe', 'godartc', 'vrpCLZ', 'godart.christophe@gmail.com', '100000', '0', 'Admin');
-
+INSERT INTO users VALUES(0, 'Admin', 'admin', 'admin', 'Rt6cO9f', 'deconinck.damien@gmail.com', '1000000', '0', 'Admin');
+INSERT INTO users(nom, prenom, login, pass, mail, argent, argentBloque, role) VALUES('Deconinck', 'Damien', 'deconind', 'vrpCLZ', 'deconinck.damien@gmail.com', '100000', '0', 'Admin');
+INSERT INTO users(nom, prenom, login, pass, mail, argent, argentBloque, role) VALUES('Godart', 'Christophe', 'godartc', 'vrpCLZ', 'godart.christophe@gmail.com', '100000', '0', 'Admin');
 
 CREATE TABLE markets
 (
-    idMarket                    INT,
+    idMarket                    SERIAL,
     libelle                     VARCHAR(300),
     libelleInverse              VARCHAR(300),
     dateFin                     DATE,
@@ -39,12 +38,12 @@ CREATE TABLE markets
 );
 
 INSERT INTO markets VALUES(0, '', '', '1995-01-01',  CURRENT_TIMESTAMP, 0, 2);
-INSERT INTO markets VALUES(1, 'Il pleuvra le 1er Juin', 'Il ne pleuvra pas le 1er Juin', '2014-06-01',  CURRENT_TIMESTAMP, 0, 2);
+INSERT INTO markets(libelle, libelleInverse, dateFin, publication, userID, resultat) VALUES('Il pleuvra le 1er Juin', 'Il ne pleuvra pas le 1er Juin', '2014-06-01',  CURRENT_TIMESTAMP, 0, 2);
 
 
 CREATE TABLE transactions
 (
-    idTrans                     INT,
+    idTrans                     SERIAL,
     marketID                    INT,
     userID                      INT,
     nombre                      NUMERIC(10),

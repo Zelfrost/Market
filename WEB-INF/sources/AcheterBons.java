@@ -67,17 +67,16 @@ public class AcheterBons extends HttpServlet
 								retraitBons	= (nbBons > rs.getInt("nombreRestant")?rs.getInt("nombreRestant"):nbBons);
 								upST		= con.createStatement();
 								// Ajout de la transactions avec le nombre de bons
-								upST.executeUpdate("INSERT INTO transactions "
-														+ "SELECT MAX(idtrans)+1, "
+								upST.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, nombreBloque, prix, choix, etat, dateTrans) VALUES (" 
 															+ req.getParameter("id") + ", "
 															+ util.id() + ", "
 															+ retraitBons + ", "
 															+ "0, "
+															+ "0, "
 															+ rs.getInt("prix") + ", "
 															+ req.getParameter("choix") + ", "
 															+ "0, "
-															+ "CURRENT_TIMESTAMP "
-														+ "FROM transactions;");
+															+ "CURRENT_TIMESTAMP);");
 								// On retire de la transaction du joueur en face le nombre de bons rachetés
 								upST.executeUpdate("UPDATE transactions SET "
 														+ "nombreRestant = nombreRestant - " + retraitBons
@@ -101,35 +100,31 @@ public class AcheterBons extends HttpServlet
 						    	// On met à jour l'argent bloqué du joueur si il reste des bons
 						    	util.ajouterArgentBloque(Integer.parseInt(req.getParameter("prixBons")) * nbBons);
 						    	// Et on crée une transactions pour les bons restants
-						    	st.executeUpdate("INSERT INTO transactions "
-						    						+ "SELECT MAX(idtrans)+1, "
+						    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, nombreBloque, prix, choix, etat, dateTrans) VALUES ("
 						    							+ req.getParameter("id") + ", "
 						    							+ util.id() + ", "
+						    							+ req.getParameter("nbBons") + ", "
 						    							+ nbBons + ", "
 						    							+ "0, "
-						    							+ nbBons + ", "
 						    							+ req.getParameter("prixBons") + ", "
 						    							+ req.getParameter("choix") + ", "
 						    							+ "0, "
-						    							+ "CURRENT_TIMESTAMP "
-						    						+ "FROM transactions;");
+						    							+ "CURRENT_TIMESTAMP);");
 						    }
 						} else {
 					    	// On met à jour l'argent bloqué du joueur si il reste des bons
 					    	util.ajouterArgentBloque(Integer.parseInt(req.getParameter("prixBons")) * nbBons);
 					    	// Et on crée une transactions pour les bons restants
-					    	st.executeUpdate("INSERT INTO transactions "
-					    						+ "SELECT MAX(idtrans)+1, "
+					    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, nombreBloque, prix, choix, etat, dateTrans) VALUES ("
 					    							+ req.getParameter("id") + ", "
 					    							+ util.id() + ", "
 					    							+ nbBons + ", "
-					    							+ "0, "
 					    							+ nbBons + ", "
+					    							+ "0, "
 					    							+ req.getParameter("prixBons") + ", "
 					    							+ req.getParameter("choix") + ", "
 					    							+ "0, "
-					    							+ "CURRENT_TIMESTAMP "
-					    						+ "FROM transactions;");
+					    							+ "CURRENT_TIMESTAMP);");
 						}
 						con.close();
 						res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&success=1");
