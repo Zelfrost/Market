@@ -211,6 +211,58 @@ public class Personne
 		return argent - argentBloque;
 	}
 
+	public String getBons(int marketID, int choix)
+	{
+		return getBons(marketID, choix, "nombreRestant", "nombreRestant<>0");
+	}
+
+	public String getTitres(int marketID, int choix)
+	{
+		return getBons(marketID, choix, "nombre - nombreRestant AS nombre", "nombre > nombreRestant");
+	}
+
+	private String getBons(int marketID, int choix, String nombre, String condition)
+	{
+		Connection con 	= null;
+		String ret 		= "";
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"idTrans, " + 
+													nombre + ", " +
+													"prix " +
+												"FROM transactions " +
+												"WHERE userID = '" + id + "'" +
+													" AND marketID=" + marketID +
+													" AND choix=" + choix +
+													" AND " + condition + " " +
+												"ORDER BY " +
+													"prix ASC, " +
+													"nombreRestant ASC;");
+			if(! rs.next())
+				ret = "0";
+			else {
+				do {
+					ret += "<tr>";
+					ret += "<td>" + rs.getString("nombreRestant") + " bons</td>";
+					ret += "<td>" + rs.getString("prix") + " euros/u</td>";
+					ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "'>X</a></td>";
+					ret += "<tr>";
+				} while(rs.next());
+			}
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return "0";
+		}
+	}
+
 
 
 	private Connection getConnection()
@@ -231,6 +283,8 @@ public class Personne
 			return null;
 		}
 	}
+
+
 
 	private void setError(Exception error)
 	{

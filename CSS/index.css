@@ -327,6 +327,9 @@ hr {
     left: -1000px;
     margin: 0;
 }
+#body td a.finit {
+    color: blue;
+}
 #body tr td {
     padding: 5px;
     

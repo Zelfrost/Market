@@ -1,4 +1,4 @@
-<%@ page import="tools.Personne" %>
+<%@ page import="tools.*" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>
@@ -16,36 +16,36 @@
 %>
 
 <div id="selectpage">
-    <%
-	    int pages 		= 	(request.getParameter("page")!=null)
-				    		?Integer.parseInt(request.getParameter("page"))
-				    		:1;
-        Connection con = null;
-        try {
-	        Context initCtx = 	new InitialContext();
-	        Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
-	        DataSource ds 	= 	(DataSource) envCtx.lookup("base");
-	        con 	= 	ds.getConnection();
+<%
+    int pages 		= 	(request.getParameter("page")!=null)
+			    		?Integer.parseInt(request.getParameter("page"))
+			    		:1;
+    Connection con = null;
+    try {
+        Context initCtx = 	new InitialContext();
+        Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
+        DataSource ds 	= 	(DataSource) envCtx.lookup("base");
+        con 	= 	ds.getConnection();
 
-		    Statement st 	= 	con.createStatement();
-		    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin " + ((old==null)?">=":"<") + " date('now');");
-		    rs.next();
+	    Statement st 	= 	con.createStatement();
+	    ResultSet rs 	= 	st.executeQuery("SELECT count(*) as c FROM markets where dateFin " + ((old==null)?">=":"<") + " date('now');");
+	    rs.next();
 
-		    int nbpages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
+	    int nbpages 	= 	(int)Math.ceil((double)rs.getInt("c") / 10);
 
-		    if( nbpages > 0 )
-			    out.println("pages : ");
-		    if( pages != 1 )
-			    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
-		    for( int i = 1; i <= nbpages; i++ ) {
-			    if( i != pages )
-				    out.println("<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
-			    else
-				    out.println("<span>" + i + "</span>");
-		    }
-		    if( pages != nbpages )
-			    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
-	%>
+	    if( nbpages > 0 )
+		    out.println("pages : ");
+	    if( pages != 1 )
+		    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
+	    for( int i = 1; i <= nbpages; i++ ) {
+		    if( i != pages )
+			    out.println("<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
+		    else
+			    out.println("<span>" + i + "</span>");
+	    }
+	    if( pages != nbpages )
+		    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
+%>
 </div>
 
 <table>
@@ -54,59 +54,27 @@
 		<th>Date de fin</th>
 		<th>Taux</th>
 	</tr>
-	<%
-			rs 			= st.executeQuery("SELECT idMarket, libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat FROM markets WHERE " + 
-				((old==null)?"dateFin >= date('now') AND resultat=2":"(dateFin < date('now') OR resultat <> 2)") + " AND idMarket<>0 ORDER BY " + ((old==null)?"publication":"dateFin") + " DESC LIMIT 10 OFFSET " + ((pages-1)*10) + ";");
-			String id;
-			Statement stTaux;
-			ResultSet rsTaux;
-			int t0, t1, max, taux;
-			while (rs.next()) {
-				id 		= rs.getString("idMarket");
-			    out.println("<tr>");
-			    out.println("<td><a " + ((!rs.getString("resultat").equals("2"))?"style='color: #3322CC;'":"") + " href='information" + ((old!=null && !rs.getString("resultat").equals("2"))?"Finit":"") + "?id=" + id + "'>" + ((rs.getString("resultat").equals("1"))?rs.getString("libelleInverse"): rs.getString("libelle")) + "</a></td>");
-			    out.println("<td>" + rs.getString("d") + "</td>");
+<%
+	Marche m = new Marche(0);
+	if(old == null)
+		out.println( m.marchesEnCours(((pages-1)*10)) );
+	else
+		out.println( m.marchesFinit(((pages-1)*10)) );
+%>
+</table>
 
-			    stTaux 	= con.createStatement();
-			    rsTaux 	= stTaux.executeQuery("SELECT sum((nombre - nombreRestant) * prix) AS t0 FROM transactions WHERE marketID = " + id + " AND choix = 0;");
-			    rsTaux.next();
-			    t0 		= rsTaux.getInt("t0");
+<%
+		if(old!=null)
+			out.println("En <span style='color: #3322CC;'>bleu</span>, les pronostics dont le résultat a été ajouté<br/>");
 
-			    rsTaux 	= stTaux.executeQuery("SELECT sum((nombre - nombreRestant) * prix) AS t1 FROM transactions WHERE marketID = " + id + " AND choix = 1;");
-			    rsTaux.next();
-			    t1 		= rsTaux.getInt("t1");
+		rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE " + ((old==null)?"dateFin<DATE('now')":"dateFin>=DATE('now')") + ";");
+		if( rs.next() && rs.getInt("c")>0 )
+			out.println("<a href='marches?" + ((old==null)?"old=1":"") + "' class='orange next' >Voir les marchés " + ((old==null)?"terminés":"en cours") + "</a>");
 
-			    max 	= 	(t1>t0)
-			    			?t1
-			    			:t0;
-			    try {
-			    	taux = (int)(((double)max/(t0+t1))*100);
-			    } catch(ArithmeticException e) {
-			    	taux = 0;
-				}
-
-			    out.print("<td");
-			    out.print( 	(taux==0)
-			    			?">"
-			    			:
-			    				(t0==max)
-			    				?" class='positif'>+"
-			    				:" class='negatif'>-"
-			   	);
-			    out.println(taux + "%</td>");
-			    out.println("</tr>");
-			}
-			out.println("</table>");
-			if(old!=null)
-				out.println("En <span style='color: #3322CC;'>bleu</span>, les pronostics dont le résultat a été ajouté<br/>");
-
-			rs = st.executeQuery("SELECT COUNT(*) AS c FROM markets WHERE " + ((old==null)?"dateFin<DATE('now')":"dateFin>=DATE('now')") + ";");
-			if( rs.next() && rs.getInt("c")>0 )
-				out.println("<a href='marches?" + ((old==null)?"old=1":"") + "' class='orange next' >Voir les marchés " + ((old==null)?"terminés":"en cours") + "</a>");
-		} catch(SQLException e) {
-		} finally {
-		    try { con.close(); } catch(Exception e) { /* Ignored */ }
-		}
-	%>
+		con.close();
+	} catch(SQLException e) {
+	    try { con.close(); } catch(Exception ex) { /* Ignored */ }
+	}
+%>
 
 <jsp:include page="footer.jsp" />

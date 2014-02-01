@@ -1,3 +1,4 @@
+<%@ page import="tools.*" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.sql.*" %>
@@ -8,15 +9,14 @@
 <%
     Locale loc          = (Locale) session.getAttribute("loc");
     ResourceBundle res  = ResourceBundle.getBundle("prop.information", loc);
-%>
 
-<%
 	if(request.getParameter("id")==null || request.getParameter("id").equals("") || request.getParameter("id").equals("0")) {
 %>
 <jsp:include page="header.jsp?titre=Error" />
 <%
 		out.println("<span id='error'>" + res.getString("erreur") + "</span>");
 	} else {
+		Personne util 	= 	(Personne) session.getAttribute("Personne");
 		int id 			= 	Integer.parseInt(request.getParameter("id"));
 		int choix 		= 	(request.getParameter("choix")!=null)
 							?Integer.parseInt(request.getParameter("choix"))
@@ -28,31 +28,28 @@
 	    Connection con 	= 	ds.getConnection();
 
 		Statement st 	= 	con.createStatement();
-		ResultSet rs 	= 	st.executeQuery("SELECT libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') as d, resultat, login FROM markets JOIN users on users.idUser=markets.userID WHERE idMarket='" + id +"';");
+		ResultSet rs;
 
-		if(!rs.next())
+		Marche m 		= new Marche(id);
+
+		if(m.libelle() == null)
 			response.sendRedirect("information");
 		else {
-			if(! rs.getString("resultat").equals("2"))
+
+			if(! m.resultat().equals("2"))
 				response.sendRedirect("informationFinit?id=" + id);
 			else {
-				String libelle;
-				if( ! rs.getString("resultat").equals("2") )
-					libelle 	= 	(rs.getString("resultat").equals("0"))
-									?rs.getString("libelle")
-									:rs.getString("libelleInverse");
-				else
-					libelle 	= 	(choix==0)
-									?rs.getString("libelle")
-									:rs.getString("libelleInverse");
+				String libelle 	= 	(choix==0)
+								?m.libelle()
+								:m.libelleInverse();
 
-				String[] date 	=	rs.getString("d").split("/");
-				java.util.Date fin 	= 	new java.util.Date(	Integer.parseInt(date[2])-1900,
+				String[] date 	= m.dateFin().split("/");
+				java.util.Date fin 	= new java.util.Date(	Integer.parseInt(date[2])-1900,
 																Integer.parseInt(date[1])-1,
 																Integer.parseInt(date[0])
 										);
-				String resultat = rs.getString("resultat");
-				String head 	= 	"header.jsp?titre=" + libelle;
+				String resultat = m.resultat();
+				String head 	= "header.jsp?titre=" + libelle;
 %>
 <jsp:include page="<%= head %>" />
 
@@ -62,12 +59,8 @@
 <%
 				out.println("<h3>" + libelle + "</h3>");
 
-				if(request.getParameter("success")!=null) {
-					if(rs.getString("resultat").equals("2"))
-						out.println("<span id='success'>" + res.getString("succes2") + "</span>");
-					else
-						out.println("<span id='success'>" + res.getString("succes") + "</span>");
-				}
+				if(request.getParameter("success")!=null)
+					out.println("<span id='success'>" + res.getString("succes") + "</span>");
 				if(request.getParameter("error")!=null) {
 					if(request.getParameter("error").equals("1"))
 						out.println("<span id='error'>" + res.getString("erreur1") + "</span>");
@@ -77,18 +70,17 @@
 						out.println("<span id='error'>" + res.getString("erreur3") + "</span>");
 				}
 
-				if(rs.getString("resultat").equals("2"))
-					out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>" + res.getString("inverseLien") + "</a></span>");
+				out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>" + res.getString("inverseLien") + "</a></span>");
 %>
 
-<p><%= res.getString("date") %> : <strong><%= rs.getString("d") %></strong>
+<p><%= res.getString("date") %> : <strong><%= m.dateFin() %></strong>
 <%
-				if( fin.compareTo(new java.util.Date()) <= 0 && request.getUserPrincipal()!=null && rs.getString("login").equals(request.getUserPrincipal().getName()) && rs.getString("resultat").equals("2"))
-					out.println("<span id='result'><a href='resultat?id=" + request.getParameter("id") + "'>" + res.getString("resultat") + " ?</a></span>");
+				if( fin.compareTo(new java.util.Date()) <= 0 && request.getUserPrincipal()!=null && m.id() == util.id())
+					out.println("<span id='result'><a href='resultat?id=" + id + "'>" + res.getString("resultat") + " ?</a></span>");
 %>
 </p>
 <%
-				if( fin.compareTo(new java.util.Date()) > 0 && resultat.equals("2") ) {
+				if( fin.compareTo(new java.util.Date()) > 0 ) {
 %>
 
 <table class="rouge">
@@ -167,15 +159,13 @@
 
 <%
 				if(request.getUserPrincipal()!=null) {
-					rs 	= st.executeQuery("SELECT idUser, nom, prenom, argent - argentBloque AS argent FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-					rs.next();
 
 %>
 <div class='infoRight right'>
-	<h2 class='withSmall'><%= rs.getString("nom")%> <%= rs.getString("prenom") %></h2>
-	<span class='small'><%= res.getString("argent") %> : <%= rs.getString("argent") %>€</span>
+	<h2 class='withSmall'><%= util.prenom() + " " + util.nom() %></h2>
+	<span class='small'><%= res.getString("argent") %> : <%= util.argentDispo() %>€</span>
 <%
-					if( fin.compareTo(new java.util.Date()) > 0 && resultat.equals("2") ) {
+					if( fin.compareTo(new java.util.Date()) > 0 ) {
 %>
 	<h4><%= res.getString("invest") %></h4>
 	<table class='invest'>
@@ -186,20 +176,11 @@
 		</tr>
 
 <%
-					rs 	= st.executeQuery("SELECT idTrans, nombreRestant, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombreRestant<>0 ORDER BY prix ASC, nombreRestant ASC;");
-					if(! rs.next())
-						out.println("<tr class='empty info'><td colspan='3'>" + res.getString("invest") + "</td></tr>");
-					else {
-						do {
-%>
-		<tr>
-			<td><%= rs.getString("nombreRestant") %> bons</td>
-			<td><%= rs.getString("prix") %> euros/u</td>
-			<td><a href='suppTrans?idTrans=<%= rs.getString("idTrans") %>&id=<%= request.getParameter("id") %>'>X</a></td>
-		<tr>
-<%
-						} while(rs.next());
-					}
+						String bons = util.getBons(id, choix);
+						if(bons.equals("0"))
+							out.println("<tr class='empty info'><td colspan='3'>" + res.getString("invest0") + "</td></tr>");
+						else
+							out.println(bons);
 %>
 	</table>
 	<h4 class='second'><%= res.getString("investA") %></h4>
@@ -210,24 +191,16 @@
 		</tr>
 
 <%
-					rs 	= st.executeQuery("SELECT idTrans, (nombre - nombreRestant) AS nombre, prix FROM transactions JOIN users ON transactions.userID=users.idUser WHERE login = '" + request.getUserPrincipal().getName() + "' AND marketID=" + request.getParameter("id") + " AND choix=" + choix + " AND nombre>nombreRestant ORDER BY prix ASC, nombreRestant ASC;");
-					if(! rs.next())
-						out.println("<tr class='empty info'><td colspan='3'>" + res.getString("invest0") + "</td></tr>");
-					else {
-						do {
-%>
-		<tr>
-			<td><%= rs.getString("nombre") %> bons</td>
-			<td class='last'><%= rs.getString("prix") %> euros/u</td>
-		<tr>
-<%
-						} while(rs.next());
-					}
-				}
+						String titres = util.getTitres(id, choix);
+						if(titres.equals("0"))
+							out.println("<tr class='empty info'><td colspan='3'>" + res.getString("invest0") + "</td></tr>");
+						else
+							out.println(titres);
 %>
 	</table>
 </div>
 <%
+	}
 			}
 		}
 		con.close();
