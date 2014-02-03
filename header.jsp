@@ -8,10 +8,13 @@
 <%@ page import="javax.naming.*" %>
 
 <%
+	Personne util = null;
 	if(request.getUserPrincipal()!=null && session.getAttribute("Personne")==null) {
-		Personne util 	= new Personne(request.getUserPrincipal().getName());
+		util 	= new Personne(request.getUserPrincipal().getName());
 		session.setAttribute("Personne", util);
 	}
+	if(util == null)
+		util = (Personne)session.getAttribute("Personne");
 
 	Locale loc 	= (Locale) session.getAttribute("loc");
 	if(request.getParameter("loc")!=null) {

@@ -16,7 +16,6 @@
 <%
 		out.println("<span id='error'>" + res.getString("erreur") + "</span>");
 	} else {
-		Personne util 	= 	(Personne) session.getAttribute("Personne");
 		int id 			= 	Integer.parseInt(request.getParameter("id"));
 		int choix 		= 	(request.getParameter("choix")!=null)
 							?Integer.parseInt(request.getParameter("choix"))
@@ -57,6 +56,10 @@
 <div class='infoLeft left'>
 <a id="prev" href='marches'><%= res.getString("lienRetour") %></a>
 <%
+				Personne util = null;
+				if(request.getUserPrincipal() != null)
+					util 		= (Personne) session.getAttribute("Personne");
+
 				out.println("<h3>" + libelle + "</h3>");
 
 				if(request.getParameter("success")!=null)
@@ -88,19 +91,11 @@
 		<th colspan="3"><%= res.getString("vend") %></th>
 	</tr>
 <%
-					rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, 100 - prix AS prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + ((choix==1)?0:1) + " AND nombreRestant <> 0 AND etat = 0 GROUP BY prix ORDER BY prix DESC");
-
-					if(!rs.next())
+					String vente = m.proposition((choix==0)?1:0, 1);
+					if(vente.equals("0"))
 						out.println("<tr class='empty info'><td colspan='3'>" + res.getString("pasVend") + "</td></tr>");
-					else {
-						do {
-							out.println("<tr>");
-							out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
-							out.println("<td>" + rs.getString("somme") + " bons</td>");
-							out.println("<td>" + rs.getString("prix") + "€/u</td>");
-							out.println("</tr>");
-						} while(rs.next());
-					}
+					else
+						out.println(vente);
 %>
 </table>
 <form id='acheter' method='POST' action='AcheterBons'>
@@ -113,24 +108,14 @@
 		<th colspan="3"><%= res.getString("ach") %></th>
 	</tr>
 <%
-					rs = st.executeQuery("SELECT MIN(userID) AS userID, MIN(nom || ' ' || prenom) AS nom, count(DISTINCT userID) AS nbre, SUM(nombreRestant) AS somme, prix FROM transactions LEFT JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + choix + " AND nombreRestant <> 0 AND etat = 0 GROUP BY prix ORDER BY prix DESC");
-					if(!rs.next())
+					String achat = m.proposition(choix, 0);
+					if(achat.equals("0"))
 						out.println("<tr class='empty info'><td colspan='3'>" + res.getString("pasAch") + "</td></tr>");
-					else {
-						do {
-							out.println("<tr class='info'>");
-							out.println("<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>");
-							out.println("<td>" + rs.getString("somme") + " bons</td>");
-							out.println("<td>" + rs.getString("prix") + "€/u</td>");
-							out.println("</tr>");
-						} while(rs.next());
-					}		
-					if ( request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User") ){
-								
-						rs = st.executeQuery("SELECT (nom || ' ' || prenom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-						rs.next();
-					
-					    out.println("<tr class='form'><td id='nom'>" + rs.getString("n") + "</td>");
+					else
+						out.println(achat);
+
+					if ( request.getUserPrincipal() != null ){
+					    out.println("<tr class='form'><td id='nom'>" + util.nom() + " " + util.prenom() +  "</td>");
 						out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
 						out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
 						out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' name='valider' value='" + res.getString("acheter") + "' class='achat' /><input type='submit' name='valider' value='" + res.getString("vendre") + "' class='achat' /></td></tr>");
@@ -140,17 +125,12 @@
 %>
 </table>
 </form>
-<%
-				rs = st.executeQuery("SELECT count(*) AS nb FROM transactions WHERE marketID=" + id + " AND choix=" + choix + ";");
-				int nb = 0;
-				if(rs.next())
-					nb = rs.getInt("nb");
-				if(nb > 0) {
-%>
 
+<%
+				if(m.nbProp(choix) > 0) {
+%>
 <h3><%= res.getString("etatMarche") %></h3>
 <div id="graphique" style="width: auto; height: 250px;"></div>
-
 <%
 				}
 %>
@@ -200,12 +180,12 @@
 	</table>
 </div>
 <%
-	}
+				}
 			}
 		}
 		con.close();
 	}
-}	
+}
 %>
 <link rel='stylesheet' href='CSS/morris-0.4.3.min.css' />
 <script src='JS/jquery-1.9.1.js'></script>

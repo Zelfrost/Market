@@ -29,13 +29,15 @@ public class Graphique extends HttpServlet
 				Statement upST 	= 	con.createStatement();
 				ResultSet rs 	= 	st.executeQuery("SELECT SUM(prix * nombre) / SUM(nombre) AS total, to_char(dateTrans, 'YYYY-MM-DD') AS date FROM transactions WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY date ORDER BY date ASC;");
 				
-				retour 			+= 	"[";
-				while(rs.next()) {
-					retour 		+= "{ \"jour\": \"" + rs.getString("date") + "\", \"valeur\": \"" + ((double)Math.round(rs.getDouble("total") * 100) / 100) + "\" },";
+				if(rs.next()){
+					retour 			+= 	"[";
+					do {
+						retour 		+= "{ \"jour\": \"" + rs.getString("date") + "\", \"valeur\": \"" + ((double)Math.round(rs.getDouble("total") * 100) / 100) + "\" },";
+					} while(rs.next());
+					if(retour.charAt(retour.length()-1) == ',')
+						retour 		= retour.substring(0, retour.length()-1);
+					retour			+= "]";
 				}
-				if(retour.charAt(retour.length()-1) == ',')
-					retour 		= retour.substring(0, retour.length()-1);
-				retour			+= "]";
 
 				res.getWriter().println(retour);
 

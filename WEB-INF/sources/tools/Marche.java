@@ -210,6 +210,79 @@ public class Marche
 		}
 	}
 
+	public String proposition(int choix, int prixInverse)
+	{
+		Connection con 	= null;
+		String ret 		= "";
+		try {
+			con 			= getConnection();
+
+			Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"MIN(userID) AS userID, " +
+													"MIN(nom || ' ' || prenom) AS nom, " +
+													"count(DISTINCT userID) AS nbre, " +
+													"SUM(nombreRestant) AS somme, " +
+													((prixInverse!=0)?"100 - ":"") + "prix AS prix " +
+												"FROM transactions " +
+													"LEFT JOIN users ON transactions.userID=users.idUser " +
+												"WHERE " +
+													"marketID=" + id + 
+													" AND choix=" + choix + 
+													" AND nombreRestant <> 0" +
+													" AND etat = 0 " +
+												"GROUP BY prix " +
+												"ORDER BY prix DESC;");
+
+			if(!rs.next())
+				ret 	= "0";
+			else {
+				do {
+					ret += "<tr>";
+					ret += "<td>" + ((rs.getInt("nbre")==1)?rs.getString("nom"):"---") + "</td>";
+					ret += "<td>" + rs.getString("somme") + " bons</td>";
+					ret += "<td>" + rs.getString("prix") + "€/u</td>";
+					ret += "</tr>";
+				} while(rs.next());
+			}
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return "<td></td>";
+		}
+	}
+
+	public int nbProp(int choix)
+	{
+		Connection con 	= null;
+		try {
+			con 			= getConnection();
+
+			Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"count(*) AS nb " +
+												"FROM transactions " +
+												"WHERE " +
+													"marketID=" + id +
+													" AND choix=" + choix +
+													" AND nombre <> 0;" );
+
+			int nb = 0;
+			if(rs.next())
+				nb = rs.getInt("nb");
+
+			con.close();
+			return nb;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return 0;
+		}
+	}
+
 
 
 	private Connection getConnection()
