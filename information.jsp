@@ -1,9 +1,6 @@
 <%@ page import="tools.*" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ResourceBundle" %>
-<%@ page import="java.sql.*" %>
-<%@ page import="javax.sql.*" %>
-<%@ page import="javax.naming.*" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%
@@ -20,14 +17,6 @@
 		int choix 		= 	(request.getParameter("choix")!=null)
 							?Integer.parseInt(request.getParameter("choix"))
 							:0;
-		
-	    Context initCtx = 	new InitialContext();
-	    Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
-	    DataSource ds 	= 	(DataSource) envCtx.lookup("base");
-	    Connection con 	= 	ds.getConnection();
-
-		Statement st 	= 	con.createStatement();
-		ResultSet rs;
 
 		Marche m 		= new Marche(id);
 
@@ -65,12 +54,9 @@
 				if(request.getParameter("success")!=null)
 					out.println("<span id='success'>" + res.getString("succes") + "</span>");
 				if(request.getParameter("error")!=null) {
-					if(request.getParameter("error").equals("1"))
-						out.println("<span id='error'>" + res.getString("erreur1") + "</span>");
-					else if(request.getParameter("error").equals("2"))
-						out.println("<span id='error'>" + res.getString("erreur2") + "</span>");
-					else
-						out.println("<span id='error'>" + res.getString("erreur3") + "</span>");
+					try {
+						out.println("<span id='error'>" + res.getString("erreur"+request.getParameter("error")) + "</span>");
+					} catch( Exception e ) { /* Ignored */}
 				}
 
 				out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>" + res.getString("inverseLien") + "</a></span>");
@@ -183,7 +169,6 @@
 				}
 			}
 		}
-		con.close();
 	}
 }
 %>

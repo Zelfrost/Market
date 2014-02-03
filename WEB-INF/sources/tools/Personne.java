@@ -263,6 +263,48 @@ public class Personne
 		}
 	}
 
+	public String mesMarches()
+	{
+		Connection con 	= null;
+		String ret 		= "";
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"idMarket, " +
+													"libelle, " +
+													"libelleInverse, " +
+													"choix " +
+												"FROM transactions " +
+													"JOIN markets ON markets.idMarket=transactions.marketID " +
+												"WHERE" +
+													" transactions.userID=" + id + 
+													" AND dateFin>=DATE('now')" +
+													" AND resultat=2 " +
+												"GROUP BY " +
+													"idMarket, " +
+													"choix " +
+												"ORDER BY publication " +
+												"DESC LIMIT 10;");
+			if(! rs.next())
+				ret = "0";
+			else {
+				do {
+	            	ret += "<li><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "'>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></li>";
+	        	} while (rs.next());
+			}
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return "0";
+		}
+	}
+
 
 
 	private Connection getConnection()

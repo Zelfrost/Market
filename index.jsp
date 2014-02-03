@@ -1,3 +1,4 @@
+<%@ page import="tools.*" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.sql.*" %>
@@ -56,26 +57,18 @@
     </div>
 <% 
       if (request.getUserPrincipal()!=null){
-        rs = st.executeQuery("SELECT idUser from users where login='" + request.getUserPrincipal().getName() + "'");
-        rs.next();
-        String id = rs.getString("idUser");
-
-        rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle, libelleInverse, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " AND dateFin>=DATE('now') AND resultat=2 GROUP BY idMarket, choix ORDER BY publication DESC LIMIT 10;");
-        if(rs.next()) {
+        String mm = ((Personne)session.getAttribute("Personne")).mesMarches();
+        if(! mm.equals("0")) {
 %>
     <div class="menu">
       <div class="header">
-	<%= res.getString("mes_marches") %>
+        <%= res.getString("mes_marches") %>
       </div>
       <div class="body">
         <ul>
-<%
-          do {
-            out.println("<li><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "'>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></li>");
-          } while (rs.next());
-%>
-<li class="all"><a href="mesmarches"><%= res.getString("tous_mes_marches") %></a></li>
-	       </ul>
+          <%= mm %>
+          <li class="all"><a href="mesmarches"><%= res.getString("tous_mes_marches") %></a></li>
+        </ul>
       </div>
     </div>
 <%
