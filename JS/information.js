@@ -2,7 +2,7 @@ $(document).ready( function(){
 	var id 		= $('input#id').val();
 	var choix 	= $('input#choix').val();
 	$.getJSON(
-		"/Market/Graphique", 
+		"/MarketDev/Graphique", 
 		{
 			"id": id,
 			"choix": choix

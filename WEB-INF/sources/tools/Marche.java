@@ -13,6 +13,7 @@ public class Marche
 {
 	int 	id,
 			createur;
+	long 	dateFinEpoch;
 	String 	libelle,
 			libelleInverse,
 			dateDebut,
@@ -26,6 +27,7 @@ public class Marche
 		this.id 		= id;
 		if(id == 0) {
 			createur 		= 0;
+			dateFinEpoch	= 0;
 			libelle 		= null;
 			libelleInverse 	= null;
 			dateDebut		= null;
@@ -51,6 +53,7 @@ public class Marche
 													"libelleInverse, " +
 													"to_char(publication, 'DD/MM/YYYY') AS dateDebut, " +
 													"to_char(dateFin, 'HH24:MI DD/MM/YYYY') AS dateFin, " +
+													"date_part('epoch', dateFin) AS dateFinEpoch, " +
 													"resultat, " +
 													"userID " +
 												"FROM markets " +
@@ -60,10 +63,12 @@ public class Marche
 				libelleInverse 	= rs.getString("libelleInverse");
 				dateDebut	 	= rs.getString("dateDebut");
 				dateFin		 	= rs.getString("dateFin");
+				dateFinEpoch 	= Long.parseLong(rs.getString("dateFinEpoch"));
 				resultat 		= rs.getString("resultat");
 				createur 		= rs.getInt("userID");
 			} else {
 				createur 		= 0;
+				dateFinEpoch	= 0;
 				libelle 		= null;
 				libelleInverse 	= null;
 				dateDebut 		= null;
@@ -108,6 +113,11 @@ public class Marche
 	public String dateFin()
 	{
 		return dateFin;
+	}
+
+	public long dateFinEpoch()
+	{
+		return dateFinEpoch;
 	}
 
 	public String resultat()
@@ -279,12 +289,25 @@ public class Marche
 		return null;
 	}
 
-	private String taux(String id)
+	public String taux(String id)
 	{
 		Connection con = null;
 		try {
-			String ret;
 			con 			= getConnection();
+
+			con.close();
+			return taux(id, con);
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return "<td></td>";
+		}
+	}
+
+	public static String taux(String id, Connection con)
+	{
+		try {
+			String ret;
 
 			Statement st 	= con.createStatement();
 			ResultSet rs 	= st.executeQuery(	"SELECT " +
@@ -314,16 +337,11 @@ public class Marche
 			else if(t1 < t2)
 				ret += " class='negatif'>-" + ((int)((t2 / ( t1 + t2 )) * 100));
 			else
-				ret += ">" + ((int)((t2 / ( t1 + t2 )) * 100));
+				ret += ">0";
 			ret += "%</td>";
 
-			con.close();
 			return ret;
-
-		} catch( Exception e ) {
-			try { con.close(); } catch( Exception ex ) { /* Ignored */}
-			return "<td></td>";
-		}
+		} catch( Exception e ) { return "<td></td>"; }
 	}
 
 	public String proposition(int choix, int prixInverse)

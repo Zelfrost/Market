@@ -1,4 +1,4 @@
-import tools.Personne;
+import tools.*;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -34,8 +34,10 @@ public class AcheterBons extends HttpServlet
 		    //format prix invalide
 		}
 
+		Marche m = new Marche(Integer.parseInt(req.getParameter("id")));
+		java.util.Date fin = new java.util.Date(m.dateFinEpoch() * 1000);
 
-		if (req.getParameter("nbBons") != null && req.getParameter("prixBons") != null && valable) {
+		if (req.getParameter("nbBons") != null && req.getParameter("prixBons") != null && valable && fin.after(new java.util.Date())) {
 			try {
 			    
 			    Context initCtx = new InitialContext();
@@ -144,6 +146,7 @@ public class AcheterBons extends HttpServlet
 			} catch (Exception e ) {
 			    e.printStackTrace(res.getWriter());
 			}			
-		}
+		} else
+		res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=4");
     }
 }	

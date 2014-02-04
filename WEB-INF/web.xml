@@ -186,6 +186,7 @@
             <url-pattern>/perso</url-pattern>
             <url-pattern>/changePerso</url-pattern>
             <url-pattern>/changerPerso</url-pattern>
+            <url-pattern>/mesmarches</url-pattern>
         </web-resource-collection>
 
         <auth-constraint>

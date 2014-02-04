@@ -14,15 +14,11 @@
 
 		String[] heure 	= m.dateFin().substring(0, 5).split(":");
 		String[] date 	= m.dateFin().substring(6,14).split("/");
-		java.util.Date fin 	= new java.util.Date(	Integer.parseInt(date[2])-1900,
-													Integer.parseInt(date[1])-1,
-													Integer.parseInt(date[0]),
-													Integer.parseInt(heure[0])-1,
-													Integer.parseInt(heure[1]) );
+		java.util.Date fin 	= new java.util.Date( m.dateFinEpoch() * 1000 );
 		
 		if( m.createur() != ((Personne)session.getAttribute("Personne")).id()
-						 || fin.compareTo(new java.util.Date()) < 0 )
-			response.sendRedirect("resultat");
+						 || fin.after(new java.util.Date()) )
+			response.sendRedirect("marches");
 		else {
 %>
 	<h2>Résultat du marché</h2>

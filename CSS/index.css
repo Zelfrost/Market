@@ -224,6 +224,32 @@ hr {
 #body div.label  {
     margin-bottom: 5px;
 }
+#body #mod {
+    width: 98%;
+
+    margin: 0 auto;
+    margin-top: 15px;
+
+    background-color: #F9F9F9;
+    border: 1px solid #CCC;
+}
+#body h5 {
+    display: inline-block;
+    width: 100%;
+
+    padding: 10px 15px;
+
+    color: #FF6600;
+    text-decoration: underline;
+
+    font-size: 1.1em;
+}
+#body h5:hover {
+    cursor: pointer;
+}
+#body #mod #changePerso {
+    display: none;
+}
 #body form#changePerso div.label span:first-child, #body form#conn div.label span:first-child {
     width: 200px;
 }

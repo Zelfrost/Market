@@ -1,4 +1,5 @@
 package tools;
+import tools.Marche;
 
 
 
@@ -211,17 +212,17 @@ public class Personne
 		return argent - argentBloque;
 	}
 
-	public String getBons(int marketID, int choix)
+	public String getBons(int marketID, int choix, boolean suppr)
 	{
-		return getBons(marketID, choix, "nombreRestant", "nombreRestant<>0");
+		return getBons(marketID, choix, "nombreRestant", "nombreRestant<>0", suppr);
 	}
 
 	public String getTitres(int marketID, int choix)
 	{
-		return getBons(marketID, choix, "nombre - nombreRestant AS nombre", "nombre > nombreRestant");
+		return getBons(marketID, choix, "nombre - nombreRestant AS nombre", "nombre > nombreRestant", false);
 	}
 
-	private String getBons(int marketID, int choix, String nombre, String condition)
+	private String getBons(int marketID, int choix, String nombre, String condition, boolean suppr)
 	{
 		Connection con 	= null;
 		String ret 		= "";
@@ -249,7 +250,8 @@ public class Personne
 					ret += "<tr>";
 					ret += "<td>" + rs.getString("nombreRestant") + " bons</td>";
 					ret += "<td>" + rs.getString("prix") + " euros/u</td>";
-					ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "'>X</a></td>";
+					if(suppr)
+						ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "'>X</a></td>";
 					ret += "<tr>";
 				} while(rs.next());
 			}
@@ -305,6 +307,90 @@ public class Personne
 		}
 	}
 
+	public String tousMesMarches()
+	{
+		Connection con 	= null;
+		String ret 		= "";
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"idMarket, " +
+													"libelle, " +
+													"libelleInverse, " +
+													"to_char(dateFin, 'HH24:MI DD/MM/YYYY') AS d, " +
+													"choix " +
+												"FROM transactions " +
+													"JOIN markets ON markets.idMarket=transactions.marketID " +
+												"WHERE" +
+													" transactions.userID=" + id + 
+													" AND dateFin>=DATE('now')" +
+													" AND resultat=2 " +
+												"GROUP BY " +
+													"idMarket, " +
+													"choix " +
+												"ORDER BY publication " +
+												"DESC LIMIT 10;");
+			if(! rs.next())
+				ret = "<td class='empty' colspan='3'>Vous n'avez investis dans aucun marchés en cours</td>";
+			else {
+				do {
+					ret += "<tr>";
+	            	ret += "<td><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "'>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>";
+	            	ret += "<td>" + rs.getString("d") + "</td>";
+	            	ret += Marche.taux(rs.getString("idMarket"), con);
+	            	ret += "</tr>";
+	        	} while (rs.next());
+			}
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return "0";
+		}
+	}
+
+
+	public int nbMesMarches()
+	{
+		Connection con 	= null;
+		int ret;
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"count(*) AS c " +
+												"FROM transactions " +
+													"JOIN markets ON markets.idMarket=transactions.marketID " +
+												"WHERE" +
+													" transactions.userID=" + id + 
+													" AND dateFin>=DATE('now')" +
+													" AND resultat=2 " +
+												"GROUP BY " +
+													"idMarket, " +
+													"choix " +
+												"ORDER BY publication " +
+												"DESC LIMIT 10;");
+			if(! rs.next())
+				ret = 0;
+			else {
+				ret = rs.getInt("c");
+			}
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return 0;
+		}
+	}
 
 
 	private Connection getConnection()

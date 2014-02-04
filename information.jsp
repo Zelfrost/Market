@@ -30,14 +30,7 @@
 				String libelle 	= 	(choix==0)
 									?m.libelle()
 									:m.libelleInverse();
-				out.println("<script>alert(" + m.dateFin() + ");</script>");
-				String[] heure 	= m.dateFin().substring(0, 5).split(":");
-				String[] date 	= m.dateFin().substring(6,14).split("/");
-				java.util.Date fin 	= new java.util.Date(	Integer.parseInt(date[2])-1900,
-															Integer.parseInt(date[1])-1,
-															Integer.parseInt(date[0]),
-															Integer.parseInt(heure[0])-1,
-															Integer.parseInt(heure[1]) );
+				java.util.Date fin 	= new java.util.Date( m.dateFinEpoch() * 1000 );
 				String resultat = m.resultat();
 				String head 	= "header.jsp?titre=" + libelle;
 %>
@@ -66,14 +59,10 @@
 
 <p><%= res.getString("date") %> : <strong><%= m.dateFin() %></strong>
 <%
-
-				if( fin.compareTo(new java.util.Date()) >= 0 && request.getUserPrincipal()!=null && m.createur() == util.id())
+				if( (! fin.after(new java.util.Date())) && request.getUserPrincipal()!=null && m.createur() == util.id())
 					out.println("<span id='result'><a href='resultat?id=" + id + "'>" + res.getString("resultat") + " ?</a></span>");
 %>
 </p>
-<%
-				if( fin.compareTo(new java.util.Date()) < 0 ) {
-%>
 
 <table class="rouge">
 	<tr>
@@ -103,13 +92,11 @@
 					else
 						out.println(achat);
 
-					if ( request.getUserPrincipal() != null ){
-					    out.println("<tr class='form'><td id='nom'>" + util.nom() + " " + util.prenom() +  "</td>");
-						out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
-						out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
-						out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' name='valider' value='" + res.getString("acheter") + "' class='achat' /><input type='submit' name='valider' value='" + res.getString("vendre") + "' class='achat' /></td></tr>");
-					
-					}
+				if( fin.after(new java.util.Date()) && request.getUserPrincipal() != null ) {
+				    out.println("<tr class='form'><td id='nom'>" + util.nom() + " " + util.prenom() +  "</td>");
+					out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
+					out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
+					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' name='valider' value='" + res.getString("acheter") + "' class='achat' /><input type='submit' name='valider' value='" + res.getString("vendre") + "' class='achat' /></td></tr>");
 				}
 %>
 </table>
@@ -133,19 +120,19 @@
 <div class='infoRight right'>
 	<h2 class='withSmall'><%= util.prenom() + " " + util.nom() %></h2>
 	<span class='small'><%= res.getString("argent") %> : <%= util.argentDispo() %>€</span>
-<%
-					if( fin.compareTo(new java.util.Date()) > 0 ) {
-%>
 	<h4><%= res.getString("invest") %></h4>
 	<table class='invest'>
 		<tr class='th'>
 			<th><%= res.getString("nombre") %></th>
 			<th><%= res.getString("prix") %></th>
-			<th><%= res.getString("suppr") %></th>
+<%
+					if( fin.after(new java.util.Date()) )
+						out.println("<th>" + res.getString("suppr") + "</th>");
+%>
 		</tr>
 
 <%
-						String bons = util.getBons(id, choix);
+						String bons = util.getBons(id, choix, fin.after(new java.util.Date()));
 						if(bons.equals("0"))
 							out.println("<tr class='empty info'><td colspan='3'>" + res.getString("invest0") + "</td></tr>");
 						else
@@ -169,7 +156,6 @@
 	</table>
 </div>
 <%
-				}
 			}
 		}
 	}

@@ -45,14 +45,10 @@ public class Result extends HttpServlet
 
 			String[] heure 	= m.dateFin().substring(0, 5).split(":");
 			String[] date 	= m.dateFin().substring(6,14).split("/");
-			java.util.Date fin 	= new java.util.Date(	Integer.parseInt(date[2])-1900,
-														Integer.parseInt(date[1])-1,
-														Integer.parseInt(date[0]),
-														Integer.parseInt(heure[0])-1,
-														Integer.parseInt(heure[1]) );
+			java.util.Date fin 	= new java.util.Date( m.dateFinEpoch() * 1000 );
 			
-			if( m.createur() != util.id() || fin.compareTo(new java.util.Date()) < 0 )
-				res.sendRedirect("marche");
+			if( m.createur() != util.id() || fin.after(new java.util.Date()) )
+				res.sendRedirect("marches");
 			else {
 				int rest 	= 	req.getParameter("result").equals("oui")?0:1;
 				String lib 	= 	(rest==0)?m.libelle():m.libelleInverse();
