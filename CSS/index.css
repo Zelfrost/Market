@@ -420,8 +420,12 @@ hr {
     color: #888;
 }
 #body form textarea {
-    width: 40%;
+    width: 365px;
     height: 50px;
+
+    background-color: #FBFBFB;
+    border-radius: 0;
+    border: 1px solid #CCC;
 }
 #body form#changePerso .label span:first-child, #body form#conn .label span:first-child {
     height: 25px;
@@ -541,7 +545,7 @@ html body #body form#conn input[type="submit"]:hover, html body #body form#chang
 }
 #body form#pronostic input[type="submit"] {
     width: 80px;
-    margin-left: 265px;
+    margin-left: 455px;
 }
 #body form#resultat {
     display: inline-block;

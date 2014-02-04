@@ -11,9 +11,11 @@ import javax.naming.*;
 
 public class Marche
 {
-	int id;
+	int 	id,
+			createur;
 	String 	libelle,
 			libelleInverse,
+			dateDebut,
 			dateFin,
 			resultat;
 
@@ -23,8 +25,10 @@ public class Marche
 	{
 		this.id 		= id;
 		if(id == 0) {
+			createur 		= 0;
 			libelle 		= null;
 			libelleInverse 	= null;
+			dateDebut		= null;
 			dateFin 		= null;
 			resultat 		= null;
 		} else {
@@ -45,18 +49,24 @@ public class Marche
 			ResultSet rs 	= st.executeQuery("	SELECT " +
 													"libelle, " +
 													"libelleInverse, " +
-													"to_char(dateFin, 'DD/MM/YYYY') AS dateFin, " +
-													"resultat " +
+													"to_char(publication, 'DD/MM/YYYY') AS dateDebut, " +
+													"to_char(dateFin, 'HH24:MI DD/MM/YYYY') AS dateFin, " +
+													"resultat, " +
+													"userID " +
 												"FROM markets " +
 												"WHERE idMarket=" + id);
 			if(rs.next()) {
 				libelle 		= rs.getString("libelle");
 				libelleInverse 	= rs.getString("libelleInverse");
+				dateDebut	 	= rs.getString("dateDebut");
 				dateFin		 	= rs.getString("dateFin");
 				resultat 		= rs.getString("resultat");
+				createur 		= rs.getInt("userID");
 			} else {
+				createur 		= 0;
 				libelle 		= null;
 				libelleInverse 	= null;
+				dateDebut 		= null;
 				dateFin 		= null;
 				resultat 		= null;
 			}
@@ -75,6 +85,11 @@ public class Marche
 		return id;
 	}
 
+	public int createur()
+	{
+		return createur;
+	}
+
 	public String libelle()
 	{
 		return libelle;
@@ -85,6 +100,11 @@ public class Marche
 		return libelleInverse;
 	}
 
+	public String dateDebut()
+	{
+		return dateDebut;
+	}
+
 	public String dateFin()
 	{
 		return dateFin;
@@ -93,6 +113,102 @@ public class Marche
 	public String resultat()
 	{
 		return resultat;
+	}
+
+	public int nbMarches()
+	{
+		if(id == 0) {
+
+			Connection con 		= null;
+			int ret = 0;
+			try {
+				con 			= getConnection();
+
+				Statement st 	= con.createStatement();
+				ResultSet rs 	= st.executeQuery(	"SELECT " +
+														"count(*) as c " +
+													"FROM markets " +
+													"WHERE " +
+														"dateFin >= date('now') " +
+														"AND resultat = 2;");
+
+				if(rs.next())
+					ret = rs.getInt("c");
+
+				con.close();
+				return ret;
+
+			} catch( Exception e ) {
+				try { con.close(); } catch( Exception ex ) { /* Ignored */}
+				return ret;
+			}
+		}
+		return 0;
+	}
+
+	public int nbMarchesFinit()
+	{
+		if(id == 0) {
+
+			Connection con 		= null;
+			int ret = 0;
+			try {
+				con 			= getConnection();
+
+				Statement st 	= con.createStatement();
+				ResultSet rs 	= st.executeQuery(	"SELECT " +
+														"COUNT(*) AS c " +
+													"FROM markets " +
+													"WHERE " +
+														"dateFin<DATE('now') " +
+														"OR resultat <> 2;");
+			    
+				if(rs.next())
+					ret = rs.getInt("c");
+
+				con.close();
+				return ret;
+
+			} catch( Exception e ) {
+				try { con.close(); } catch( Exception ex ) { /* Ignored */}
+				return ret;
+			}
+		}
+		return 0;
+	}
+
+	public String tousMarches()
+	{
+		if(id == 0) {
+
+			Connection con 		= null;
+			String ret = "";
+			try {
+				con 			= getConnection();
+
+				Statement st 	= con.createStatement();
+				ResultSet rs 	= st.executeQuery(	"SELECT " +
+														"idMarket, " +
+														"libelle " +
+													"FROM markets " +
+													"WHERE" +
+														" dateFin>=DATE('now')" +
+														" AND resultat=2 " +
+													"ORDER BY publication DESC " +
+													"LIMIT 10");
+
+			    while (rs.next())
+			    	ret += "<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>";
+				
+				con.close();
+				return ret;
+
+			} catch( Exception e ) {
+				try { con.close(); } catch( Exception ex ) { /* Ignored */}
+				return ret;
+			}
+		}
+		return "";
 	}
 
 	public String marchesEnCours(int decalage)
@@ -112,10 +228,8 @@ public class Marche
 	private String marches(int decalage, String condition, String ordre)
 	{
 		if(id == 0) {
-			String ret = "";
-
 			Connection con 		= null;
-
+			String ret = "";
 			try {
 				con 			= getConnection();
 
@@ -197,8 +311,10 @@ public class Marche
 			ret = "<td";
 			if(t1 > t2) 
 				ret += " class='positif'>+" + ((int)((t1 / ( t1 + t2 )) * 100));
-			else
+			else if(t1 < t2)
 				ret += " class='negatif'>-" + ((int)((t2 / ( t1 + t2 )) * 100));
+			else
+				ret += ">" + ((int)((t2 / ( t1 + t2 )) * 100));
 			ret += "%</td>";
 
 			con.close();

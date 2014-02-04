@@ -69,20 +69,10 @@
 	            	<div id="persoTop">
 		                <img src="Images/user-group.gif" alt="icone" />
 		                <%
-		                	if( ! (request.isUserInRole("Admin") || request.isUserInRole("MarketMaker") || request.isUserInRole("User") ) )
+		                	if( request.getUserPrincipal() == null )
 		                		out.println(res.getString("deconnecte") + " (<a href='Conn?url=" + URLEncoder.encode((request.getRequestURL().append('?').append(request.getQueryString())).toString()) + "'>" + res.getString("deconnecte_link") + "</a>)");
 		            		else {
-	            				Context initCtx = 	new InitialContext();
-					            Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
-					            DataSource ds 	= 	(DataSource) envCtx.lookup("base");
-					            Connection con 	= 	ds.getConnection();
-
-					        	Statement st 	= 	con.createStatement();
-					       		ResultSet rs 	= 	st.executeQuery("SELECT (prenom || ' ' || nom) AS n FROM users WHERE login='" + request.getUserPrincipal().getName() + "';");
-					       		
-					       		rs.next();
-		            			out.print(res.getString("connecte") + " « <a style='text-decoration: underline;' href='perso'>" + rs.getString("n") + "</a> » (<a href='Conn?deco=1'>" + res.getString("connecte_link") +"</a>)");
-								con.close();
+		            			out.print(res.getString("connecte") + " « <a style='text-decoration: underline;' href='perso'>" + util.prenom() + " " + util.nom() + "</a> » (<a href='Conn?deco=1'>" + res.getString("connecte_link") +"</a>)");
 		            		}
 		            	%>
 		            </div>

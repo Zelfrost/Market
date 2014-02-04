@@ -28,14 +28,16 @@
 				response.sendRedirect("informationFinit?id=" + id);
 			else {
 				String libelle 	= 	(choix==0)
-								?m.libelle()
-								:m.libelleInverse();
-
-				String[] date 	= m.dateFin().split("/");
+									?m.libelle()
+									:m.libelleInverse();
+				out.println("<script>alert(" + m.dateFin() + ");</script>");
+				String[] heure 	= m.dateFin().substring(0, 5).split(":");
+				String[] date 	= m.dateFin().substring(6,14).split("/");
 				java.util.Date fin 	= new java.util.Date(	Integer.parseInt(date[2])-1900,
-																Integer.parseInt(date[1])-1,
-																Integer.parseInt(date[0])
-										);
+															Integer.parseInt(date[1])-1,
+															Integer.parseInt(date[0]),
+															Integer.parseInt(heure[0])-1,
+															Integer.parseInt(heure[1]) );
 				String resultat = m.resultat();
 				String head 	= "header.jsp?titre=" + libelle;
 %>
@@ -64,12 +66,13 @@
 
 <p><%= res.getString("date") %> : <strong><%= m.dateFin() %></strong>
 <%
-				if( fin.compareTo(new java.util.Date()) <= 0 && request.getUserPrincipal()!=null && m.id() == util.id())
+
+				if( fin.compareTo(new java.util.Date()) >= 0 && request.getUserPrincipal()!=null && m.createur() == util.id())
 					out.println("<span id='result'><a href='resultat?id=" + id + "'>" + res.getString("resultat") + " ?</a></span>");
 %>
 </p>
 <%
-				if( fin.compareTo(new java.util.Date()) > 0 ) {
+				if( fin.compareTo(new java.util.Date()) < 0 ) {
 %>
 
 <table class="rouge">

@@ -1,3 +1,4 @@
+import tools.Personne;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -20,7 +21,7 @@ public class AjoutPronostic extends HttpServlet
 
 			PreparedStatement pst = null;
 
-		    String insert 		= "INSERT INTO markets SELECT MAX(idMarket)+1, ?, ?, TO_DATE(?, 'DD/MM/YYYY'), CURRENT_TIMESTAMP, ?::INTEGER, 2 FROM markets;";
+		    String insert 		= "INSERT INTO markets SELECT MAX(idMarket)+1, ?, ?, ?::TIMESTAMP, CURRENT_TIMESTAMP, ?::INTEGER, 2 FROM markets;";
 
 		    try {
 				Context initCtx = 	new InitialContext();
@@ -29,16 +30,17 @@ public class AjoutPronostic extends HttpServlet
 	            Connection con 	= 	ds.getConnection();
 
 	            Statement st 	=	con.createStatement();
-	            ResultSet rs 	=	st.executeQuery("SELECT idUser FROM users WHERE login ='" + req.getUserPrincipal().getName() + "';");
 
-	            rs.next();
+	            Personne util 	= 	(Personne)req.getSession().getAttribute("Personne");
 
 		        pst = con.prepareStatement(insert);
 
+		        String fin = StringEscapeUtils.escapeHtml(req.getParameter("dateFin")) + " " + StringEscapeUtils.escapeHtml(req.getParameter("heurefin"));
+
 		        pst.setString(1, StringEscapeUtils.escapeHtml(req.getParameter("libelle")));
 		        pst.setString(2, StringEscapeUtils.escapeHtml(req.getParameter("libelleInverse")));
-		        pst.setString(3, StringEscapeUtils.escapeHtml(req.getParameter("dateFin")));
-		        pst.setString(4, rs.getString("idUser"));
+		        pst.setString(3, fin);
+		        pst.setString(4, util.id() + "");
 
       			pst.executeUpdate();
 

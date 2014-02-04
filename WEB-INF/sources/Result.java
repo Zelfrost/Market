@@ -1,3 +1,5 @@
+import tools.*;
+
 import java.util.*;
 import java.io.*;
 
@@ -27,7 +29,10 @@ public class Result extends HttpServlet
 				req.getParameter("result")==null )
 				res.sendRedirect("resultat");
 
-			String id 		= 	req.getParameter("id");
+			int id 		= 	Integer.parseInt(req.getParameter("id"));
+			Marche m  		= 	new Marche(id);
+			Personne util	= 	(Personne)req.getSession().getAttribute("Personne");
+
 			
 		    Context initCtx = 	new InitialContext();
 		    Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
@@ -36,19 +41,21 @@ public class Result extends HttpServlet
 
 			Statement st 	= 	con.createStatement();
 			Statement upST 	= 	con.createStatement();
-			ResultSet rs 	= 	st.executeQuery("SELECT libelle, libelleInverse, to_char(dateFin, 'DD/MM/YYYY') AS d, login FROM markets JOIN users ON users.idUser=markets.userID WHERE idMarket=" + id + ";");
-			rs.next();
+			ResultSet rs;
 
-			String[] date 	=	rs.getString("d").split("/");
-			java.util.Date fin 	= 	new java.util.Date(	Integer.parseInt(date[2])-1900,
+			String[] heure 	= m.dateFin().substring(0, 5).split(":");
+			String[] date 	= m.dateFin().substring(6,14).split("/");
+			java.util.Date fin 	= new java.util.Date(	Integer.parseInt(date[2])-1900,
 														Integer.parseInt(date[1])-1,
-														Integer.parseInt(date[0])
-								);
-			if( (! rs.getString("login").equals(req.getUserPrincipal().getName())) || fin.compareTo(new java.util.Date()) > 0)
-				res.sendRedirect("Result?id" + id);
+														Integer.parseInt(date[0]),
+														Integer.parseInt(heure[0])-1,
+														Integer.parseInt(heure[1]) );
+			
+			if( m.createur() != util.id() || fin.compareTo(new java.util.Date()) < 0 )
+				res.sendRedirect("marche");
 			else {
 				int rest 	= 	req.getParameter("result").equals("oui")?0:1;
-				String lib 	= 	(rest==0)?rs.getString("libelle"):rs.getString("libelleInverse");
+				String lib 	= 	(rest==0)?m.libelle():m.libelleInverse();
 
 				st.executeUpdate("UPDATE markets SET resultat=" + rest + " WHERE idMarket=" + id + ";");
 

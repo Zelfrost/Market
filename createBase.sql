@@ -26,7 +26,7 @@ CREATE TABLE markets
     idMarket                    SERIAL,
     libelle                     VARCHAR(300),
     libelleInverse              VARCHAR(300),
-    dateFin                     DATE,
+    dateFin                     TIMESTAMP,
     publication                 TIMESTAMP,
     userID                      INT,
     resultat                    NUMERIC(1),
@@ -37,8 +37,8 @@ CREATE TABLE markets
                                 ON DELETE SET NULL
 );
 
-INSERT INTO markets VALUES(0, '', '', '1995-01-01',  CURRENT_TIMESTAMP, 0, 2);
-INSERT INTO markets(libelle, libelleInverse, dateFin, publication, userID, resultat) VALUES('Il pleuvra le 1er Juin', 'Il ne pleuvra pas le 1er Juin', '2014-06-01',  CURRENT_TIMESTAMP, 0, 2);
+INSERT INTO markets VALUES(0, '', '', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 2);
+INSERT INTO markets(libelle, libelleInverse, dateFin, publication, userID, resultat) VALUES('Il pleuvra le 1er Juin', 'Il ne pleuvra pas le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 2);
 
 
 CREATE TABLE transactions

@@ -14,12 +14,9 @@
 	<h3>Inscription :</h3>
 	<%
 		if(request.getParameter("error")!=null) {
-			if(request.getParameter("error").equals("1"))
-				out.println("<span id='error'>" + res.getString("erreur1") + "</span>");
-			else if(request.getParameter("error").equals("2"))
-				out.println("<span id='error'>" + res.getString("erreur2") + "</span>");
-			else
-				out.println("<span id='error'>" + res.getString("erreur3") + "</span>");
+			try {
+				out.println("<span id='error'>" + res.getString("erreur" + request.getParameter("error")) + "</span>");
+			} catch( Exception e ) { /* Ignored */ }
 		}
 	%>
 

@@ -9,28 +9,11 @@
 %>
 
 
-<script src="JS/jquery-1.9.1.js"></script>
-<script src="JS/jquery-ui.js"></script>
-<script>
-	function sub(){
-		$( "#datepicker").val(
-			$.datepicker.formatDate(
-				"dd/mm/yy", 
-				new Date($( "#datepicker" ).val())
-			)
-		);
-	}
-
-	$(function() {
-		$( "#datepicker" ).datepicker();
-	});
-</script>
-
 <a id="prev" href='marches'><%= res.getString("lienRetour") %></a>
 
 <h3><%= res.getString("titre") %></h3>
 
-<form accept-charset="ISO-8859-1" id="pronostic" method="POST" action="AjoutPronostic">
+<form accept-charset="ISO-8859-1" onsubmit="validH();" id="pronostic" method="POST" action="AjoutPronostic">
 
 <%
 	if(request.getParameter("succes")!=null)
@@ -49,7 +32,8 @@
 
 <div>
 	<label for="dateFin"><%= res.getString("date") %> :</label>
-	<input type="text" id="datepicker" name="dateFin" onchange="sub();" />
+	<input type="text" id="timepicker" name="heurefin" onchange="subH();" />
+	<input type="text" id="datepicker" name="dateFin" onchange="subD();" />
 </div>
 
 <input type="submit" value="<%= res.getString("valider") %>" />
@@ -58,3 +42,45 @@
 
 
 <jsp:include page="footer.jsp" />
+
+
+<link rel='stylesheet' href='CSS/jquery.ptTimeSelect.css' />
+<script src="JS/jquery-1.9.1.js"></script>
+<script src="JS/jquery-ui.js"></script>
+<script src="JS/jquery.ptTimeSelect.js"></script>
+<script>
+	function validH() {
+		$("#timepicker").val( $("#timepicker").val() + ":00" );
+	}
+
+	function subD() {
+		$( "#datepicker").val(
+			$.datepicker.formatDate(
+				"yy-mm-dd", 
+				new Date($( "#datepicker" ).val())
+			)
+		);
+	}
+
+	$(document).ready( function() {
+		$( "#timepicker" ).ptTimeSelect({
+			hoursLabel: "heures",
+			minutesLabel: "minutes",
+			setButtonLabel: "Valider",
+			onClose: function(i) {
+				var t = $("#timepicker").val();
+
+				if(t.indexOf(" ")==4)
+					t = "0" + t;
+
+				if(t.indexOf("PM") != -1)
+					t = parseInt(t.split(":")[0])+12 + ":" + t.split(":")[1];
+
+				t = t.substring(0, 5);
+
+				$("#timepicker").val(t);
+			}
+		});
+		$( "#datepicker" ).datepicker();
+	});
+</script>

@@ -30,6 +30,12 @@
             </form>
         </div>
     </div>
+
+<%
+  Marche m = new Marche(0);
+  String tm = m.tousMarches();
+  if(! tm.equals("")) {
+%>
      
     <div class="menu">
         <div class="header">
@@ -37,28 +43,16 @@
         </div>
         <div class="body">
             <ul>
-<%
-  Connection con  = null;
-  try {
-    Context initCtx = new InitialContext();
-    Context envCtx  = (Context) initCtx.lookup("java:comp/env");
-    DataSource ds   = (DataSource) envCtx.lookup("base");
-    con  = ds.getConnection();
-
-    Statement st    = con.createStatement();
-    ResultSet rs    = st.executeQuery("SELECT idMarket, libelle FROM markets WHERE dateFin>=DATE('now') AND resultat=2 ORDER BY publication DESC LIMIT 10");
-
-    while (rs.next())
-      out.println("<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>");
-%>
+                <%= tm %>
                 <li class="all"><a href="marches"><%= res.getString("tous_marches") %></a></li>
             </ul>
         </div>
     </div>
 <% 
-      if (request.getUserPrincipal()!=null){
-        String mm = ((Personne)session.getAttribute("Personne")).mesMarches();
-        if(! mm.equals("0")) {
+  }
+  if (request.getUserPrincipal() != null){
+    String mm = ((Personne)session.getAttribute("Personne")).mesMarches();
+    if(! mm.equals("0")) {
 %>
     <div class="menu">
       <div class="header">
@@ -72,12 +66,7 @@
       </div>
     </div>
 <%
-      }
     }
-  } catch(SQLException e) {
-    // Ignored
-  } finally {
-    try { con.close(); } catch(Exception e) { /* Ignored */ }
   }
 %>
 </div>
