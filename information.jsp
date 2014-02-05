@@ -43,17 +43,9 @@
 				if(request.getUserPrincipal() != null)
 					util 		= (Personne) session.getAttribute("Personne");
 
-				out.println("<h3 class='followLink'>" + libelle + "</h3>");
+				out.println("<div><h3 class='followLink'>" + libelle + "</h3>");
 
-				if(request.getParameter("success")!=null)
-					out.println("<span id='success'>" + res.getString("succes") + "</span>");
-				if(request.getParameter("error")!=null) {
-					try {
-						out.println("<span id='error'>" + res.getString("erreur"+request.getParameter("error")) + "</span>");
-					} catch( Exception e ) { /* Ignored */ }
-				}
-
-				out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>" + res.getString("inverseLien") + "</a></span>");
+				out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>" + res.getString("inverseLien") + "</a></span></div>");
 %>
 
 <p><%= res.getString("date") %> : <strong><%= m.dateFin() %></strong>
@@ -111,6 +103,14 @@
 </form>
 
 <%
+				if(request.getParameter("success")!=null)
+					out.println("<span id='success'>" + res.getString("succes") + "</span>");
+				if(request.getParameter("error")!=null) {
+					try {
+						out.println("<span id='error'>" + res.getString("erreur"+request.getParameter("error")) + "</span>");
+					} catch( Exception e ) { /* Ignored */ }
+				}
+				
 				if(m.nbProp(choix) > 0) {
 %>
 <h3><%= res.getString("etatMarche") %></h3>

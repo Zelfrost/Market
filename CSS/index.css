@@ -135,9 +135,18 @@ strong {
     width: 70%;
     margin-right: 10px;
 }
-#body .left div {
+#body .left div:not(#prev + div) {
     text-align: right;
     color: #4F9FCF;
+}
+#body .left #prev + div {
+    padding-left: 20px;
+    margin-bottom: 30px;
+
+    border-left: 3px solid #4B8CC9;
+}
+#body .left #prev + div .small {
+    margin-bottom: 2px;
 }
 
 #body .underline {
@@ -608,7 +617,6 @@ html body #body form#conn input[type="submit"]:hover, html body #body form#chang
     width: calc(25% - 16px);
 }
 #body .infoRight {
-    border-left: 5px solid #4B8CC9;
     width: calc(30% - 56px);
     float: right;
     padding: 15px;

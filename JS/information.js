@@ -2,7 +2,7 @@ $(document).ready( function() {
 	var id 		= $('input#id').val();
 	var choix 	= $('input#choix').val();
 	$.getJSON(
-		"/MarketDev/Graphique", 
+		"/Market/Graphique", 
 		{
 			"id": id,
 			"choix": choix
@@ -28,7 +28,7 @@ function raffr() {
 	var choix 	= $('input#choix').val();
 
 	$("table.rouge tbody").load(
-		"/MarketDev/MarcheQuery", 
+		"/Market/MarcheQuery", 
 		{
 			"id": id,
 			"choix": ((choix==1)?0:1),
@@ -37,7 +37,7 @@ function raffr() {
 	);
 	
 	$("table.vert tbody").load(
-		"/MarketDev/MarcheQuery", 
+		"/Market/MarcheQuery", 
 		{
 			"id": id,
 			"choix": choix,
