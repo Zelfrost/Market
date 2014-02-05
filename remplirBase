@@ -1,0 +1,121 @@
+#!/usr/bin/perl
+
+open(U, ">remplirUser.sql");
+foreach $i (5..10000) {
+	print U 'INSERT INTO users VALUES('.$i.', \'aaa\', \'bbb\', \'aaa'.$i.'\', \'aaa\', \'aa@aa.aa\', 10000, 0, \'User\');'."\n";
+}
+close(U);
+
+
+open(M, ">remplirMarket.sql");
+foreach $i (5..10000) {
+	print M 'INSERT INTO markets VALUES('.$i.', \'aaa\', \'bbb\', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '.$i.', 2);'."\n";
+}
+foreach $i (100005..20000) {
+	print M 'INSERT INTO markets VALUES('.$i.', \'aaa\', \'bbb\', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '.( $i - 10000 ).', 2);'."\n";
+}
+foreach $i (200005..30000) {
+	print M 'INSERT INTO markets VALUES('.$i.', \'aaa\', \'bbb\', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '.( $i - 20000 ).', 2);'."\n";
+}
+foreach $i (300005..40000) {
+	print M 'INSERT INTO markets VALUES('.$i.', \'aaa\', \'bbb\', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '.( $i - 30000 ).', 2);'."\n";
+}
+close(M);
+
+open(T, ">remplirTrans.sql");
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('.$i.', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 10000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 20000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 30000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 40000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 50000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 60000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 70000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 80000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 90000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 100000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 110000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 120000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 130000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 140000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 0, 0, CURRENT_TIMESTAMP);'."\n";
+}
+
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 150000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 160000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 170000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 180000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 190000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 200000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 210000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 220000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 230000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 240000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 250000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 260000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 270000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 280000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+foreach $i (5..10000) {
+	print T 'INSERT INTO transactions VALUES('. ( $i + 290000 ) .', '.$i.', '.$i.', 10, 10, 0, 30, 1, 0, CURRENT_TIMESTAMP);'."\n";
+}
+close(T);

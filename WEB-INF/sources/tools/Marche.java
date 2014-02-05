@@ -18,7 +18,8 @@ public class Marche
 			libelleInverse,
 			dateDebut,
 			dateFin,
-			resultat;
+			resultat,
+			erreur;
 
 
 
@@ -33,6 +34,7 @@ public class Marche
 			dateDebut		= null;
 			dateFin 		= null;
 			resultat 		= null;
+			erreur = "";
 		} else {
 			creerMarche();
 		}
@@ -63,7 +65,7 @@ public class Marche
 				libelleInverse 	= rs.getString("libelleInverse");
 				dateDebut	 	= rs.getString("dateDebut");
 				dateFin		 	= rs.getString("dateFin");
-				dateFinEpoch 	= Long.parseLong(rs.getString("dateFinEpoch"));
+				dateFinEpoch 	= Math.round(Double.parseDouble(rs.getString("dateFinEpoch")));
 				resultat 		= rs.getString("resultat");
 				createur 		= rs.getInt("userID");
 			} else {
@@ -79,9 +81,12 @@ public class Marche
 			con.close();
 
 		} catch( Exception e ) {
+			erreur = e.getMessage();
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 		}
 	}
+
+	public String erreur() { return erreur; }
 
 
 
@@ -254,7 +259,7 @@ public class Marche
 													"WHERE " + condition + " " +
 														" AND idMarket <> 0 " +
 													"ORDER BY " + ordre + " DESC " +
-													"LIMIT 10 OFFSET " + decalage + ";");
+													"LIMIT 30 OFFSET " + decalage + ";");
 
 				if(! rs.next())
 					ret += "<tr><td colspan=3 style='text-align: center;'>Aucun marchés ne correspond à votre demande</td></tr>";
@@ -295,8 +300,10 @@ public class Marche
 		try {
 			con 			= getConnection();
 
+			String res = taux(id, con);
+
 			con.close();
-			return taux(id, con);
+			return res;
 
 		} catch( Exception e ) {
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}

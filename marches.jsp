@@ -22,7 +22,7 @@
 			    		:1;
 
     Marche m = new Marche(0);
-    int nbpages 	= 	(int)Math.ceil((double)((old==null)?m.nbMarches():m.nbMarchesFinit()) / 10);
+    int nbpages 	= 	(int)Math.ceil((double)((old==null)?m.nbMarches():m.nbMarchesFinit()) / 30);
 
     if( nbpages > 0 )
 	    out.println("pages : ");
@@ -47,9 +47,9 @@
 	</tr>
 <%
 	if(old == null)
-		out.println( m.marchesEnCours(((pages-1)*10)) );
+		out.println( m.marchesEnCours(((pages-1)*30)) );
 	else
-		out.println( m.marchesFinit(((pages-1)*10)) );
+		out.println( m.marchesFinit(((pages-1)*30)) );
 %>
 </table>
 

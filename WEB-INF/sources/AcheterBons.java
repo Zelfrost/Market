@@ -131,22 +131,37 @@ public class AcheterBons extends HttpServlet
 						con.close();
 						res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&success=1");
 				    } else {
-					con.close();
-					res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=1");
+						con.close();
+						res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=1");
 				    }
 				} else {
 					rs 	= st.executeQuery("SELECT "
 												+ "SUM(nombre - nombreRestant - nombreBloque) AS nombre "
 											+ "FROM transactions "
-											+ "WHERE idMarket=" + req.getParameter("id") + " "
+											+ "WHERE marketID=" + req.getParameter("id") + " "
 												+ "AND choix=" + req.getParameter("choix") + " "
 												+ "AND userID=" + util.id() + " "
-												+ "AND etat <> 0;");
+												+ "AND etat = 0;");
+					if(rs.next() && rs.getInt("nombre") >= nbBons) {
+						rs 	= st.executeQuery("SELECT "
+												+ "idTrans "
+											+ "FROM transactions "
+											+ "WHERE marketID=" + req.getParameter("id") + " "
+												+ "AND choix=" + req.getParameter("choix") + " "
+												+ "AND userID=" + util.id() + " "
+												+ "AND etat = 0 "
+											+ "ORDER BY prix ASC;");
+						while(rs.next()){
+							
+						}
+					} else {
+						res.getWriter().println("Erreur");
+					}
 				}
 			} catch (Exception e ) {
 			    e.printStackTrace(res.getWriter());
 			}			
 		} else
-		res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=4");
+			res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=4");
     }
-}	
+}

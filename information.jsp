@@ -23,7 +23,7 @@
 		if(m.libelle() == null)
 			response.sendRedirect("information");
 		else {
-
+			out.println(m.erreur());
 			if(! m.resultat().equals("2"))
 				response.sendRedirect("informationFinit?id=" + id);
 			else {
@@ -51,7 +51,7 @@
 				if(request.getParameter("error")!=null) {
 					try {
 						out.println("<span id='error'>" + res.getString("erreur"+request.getParameter("error")) + "</span>");
-					} catch( Exception e ) { /* Ignored */}
+					} catch( Exception e ) { /* Ignored */ }
 				}
 
 				out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + id + "&choix=" + ((choix==1)?0:1) + "'>" + res.getString("inverseLien") + "</a></span>");

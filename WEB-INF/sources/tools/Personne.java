@@ -45,7 +45,7 @@ public class Personne
 			con 			= getConnection();
 
             Statement st 	= con.createStatement();
-			ResultSet rs 	= st.executeQuery("Select nom, prenom, mail, login, role, idUser, argent, argentBloque FROM users WHERE login='" + login + "';");
+			ResultSet rs 	= st.executeQuery("SELECT nom, prenom, mail, login, role, idUser, argent, argentBloque FROM users WHERE login='" + login + "';");
 			rs.next();
 
 			nom 			= rs.getString("nom");
@@ -173,6 +173,47 @@ public class Personne
 		return argentBloque;
 	}
 
+	public void majArgentBloque()
+	{
+		Connection con 		= null;
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery("SELECT argentBloque FROM users WHERE login='" + login + "';");
+			rs.next();
+
+			argentBloque 	= rs.getInt("argentBloque");
+
+			con.close();
+
+		} catch( Exception e ) {
+			setError(e);
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+		}
+	}
+
+	public void recupArgentBloque(int idTrans)
+	{
+		Connection con 		= null;
+		try {
+
+			con 			= getConnection();
+
+            PreparedStatement pst 	= con.prepareStatement("UPDATE users SET argentBloque = argentBloque - ( SELECT (nombreRestant * prix) FROM transactions WHERE idTrans=? ) WHERE idUser=" + id + ";");
+			pst.setInt(1, idTrans);
+			pst.executeUpdate();
+			majArgentBloque();
+
+			con.close();
+			
+		} catch( Exception e ) {
+			setError(e);
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+		}
+	}
+
 	public boolean setArgentBloque(int argentBloque)
 	{
 		Connection con 		= null;
@@ -214,7 +255,7 @@ public class Personne
 
 	public String getBons(int marketID, int choix, boolean suppr)
 	{
-		return getBons(marketID, choix, "nombreRestant", "nombreRestant<>0", suppr);
+		return getBons(marketID, choix, "nombreRestant AS nombre", "nombreRestant<>0", suppr);
 	}
 
 	public String getTitres(int marketID, int choix)
@@ -248,11 +289,11 @@ public class Personne
 			else {
 				do {
 					ret += "<tr>";
-					ret += "<td>" + rs.getString("nombreRestant") + " bons</td>";
+					ret += "<td>" + rs.getString("nombre") + " bons</td>";
 					ret += "<td>" + rs.getString("prix") + " euros/u</td>";
 					if(suppr)
 						ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "'>X</a></td>";
-					ret += "<tr>";
+					ret += "</tr>";
 				} while(rs.next());
 			}
 
