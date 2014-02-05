@@ -24,26 +24,39 @@
     Marche m = new Marche(0);
     int nbpages 	= 	(int)Math.ceil((double)((old==null)?m.nbMarches():m.nbMarchesFinit()) / 30);
 
-    if( nbpages > 0 )
-	    out.println("pages : ");
-    if( pages != 1 )
-	    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
-    for( int i = 1; i <= nbpages; i++ ) {
-	    if( i != pages )
-		    out.println("<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
-	    else
-		    out.println("<span>" + i + "</span>");
-    }
+    if(nbpages > 1) {
+		out.println("Pages : ");
+
+		if(pages > 2)
+	    	out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=1'>Début</a>)");
+    	if(pages > 1)
+	    	out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages-1) + "'>Précédent</a>)");
+
+	    for(int i=pages-4; i<pages; i++)
+	    	if(i > 0)
+	    		out.println("<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
+
+	    out.println("<span>" + pages + "</span>");
+
+	    for(int i=pages+1; i<=pages+4; i++)
+	    	if(nbpages - i >= 0)
+	    		out.println("<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + i + "'>" + i + "</a>");
+
+	    if(nbpages - pages > 0)
+			out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
+		if(pages < nbpages - 1)
+			out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + nbpages + "'>Fin</a>)");
+	}
+
     if( pages != nbpages )
-	    out.println("(<a class='orange' href='marches?" + ((old==null)?"":toOld) + "page=" + (pages+1) + "'>Suivant</a>)");
 %>
 </div>
 
-<table>
+<table id="marches">
 	<tr class="th">
 		<th>Titres</th>
 		<th>Date de fin</th>
-		<th>Taux</th>
+		<th>Etat</th>
 	</tr>
 <%
 	if(old == null)

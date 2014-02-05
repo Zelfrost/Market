@@ -23,7 +23,6 @@
 		if(m.libelle() == null)
 			response.sendRedirect("information");
 		else {
-			out.println(m.erreur());
 			if(! m.resultat().equals("2"))
 				response.sendRedirect("informationFinit?id=" + id);
 			else {

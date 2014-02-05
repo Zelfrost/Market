@@ -362,6 +362,7 @@ public class Personne
 													"libelle, " +
 													"libelleInverse, " +
 													"to_char(dateFin, 'HH24:MI DD/MM/YYYY') AS d, " +
+													"date_part('epoch', dateFin) AS dateFinEpoch, " +
 													"choix " +
 												"FROM transactions " +
 													"JOIN markets ON markets.idMarket=transactions.marketID " +
@@ -381,7 +382,17 @@ public class Personne
 					ret += "<tr>";
 	            	ret += "<td><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "'>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>";
 	            	ret += "<td>" + rs.getString("d") + "</td>";
-	            	ret += Marche.taux(rs.getString("idMarket"), con);
+
+					java.util.Date fin = new java.util.Date(Math.round(Double.parseDouble(rs.getString("dateFinEpoch"))) * 1000);
+					if(fin.after(new java.util.Date()))
+						ret += "<td>En cours</td>";
+					else {
+						if(rs.getString("resultat").equals("2"))
+							ret += "<td style='color: red;'>En attente d'un résultat</td>";
+						else
+							ret += "<td style='color: green;'>Finit</td>";
+					}
+
 	            	ret += "</tr>";
 	        	} while (rs.next());
 			}

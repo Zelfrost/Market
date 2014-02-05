@@ -314,6 +314,10 @@ hr {
     width: 90%;
     margin: 40px 0 40px 20px;
 }
+#body table#marches {
+    width: 60%;
+    margin: 40px auto;
+}
 #body table.rouge, #body table.vert {
     width: 95%;
 }
@@ -330,6 +334,9 @@ hr {
 }
 #body table tr.empty {
     text-align: center;
+}
+#body table tr.th {
+    background-color: #AAA;
 }
 #body tr th {
     padding: 5px;
@@ -362,7 +369,7 @@ hr {
     color: #777;
 }
 #body tr td:nth-child(1) {
-    width: 70%;
+    width: 60%;
 }
 #body table.invest td:nth-child(1) {
     width: 45%;
@@ -377,7 +384,7 @@ hr {
     width: 55%;
 }
 #body tr td:nth-child(3) {
-    width: 5%;
+    width: 15%;
     text-align: right;
 }
 #body table.invest td:nth-child(3) a{

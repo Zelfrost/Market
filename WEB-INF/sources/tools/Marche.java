@@ -18,8 +18,7 @@ public class Marche
 			libelleInverse,
 			dateDebut,
 			dateFin,
-			resultat,
-			erreur;
+			resultat;
 
 
 
@@ -34,7 +33,6 @@ public class Marche
 			dateDebut		= null;
 			dateFin 		= null;
 			resultat 		= null;
-			erreur = "";
 		} else {
 			creerMarche();
 		}
@@ -81,12 +79,9 @@ public class Marche
 			con.close();
 
 		} catch( Exception e ) {
-			erreur = e.getMessage();
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 		}
 	}
-
-	public String erreur() { return erreur; }
 
 
 
@@ -254,6 +249,7 @@ public class Marche
 														"libelle, " +
 														"libelleInverse, " +
 														"to_char(dateFin, 'DD/MM/YYYY') AS dateFin, " +
+														"date_part('epoch', dateFin) AS dateFinEpoch, " +
 														"resultat " +
 													"FROM markets " +
 													"WHERE " + condition + " " +
@@ -276,7 +272,15 @@ public class Marche
 								+ "</a></td>";
 						ret += "<td>" + rs.getString("dateFin") + "</td>";
 
-						ret += taux(rs.getString("idMarket"));
+						java.util.Date fin = new java.util.Date(Math.round(Double.parseDouble(rs.getString("dateFinEpoch"))) * 1000);
+						if(fin.after(new java.util.Date()))
+							ret += "<td>En cours</td>";
+						else {
+							if(rs.getString("resultat").equals("2"))
+								ret += "<td style='color: red;'>En attente d'un résultat</td>";
+							else
+								ret += "<td style='color: green;'>Finit</td>";
+						}
 
 						ret += "</tr>";	
 					} while( rs.next());
@@ -292,63 +296,6 @@ public class Marche
 		}
 
 		return null;
-	}
-
-	public String taux(String id)
-	{
-		Connection con = null;
-		try {
-			con 			= getConnection();
-
-			String res = taux(id, con);
-
-			con.close();
-			return res;
-
-		} catch( Exception e ) {
-			try { con.close(); } catch( Exception ex ) { /* Ignored */}
-			return "<td></td>";
-		}
-	}
-
-	public static String taux(String id, Connection con)
-	{
-		try {
-			String ret;
-
-			Statement st 	= con.createStatement();
-			ResultSet rs 	= st.executeQuery(	"SELECT " +
-													"SUM((nombre - nombreRestant) * prix) AS tot " +
-												"FROM transactions " +
-												"WHERE " +
-													"marketID=" + id + " AND " +
-													"choix=0;");
-			double 	t1 = 10, 
-					t2 = 100;
-			if(rs.next())
-				t1 = rs.getDouble("tot");
-
-			rs 	= st.executeQuery(	"SELECT " +
-										"SUM((nombre - nombreRestant) * prix) AS tot " +
-									"FROM transactions " +
-									"WHERE " +
-										"marketID=" + id + " AND " +
-										"choix=1;");
-			if(rs.next())
-				t2 = rs.getDouble("tot");
-
-
-			ret = "<td";
-			if(t1 > t2) 
-				ret += " class='positif'>+" + ((int)((t1 / ( t1 + t2 )) * 100));
-			else if(t1 < t2)
-				ret += " class='negatif'>-" + ((int)((t2 / ( t1 + t2 )) * 100));
-			else
-				ret += ">0";
-			ret += "%</td>";
-
-			return ret;
-		} catch( Exception e ) { return "<td></td>"; }
 	}
 
 	public String proposition(int choix, int prixInverse)
