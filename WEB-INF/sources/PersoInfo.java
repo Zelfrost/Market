@@ -12,11 +12,12 @@ public class PersoInfo extends HttpServlet
 	public void service( HttpServletRequest req, HttpServletResponse res )
 		throws ServletException, IOException
 	{
+            Connection con = null;
 		try {
-				Context initCtx = new InitialContext();
+			Context initCtx   = new InitialContext();
 	          	Context envCtx 	= (Context) initCtx.lookup("java:comp/env");
             	DataSource ds 	= (DataSource) envCtx.lookup("base");
-            	Connection con 	= ds.getConnection();
+            	con 	            = ds.getConnection();
 
             	Statement st 	= con.createStatement();
             	ResultSet rs 	= st.executeQuery("SELECT idUser FROM users WHERE login='" + req.getUserPrincipal().getName() + "';");
@@ -32,6 +33,8 @@ public class PersoInfo extends HttpServlet
             	res.getWriter().print("nombre:" + rs.getString("nombre") + ";prix:" + rs.getString("prix"));
 
             	con.close();
-        } catch( Exception e ) { e.printStackTrace(res.getWriter()); } 
+            } catch( Exception e ) { 
+                  try { con.close(); } catch( Exception ex ) { /* Ignored */ }
+            } 
 	}
 }

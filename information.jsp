@@ -4,15 +4,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <%
-    Locale loc          = (Locale) session.getAttribute("loc");
-    ResourceBundle res  = ResourceBundle.getBundle("prop.information", loc);
-
-	if(request.getParameter("id")==null || request.getParameter("id").equals("") || request.getParameter("id").equals("0")) {
-%>
-<jsp:include page="header.jsp?titre=Error" />
-<%
-		out.println("<span id='error'>" + res.getString("erreur") + "</span>");
-	} else {
+	if(request.getParameter("id")==null || request.getParameter("id").equals("") || request.getParameter("id").equals("0"))
+		response.sendRedirect("marches");
+	else {
 		int id 			= 	Integer.parseInt(request.getParameter("id"));
 		int choix 		= 	(request.getParameter("choix")!=null)
 							?Integer.parseInt(request.getParameter("choix"))
@@ -21,7 +15,7 @@
 		Marche m 		= new Marche(id);
 
 		if(m.libelle() == null)
-			response.sendRedirect("information");
+			response.sendRedirect("marches");
 		else {
 			if(! m.resultat().equals("2"))
 				response.sendRedirect("informationFinit?id=" + id);
@@ -33,7 +27,13 @@
 				String resultat = m.resultat();
 				String head 	= "header.jsp?titre=" + libelle;
 %>
+
 <jsp:include page="<%= head %>" />
+
+<%
+    Locale loc          = (Locale) session.getAttribute("loc");
+    ResourceBundle res  = ResourceBundle.getBundle("prop.information", loc);
+%>
 
 
 <div class='infoLeft left'>
@@ -43,7 +43,7 @@
 				if(request.getUserPrincipal() != null)
 					util 		= (Personne) session.getAttribute("Personne");
 
-				out.println("<h3>" + libelle + "</h3>");
+				out.println("<h3 class='followLink'>" + libelle + "</h3>");
 
 				if(request.getParameter("success")!=null)
 					out.println("<span id='success'>" + res.getString("succes") + "</span>");
@@ -64,9 +64,12 @@
 </p>
 
 <table class="rouge">
-	<tr>
-		<th colspan="3"><%= res.getString("vend") %></th>
-	</tr>
+	<thead>
+		<tr class='th'>
+			<th colspan="3"><%= res.getString("vend") %></th>
+		</tr>
+	</thead>
+	<tbody>
 <%
 					String vente = m.proposition((choix==0)?1:0, 1);
 					if(vente.equals("0"))
@@ -74,6 +77,7 @@
 					else
 						out.println(vente);
 %>
+	</tbody>
 </table>
 <form id='acheter' method='POST' action='AcheterBons'>
 <%
@@ -81,23 +85,28 @@
 					out.println("<input type='hidden' id='choix' name='choix' value='" + choix + "'/>");
 %>
 <table class="vert">
-	<tr>
-		<th colspan="3"><%= res.getString("ach") %></th>
-	</tr>
+	<thead>
+		<tr class='th'>
+			<th colspan="3"><%= res.getString("ach") %></th>
+		</tr>
+	</thead>
 <%
-					String achat = m.proposition(choix, 0);
-					if(achat.equals("0"))
-						out.println("<tr class='empty info'><td colspan='3'>" + res.getString("pasAch") + "</td></tr>");
-					else
-						out.println(achat);
-
 				if( fin.after(new java.util.Date()) && request.getUserPrincipal() != null ) {
-				    out.println("<tr class='form'><td id='nom'>" + util.nom() + " " + util.prenom() +  "</td>");
+				    out.println("<tfoot><tr class='form'><td id='nom'>" + util.nom() + " " + util.prenom() +  "</td>");
 					out.println("<td><input name='nbBons' class='number first' type='text' placeholder='X' /> bons</td>");
 					out.println("<td><input name='prixBons' class='number' type='text' class='second' placeholder='€' /></td></tr>");
-					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' name='valider' value='" + res.getString("acheter") + "' class='achat' /><input type='submit' name='valider' value='" + res.getString("vendre") + "' class='achat' /></td></tr>");
+					out.println("<tr class='form'><td colspan='3'><span class='achatInfo'>" + res.getString("info") + "</span><input type='submit' name='valider' value='" + res.getString("acheter") + "' class='achat' /><input type='submit' name='valider' value='" + res.getString("vendre") + "' class='achat' /></td></tr></tfoot>");
 				}
 %>
+	<tbody>
+<%
+				String achat = m.proposition(choix, 0);
+				if(achat.equals("0"))
+					out.println("<tr class='empty info'><td colspan='3'>" + res.getString("pasAch") + "</td></tr>");
+				else
+					out.println(achat);
+%>
+	</tbody>
 </table>
 </form>
 
@@ -125,11 +134,10 @@
 			<th><%= res.getString("nombre") %></th>
 			<th><%= res.getString("prix") %></th>
 <%
-					if( fin.after(new java.util.Date()) )
-						out.println("<th>" + res.getString("suppr") + "</th>");
+				if( fin.after(new java.util.Date()) )
+					out.println("<th>" + res.getString("suppr") + "</th>");
 %>
 		</tr>
-
 <%
 						String bons = util.getBons(id, choix, fin.after(new java.util.Date()));
 						if(bons.equals("0"))
@@ -144,7 +152,6 @@
 			<th><%= res.getString("nombre") %></th>
 			<th><%= res.getString("prix") %></th>
 		</tr>
-
 <%
 						String titres = util.getTitres(id, choix);
 						if(titres.equals("0"))

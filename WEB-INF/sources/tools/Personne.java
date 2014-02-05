@@ -290,9 +290,9 @@ public class Personne
 				do {
 					ret += "<tr>";
 					ret += "<td>" + rs.getString("nombre") + " bons</td>";
-					ret += "<td>" + rs.getString("prix") + " euros/u</td>";
+					ret += "<td>" + rs.getString("prix") + " &euro; / u</td>";
 					if(suppr)
-						ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "'>X</a></td>";
+						ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "&choix=" + choix + "'>X</a></td>";
 					ret += "</tr>";
 				} while(rs.next());
 			}

@@ -39,7 +39,7 @@ public class suppTrans extends HttpServlet
 
     			con.close();
           
-    			res.sendRedirect("information?id=" + req.getParameter("id"));
+    			res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix"));
     		} catch (Exception e) {
     			e.printStackTrace(res.getWriter());
     		}

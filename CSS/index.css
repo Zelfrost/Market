@@ -8,7 +8,8 @@ body {
 	
 	background-color: #EEE;
 	
-	font-family: Arial;
+	font-family: 'Marvel', sans-serif;
+    font-size: 1.1em;
 	color: #444;
 }
 
@@ -26,7 +27,6 @@ body {
     border-bottom: 2px solid #025C73;
     
     color: #EEE;
-    font-family: "Myriad Pro", Verdana, Arial;
     font-size: 1.3em;
 }
 #header .left {
@@ -74,6 +74,12 @@ hr {
 
 #body {
     padding: 1% 8%;
+}
+strong {
+    font-size: 1.1em;
+}
+#body span.small + p {
+    margin-top: 30px;
 }
 #body .persoInfo {
     display: none;
@@ -672,6 +678,5 @@ html body #body form#conn input[type="submit"]:hover, html body #body form#chang
     border-top: 1px solid #444;
     
     color: #EEE;
-    font-family: "Myriad Pro", Verdana, Arial;
     text-align: right;
 }

@@ -41,6 +41,7 @@
 		<%@ page contentType="text/html;charset=UTF-8" %>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="CSS/resetCSS.css" />
+		<link href='http://fonts.googleapis.com/css?family=Marvel:700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="CSS/jquery-ui.css" />
 		<link rel="stylesheet" href="CSS/index.css" />
 <%
