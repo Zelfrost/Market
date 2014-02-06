@@ -253,17 +253,7 @@ public class Personne
 		return argent - argentBloque;
 	}
 
-	public String getBons(int marketID, int choix, boolean suppr)
-	{
-		return getBons(marketID, choix, "nombreRestant AS nombre", "nombreRestant<>0", suppr);
-	}
-
-	public String getTitres(int marketID, int choix)
-	{
-		return getBons(marketID, choix, "nombre - nombreRestant AS nombre", "nombre > nombreRestant", false);
-	}
-
-	private String getBons(int marketID, int choix, String nombre, String condition, boolean suppr)
+	public String getBons(int marketID, boolean suppr)
 	{
 		Connection con 	= null;
 		String ret 		= "";
@@ -274,13 +264,12 @@ public class Personne
             Statement st 	= con.createStatement();
 			ResultSet rs 	= st.executeQuery(	"SELECT " +
 													"idTrans, " + 
-													nombre + ", " +
+													"nombreRestant AS nombre, " +
 													"prix " +
 												"FROM transactions " +
 												"WHERE userID = '" + id + "'" +
 													" AND marketID=" + marketID +
-													" AND choix=" + choix +
-													" AND " + condition + " " +
+													" AND nombreRestant <> 0 " +
 												"ORDER BY " +
 													"prix ASC, " +
 													"nombreRestant ASC;");
@@ -292,7 +281,7 @@ public class Personne
 					ret += "<td>" + rs.getString("nombre") + " bons</td>";
 					ret += "<td>" + rs.getString("prix") + " &euro; / u</td>";
 					if(suppr)
-						ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "&choix=" + choix + "'>X</a></td>";
+						ret += "<td><a href='suppTrans?idTrans=" + rs.getString("idTrans") + "&id=" + marketID + "'>X</a></td>";
 					ret += "</tr>";
 				} while(rs.next());
 			}
@@ -303,6 +292,36 @@ public class Personne
 		} catch( Exception e ) {
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 			return "0";
+		}
+	}
+
+	public String getTitres(int marketID)
+	{
+		Connection con 	= null;
+		String ret 		= "Vous ne possédez actuellement <strong>aucuns</strong> titres dans ce marché.";
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"SUM(nombre - nombreRestant) AS nombre " +
+												"FROM transactions " +
+												"WHERE userID = '" + id + "'" +
+													" AND marketID=" + marketID +
+													" AND nombre > nombreRestant " +
+												"ORDER BY " +
+													"prix ASC, " +
+													"nombreRestant ASC;");
+			if(rs.next())
+				ret = "Vous possédez actuellement <strong>" + rs.getString("nombre") + "</strong> titre" + ((rs.getInt("nombre")!=1)?"s":"") + " dans ce marché.";
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return ret;
 		}
 	}
 
@@ -318,8 +337,6 @@ public class Personne
 			ResultSet rs 	= st.executeQuery(	"SELECT " +
 													"idMarket, " +
 													"libelle, " +
-													"libelleInverse, " +
-													"choix " +
 												"FROM transactions " +
 													"JOIN markets ON markets.idMarket=transactions.marketID " +
 												"WHERE" +
@@ -327,15 +344,14 @@ public class Personne
 													" AND dateFin>=DATE('now')" +
 													" AND resultat=2 " +
 												"GROUP BY " +
-													"idMarket, " +
-													"choix " +
+													"idMarket " +
 												"ORDER BY publication " +
 												"DESC LIMIT 10;");
 			if(! rs.next())
 				ret = "0";
 			else {
 				do {
-	            	ret += "<li><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "'>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></li>";
+	            	ret += "<li><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></li>";
 	        	} while (rs.next());
 			}
 
@@ -360,10 +376,8 @@ public class Personne
 			ResultSet rs 	= st.executeQuery(	"SELECT " +
 													"idMarket, " +
 													"libelle, " +
-													"libelleInverse, " +
 													"to_char(dateFin, 'HH24:MI DD/MM/YYYY') AS d, " +
-													"date_part('epoch', dateFin) AS dateFinEpoch, " +
-													"choix " +
+													"date_part('epoch', dateFin) AS dateFinEpoch " +
 												"FROM transactions " +
 													"JOIN markets ON markets.idMarket=transactions.marketID " +
 												"WHERE" +
@@ -371,8 +385,7 @@ public class Personne
 													" AND dateFin>=DATE('now')" +
 													" AND resultat=2 " +
 												"GROUP BY " +
-													"idMarket, " +
-													"choix " +
+													"idMarket " +
 												"ORDER BY publication " +
 												"DESC LIMIT 10;");
 			if(! rs.next())
@@ -380,7 +393,7 @@ public class Personne
 			else {
 				do {
 					ret += "<tr>";
-	            	ret += "<td><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "'>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>";
+	            	ret += "<td><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></td>";
 	            	ret += "<td>" + rs.getString("d") + "</td>";
 
 					java.util.Date fin = new java.util.Date(Math.round(Double.parseDouble(rs.getString("dateFinEpoch"))) * 1000);
@@ -423,10 +436,10 @@ public class Personne
 												"WHERE" +
 													" transactions.userID=" + id + 
 													" AND dateFin>=DATE('now')" +
-													" AND resultat=2 " +
+													" AND resultat = 2, " +
+													" AND etat = 0 " +
 												"GROUP BY " +
-													"idMarket, " +
-													"choix " +
+													"idMarket " +
 												"ORDER BY publication " +
 												"DESC LIMIT 10;");
 			if(! rs.next())

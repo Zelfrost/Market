@@ -1,11 +1,7 @@
 <%@ page import="tools.Personne" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ResourceBundle" %>
-<%@ page import="java.util.MissingResourceException" %>
 <%@ page import="java.net.URLEncoder" %>
-<%@ page import="java.sql.*" %>
-<%@ page import="javax.sql.*" %>
-<%@ page import="javax.naming.*" %>
 
 <%
 	Personne util = null;
@@ -41,7 +37,7 @@
 		<%@ page contentType="text/html;charset=UTF-8" %>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="CSS/resetCSS.css" />
-		<link href='http://fonts.googleapis.com/css?family=Marvel:700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Marvel:700,900' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="CSS/jquery-ui.css" />
 		<link rel="stylesheet" href="CSS/index.css" />
 <%

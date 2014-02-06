@@ -25,11 +25,12 @@ CREATE TABLE markets
 (
     idMarket                    SERIAL,
     libelle                     VARCHAR(300),
-    libelleInverse              VARCHAR(300),
     dateFin                     TIMESTAMP,
     publication                 TIMESTAMP,
-    userID                      INT,
     resultat                    NUMERIC(1),
+    etat                        NUMERIC(1),
+    userID                      INT,
+    idInverse                   NUMERIC(7),
 
     CONSTRAINT pk_market        PRIMARY KEY (idMarket),
     CONSTRAINT fk_user          FOREIGN KEY (userID)    REFERENCES users(idUser)
@@ -37,8 +38,10 @@ CREATE TABLE markets
                                 ON DELETE SET NULL
 );
 
-INSERT INTO markets VALUES(0, '', '', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 2);
-INSERT INTO markets(libelle, libelleInverse, dateFin, publication, userID, resultat) VALUES('Il pleuvra le 1er Juin', 'Il ne pleuvra pas le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 2);
+INSERT INTO markets VALUES(0, '', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 0, 0, 1);
+INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 1, 0, 0);
+INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('Il pleuvra le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 0, 1, 3);
+INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('Il ne pleuvra pas le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 1, 1, 2);
 
 
 CREATE TABLE transactions
@@ -49,7 +52,6 @@ CREATE TABLE transactions
     nombre                      NUMERIC(10),
     nombreRestant               NUMERIC(10),
     prix                        NUMERIC(10),
-    choix                       NUMERIC(1),
     etat                        NUMERIC(1),
     dateTrans                   TIMESTAMP,
 
@@ -62,4 +64,4 @@ CREATE TABLE transactions
                                 ON DELETE SET NULL
 );
 
-INSERT INTO transactions VALUES(0, 0, 0, 0, 0, 0, 0, 0, CURRENT_TIMESTAMP);
+INSERT INTO transactions VALUES(0, 0, 0, 0, 0, 0, 0, CURRENT_TIMESTAMP);

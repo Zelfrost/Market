@@ -21,10 +21,6 @@
 %>
 
 <h2 id="perso"><%= rs.getString("nom") %></h2>
-<%
-	if(request.getParameter("success")!=null)
-		out.println("<span id='success'>Vos modifications ont bien été prises en compte.</span>");
-%>
 
 <div class="label">
 	<span>Login : </span>

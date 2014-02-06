@@ -51,7 +51,7 @@ public class Result extends HttpServlet
 				res.sendRedirect("marches");
 			else {
 				int rest 	= 	req.getParameter("result").equals("oui")?0:1;
-				String lib 	= 	(rest==0)?m.libelle():m.libelleInverse();
+				String lib 	= 	m.libelle();
 
 				st.executeUpdate("UPDATE markets SET resultat=" + rest + " WHERE idMarket=" + id + ";");
 

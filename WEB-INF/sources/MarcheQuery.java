@@ -18,10 +18,9 @@ public class MarcheQuery extends HttpServlet
 		throws ServletException, IOException
 	{
 		int id 		= Integer.parseInt(req.getParameter("id"));
-		int choix 	= Integer.parseInt(req.getParameter("choix"));
 		int prix 	= Integer.parseInt(req.getParameter("prix"));
 
-		String r 	= Marche.proposition(id, choix, prix);
+		String r 	= Marche.proposition(id, prix);
 		if(r.charAt(r.length()-1) == '0') {
 			r 		= r.substring(0, r.length()-1);
 			r 		+= "<tr class='empty info'><td colspan='3'>Pas " + ((prix==1)?"de vendeurs":"d'acheteurs") + "</td></tr>";

@@ -12,10 +12,10 @@ import javax.naming.*;
 public class Marche
 {
 	int 	id,
+			idInverse,
 			createur;
 	long 	dateFinEpoch;
 	String 	libelle,
-			libelleInverse,
 			dateDebut,
 			dateFin,
 			resultat;
@@ -26,10 +26,10 @@ public class Marche
 	{
 		this.id 		= id;
 		if(id == 0) {
+			idInverse		= 0;
 			createur 		= 0;
 			dateFinEpoch	= 0;
 			libelle 		= null;
-			libelleInverse 	= null;
 			dateDebut		= null;
 			dateFin 		= null;
 			resultat 		= null;
@@ -50,27 +50,28 @@ public class Marche
 			Statement st 	= con.createStatement();
 			ResultSet rs 	= st.executeQuery("	SELECT " +
 													"libelle, " +
-													"libelleInverse, " +
 													"to_char(publication, 'DD/MM/YYYY') AS dateDebut, " +
 													"to_char(dateFin, 'HH24:MI DD/MM/YYYY') AS dateFin, " +
 													"date_part('epoch', dateFin) AS dateFinEpoch, " +
 													"resultat, " +
-													"userID " +
+													"userID, " +
+													"idInverse " +
 												"FROM markets " +
-												"WHERE idMarket=" + id);
+												"WHERE " +
+													"idMarket=" + id + ";");
 			if(rs.next()) {
 				libelle 		= rs.getString("libelle");
-				libelleInverse 	= rs.getString("libelleInverse");
 				dateDebut	 	= rs.getString("dateDebut");
 				dateFin		 	= rs.getString("dateFin");
 				dateFinEpoch 	= Math.round(Double.parseDouble(rs.getString("dateFinEpoch")));
 				resultat 		= rs.getString("resultat");
 				createur 		= rs.getInt("userID");
+				idInverse 		= rs.getInt("idInverse");
 			} else {
+				idInverse 		= 0;
 				createur 		= 0;
 				dateFinEpoch	= 0;
 				libelle 		= null;
-				libelleInverse 	= null;
 				dateDebut 		= null;
 				dateFin 		= null;
 				resultat 		= null;
@@ -90,6 +91,11 @@ public class Marche
 		return id;
 	}
 
+	public int idInverse()
+	{
+		return idInverse;
+	}
+
 	public int createur()
 	{
 		return createur;
@@ -98,11 +104,6 @@ public class Marche
 	public String libelle()
 	{
 		return libelle;
-	}
-
-	public String libelleInverse()
-	{
-		return libelleInverse;
 	}
 
 	public String dateDebut()
@@ -140,7 +141,8 @@ public class Marche
 													"FROM markets " +
 													"WHERE " +
 														"dateFin >= date('now') " +
-														"AND resultat = 2;");
+														"AND resultat = 2 " +
+														"AND etat = 0;");
 
 				if(rs.next())
 					ret = rs.getInt("c");
@@ -170,8 +172,9 @@ public class Marche
 														"COUNT(*) AS c " +
 													"FROM markets " +
 													"WHERE " +
-														"dateFin<DATE('now') " +
-														"OR resultat <> 2;");
+														"( dateFin<DATE('now') " +
+														"OR resultat <> 2 ) " +
+														"AND etat = 0;");
 			    
 				if(rs.next())
 					ret = rs.getInt("c");
@@ -204,6 +207,7 @@ public class Marche
 													"WHERE" +
 														" dateFin>=DATE('now')" +
 														" AND resultat=2 " +
+														" AND etat = 0 " +
 													"ORDER BY publication DESC " +
 													"LIMIT 10");
 
@@ -223,16 +227,16 @@ public class Marche
 
 	public String marchesEnCours(int decalage)
 	{
-		return marches(	decalage, "dateFin >= date('now') " +
-							" AND resultat = 2 ", 
-						"publication" );
+		return marches(	decalage, "m1.dateFin >= date('now') " +
+							" AND m1.resultat = 2 ", 
+						"m1.publication" );
 	}
 
 	public String marchesFinit(int decalage)
 	{
-		return marches( decalage, "(dateFin < date('now') " +
-							" OR resultat <> 2) ", 
-						"dateFin" );
+		return marches( decalage, "(m1.dateFin < date('now') " +
+							" OR m1.resultat <> 2) ", 
+						"m1.dateFin" );
 	}
 
 	private String marches(int decalage, String condition, String ordre)
@@ -245,15 +249,17 @@ public class Marche
 
 				Statement st 	= con.createStatement();
 				ResultSet rs 	= st.executeQuery("	SELECT " +
-														"idMarket, " +
-														"libelle, " +
-														"libelleInverse, " +
-														"to_char(dateFin, 'DD/MM/YYYY') AS dateFin, " +
-														"date_part('epoch', dateFin) AS dateFinEpoch, " +
-														"resultat " +
-													"FROM markets " +
+														"m1.idMarket, " +
+														"m1.libelle, " +
+														"m2.libelle AS libelleInverse, " +
+														"to_char(m1.dateFin, 'DD/MM/YYYY') AS dateFin, " +
+														"date_part('epoch', m1.dateFin) AS dateFinEpoch, " +
+														"m1.resultat " +
+													"FROM markets AS m1 " +
+														"LEFT JOIN markets AS m2 ON m1.idMarket = m2.idInverse " +
 													"WHERE " + condition + " " +
-														" AND idMarket <> 0 " +
+														" AND m1.idMarket <> 0 " +
+														" AND m1.etat = 0 " +
 													"ORDER BY " + ordre + " DESC " +
 													"LIMIT 30 OFFSET " + decalage + ";");
 
@@ -298,7 +304,7 @@ public class Marche
 		return null;
 	}
 
-	public String proposition(int choix, int prixInverse)
+	public String proposition(int prixInverse)
 	{
 		Connection con 	= null;
 		String ret 		= "";
@@ -314,9 +320,8 @@ public class Marche
 													((prixInverse!=0)?"100 - ":"") + "prix AS prix " +
 												"FROM transactions " +
 													"LEFT JOIN users ON transactions.userID=users.idUser " +
-												"WHERE " +
-													"marketID=" + id + 
-													" AND choix=" + choix + 
+												"WHERE" +
+													" marketID=" + ((prixInverse!=0)?idInverse:id) + 
 													" AND nombreRestant <> 0" +
 													" AND etat = 0 " +
 												"GROUP BY prix " +
@@ -343,7 +348,7 @@ public class Marche
 		}
 	}
 
-	public static String proposition(int marche, int choix, int prixInverse)
+	public static String proposition(int marche, int prixInverse)
 	{
 		Connection con 	= null;
 		String ret 		= "";
@@ -360,8 +365,7 @@ public class Marche
 												"FROM transactions " +
 													"LEFT JOIN users ON transactions.userID=users.idUser " +
 												"WHERE " +
-													"marketID=" + marche + 
-													" AND choix=" + choix + 
+													"marketID=" + marche +
 													" AND nombreRestant <> 0" +
 													" AND etat = 0 " +
 												"GROUP BY prix " +
@@ -388,7 +392,7 @@ public class Marche
 		}
 	}
 
-	public int nbProp(int choix)
+	public int nbProp()
 	{
 		Connection con 	= null;
 		try {
@@ -400,7 +404,6 @@ public class Marche
 												"FROM transactions " +
 												"WHERE " +
 													"marketID=" + id +
-													" AND choix=" + choix +
 													" AND nombre <> 0;" );
 
 			int nb = 0;

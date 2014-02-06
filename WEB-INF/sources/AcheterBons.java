@@ -18,18 +18,19 @@ public class AcheterBons extends HttpServlet
 	    boolean valable = true;
 	    int prix 		= 0,
 	    	nbBons		= 0;
+
 		try{
 		    prix 	= Integer.parseInt(req.getParameter("prixBons"));
 		    nbBons 	= Integer.parseInt(req.getParameter("nbBons"));
 		    
 		    if (prix <= 0 || prix >= 100) {
-				res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=3");
+				res.sendRedirect("information?id=" + req.getParameter("id") + "&error=3");
 				valable = false;
 		    	//prix <0 ou >100
 		    }
 
 		} catch (Exception e){
-		    res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=2");
+		    res.sendRedirect("information?id=" + req.getParameter("id") + "&error=2");
 		    valable = false;
 		    //format prix invalide
 		}
@@ -54,12 +55,11 @@ public class AcheterBons extends HttpServlet
 				    if(util.argentDispo() >= somme) {
 						rs 			= st.executeQuery("SELECT idTrans, "
 															+ "userID, "
-															+ "100-prix AS prix, "
+															+ "100 - prix AS prix, "
 															+ "nombreRestant "
 														+ "FROM transactions "
-														+ "WHERE 100-prix <= " + req.getParameter("prixBons")
-															+ " AND choix = " + ((Integer.parseInt(req.getParameter("choix"))==0)?1:0)
-															+ " AND marketID=" + req.getParameter("id")
+														+ "WHERE 100 - prix <= " + req.getParameter("prixBons")
+															+ " AND marketID=" + req.getParameter("idInverse")
 															+ " AND nombreRestant>0 "
 														+ " ORDER BY prix ASC;");
 						if(rs.next()) {
@@ -69,14 +69,13 @@ public class AcheterBons extends HttpServlet
 								retraitBons	= (nbBons > rs.getInt("nombreRestant")?rs.getInt("nombreRestant"):nbBons);
 								upST		= con.createStatement();
 								// Ajout de la transactions avec le nombre de bons
-								upST.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, nombreBloque, prix, choix, etat, dateTrans) VALUES (" 
+								upST.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, etat, dateTrans) VALUES (" 
 															+ req.getParameter("id") + ", "
 															+ util.id() + ", "
 															+ retraitBons + ", "
 															+ "0, "
 															+ "0, "
 															+ rs.getInt("prix") + ", "
-															+ req.getParameter("choix") + ", "
 															+ "0, "
 															+ "CURRENT_TIMESTAMP);");
 								// On retire de la transaction du joueur en face le nombre de bons rachetés
@@ -102,13 +101,12 @@ public class AcheterBons extends HttpServlet
 						    	// On met à jour l'argent bloqué du joueur si il reste des bons
 						    	util.ajouterArgentBloque(Integer.parseInt(req.getParameter("prixBons")) * nbBons);
 						    	// Et on crée une transactions pour les bons restants
-						    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, choix, etat, dateTrans) VALUES ("
+						    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, etat, dateTrans) VALUES ("
 						    							+ req.getParameter("id") + ", "
 						    							+ util.id() + ", "
 						    							+ req.getParameter("nbBons") + ", "
 						    							+ nbBons + ", "
 						    							+ req.getParameter("prixBons") + ", "
-						    							+ req.getParameter("choix") + ", "
 						    							+ "0, "
 						    							+ "CURRENT_TIMESTAMP);");
 						    }
@@ -116,28 +114,26 @@ public class AcheterBons extends HttpServlet
 					    	// On met à jour l'argent bloqué du joueur si il reste des bons
 					    	util.ajouterArgentBloque(Integer.parseInt(req.getParameter("prixBons")) * nbBons);
 					    	// Et on crée une transactions pour les bons restants
-					    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, choix, etat, dateTrans) VALUES ("
+					    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, etat, dateTrans) VALUES ("
 					    							+ req.getParameter("id") + ", "
 					    							+ util.id() + ", "
 					    							+ nbBons + ", "
 					    							+ nbBons + ", "
 					    							+ req.getParameter("prixBons") + ", "
-					    							+ req.getParameter("choix") + ", "
 					    							+ "0, "
 					    							+ "CURRENT_TIMESTAMP);");
 						}
 						con.close();
-						res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&success=1");
+						res.sendRedirect("information?id=" + req.getParameter("id") + "&success=1");
 				    } else {
 						con.close();
-						res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=1");
+						res.sendRedirect("information?id=" + req.getParameter("id") + "&error=1");
 				    }
 				} else {
 					rs 	= st.executeQuery("SELECT "
 												+ "SUM(nombre - nombreRestant) AS nombre "
 											+ "FROM transactions "
 											+ "WHERE marketID=" + req.getParameter("id") + " "
-												+ "AND choix=" + req.getParameter("choix") + " "
 												+ "AND userID=" + util.id() + " "
 												+ "AND etat = 0;");
 					if(rs.next() && rs.getInt("nombre") >= nbBons) {
@@ -146,7 +142,6 @@ public class AcheterBons extends HttpServlet
 												+ "nombre - nombreRestant AS nombre "
 											+ "FROM transactions "
 											+ "WHERE marketID=" + req.getParameter("id") + " "
-												+ "AND choix=" + req.getParameter("choix") + " "
 												+ "AND userID=" + util.id() + " "
 												+ "AND nombre - nombreRestant <> 0 "
 												+ "AND etat = 0;");
@@ -168,7 +163,6 @@ public class AcheterBons extends HttpServlet
 													"nombre, " +
 													"nombreRestant, " +
 													"prix, " +
-													"choix, " +
 													"etat" +
 													"dateTrans) " +
 												"VALUES(" +
@@ -177,7 +171,6 @@ public class AcheterBons extends HttpServlet
 													nbRetrait + ", " +
 													nbRetrait + ", " +
 													prix + ", " + 
-													choix + ", " +
 													"1, " +
 													"CURRENT_TIMESTAMP);");
 						}
@@ -189,6 +182,6 @@ public class AcheterBons extends HttpServlet
 			    e.printStackTrace(res.getWriter());
 			}			
 		} else
-			res.sendRedirect("information?id=" + req.getParameter("id") + "&choix=" + req.getParameter("choix") + "&error=4");
+			res.sendRedirect("information?id=" + req.getParameter("id") + "&error=4");
     }
 }

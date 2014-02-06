@@ -17,7 +17,6 @@ public class Graphique extends HttpServlet
 				req.getParameter("choix")!=null && !req.getParameter("choix").equals("") ) {
 
 				String id 		= 	req.getParameter("id");
-				String choix	=	req.getParameter("choix");
 				String retour	= 	"";
 				
 			    Context initCtx = 	new InitialContext();
@@ -27,7 +26,7 @@ public class Graphique extends HttpServlet
 
 				Statement st 	= 	con.createStatement();
 				Statement upST 	= 	con.createStatement();
-				ResultSet rs 	= 	st.executeQuery("SELECT SUM(prix * nombre) / SUM(nombre) AS total, to_char(dateTrans, 'YYYY-MM-DD') AS date FROM transactions WHERE marketID=" + id + " AND choix=" + choix + " GROUP BY date ORDER BY date ASC;");
+				ResultSet rs 	= 	st.executeQuery("SELECT SUM(prix * nombre) / SUM(nombre) AS total, to_char(dateTrans, 'YYYY-MM-DD') AS date FROM transactions WHERE marketID=" + id + " GROUP BY date ORDER BY date ASC;");
 				
 				if(rs.next()){
 					retour 			+= 	"[";
@@ -43,6 +42,9 @@ public class Graphique extends HttpServlet
 
 				con.close();
 			}
-		} catch(Exception e) {}
+		} catch(Exception e) {
+				res.getWriter().println("<script>alert('coucou');</script>");
+			e.printStackTrace(res.getWriter());
+		}
 	}
 }

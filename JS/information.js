@@ -1,11 +1,17 @@
 $(document).ready( function() {
-	var id 		= $('input#id').val();
-	var choix 	= $('input#choix').val();
+	raffr();
+});
+
+function raffr() {
+	var id 			= $('input#id').val();
+	var idInverse	= $('input#idInverse').val();
+
+	$("#graphique").html("");
+
 	$.getJSON(
 		"/Market/Graphique", 
 		{
-			"id": id,
-			"choix": choix
+			"id": id
 		}, 
 		function(res){
 			new Morris.Line({
@@ -19,19 +25,10 @@ $(document).ready( function() {
 		}
 	)
 
-	raffr();
-});
-
-function raffr() {
-	var id 		= $('input#id').val();
-
-	var choix 	= $('input#choix').val();
-
 	$("table.rouge tbody").load(
 		"/Market/MarcheQuery", 
 		{
-			"id": id,
-			"choix": ((choix==1)?0:1),
+			"id": idInverse,
 			"prix": 1
 		}
 	);
@@ -40,7 +37,6 @@ function raffr() {
 		"/Market/MarcheQuery", 
 		{
 			"id": id,
-			"choix": choix,
 			"prix": 0
 		}
 	);

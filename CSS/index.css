@@ -139,13 +139,14 @@ strong {
     text-align: right;
     color: #4F9FCF;
 }
-#body .left #prev + div {
-    padding-left: 20px;
-    margin-bottom: 30px;
+#body #prev + div {
+    padding-left: 15px;
+    margin-left: 15px;
+    margin-bottom: 10px;
 
     border-left: 3px solid #4B8CC9;
 }
-#body .left #prev + div .small {
+#body #prev + div .small {
     margin-bottom: 2px;
 }
 
@@ -192,6 +193,9 @@ strong {
 }
 #body h3 + .small a {
     color: #FF6600;
+}
+#body p + h3 {
+    margin-top: 35px;
 }
 
 #body #rsltt {
@@ -617,12 +621,31 @@ html body #body form#conn input[type="submit"]:hover, html body #body form#chang
     width: calc(25% - 16px);
 }
 #body .infoRight {
-    width: calc(30% - 56px);
     float: right;
-    padding: 15px;
+    margin-top: 20px;
 
-    background-color: #F6F6F6;
+    width: calc(35% - 56px);
+    padding: 15px;
 }
+#body .infoRight .small {
+    margin-bottom: 5px;
+}
+.infoRight div {
+    padding-left: 15px;
+    margin-bottom: 10px;
+
+    border-left: 3px solid #4B8CC9;
+}
+.infoRight h4 {
+    margin-top: 10px;
+}
+#body .infoRight h4 + table {
+    width: 90%;
+    
+    margin: 0 auto;
+    margin-top: 15px;
+}
+
 
 #body .right .menu {
     margin-top: 15px;
@@ -674,7 +697,6 @@ html body #body form#conn input[type="submit"]:hover, html body #body form#chang
 #body .right li a:hover {
     color: #CD5200;
 }
-
 
 
 #footer {
