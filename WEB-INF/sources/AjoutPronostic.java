@@ -19,30 +19,54 @@ public class AjoutPronostic extends HttpServlet
 			&& req.getParameter("dateFin")!=null ) {
 
 
-			PreparedStatement pst = null;
+			PreparedStatement pstA = null;
+			PreparedStatement pstB = null;
 
-		    String insert 		= "INSERT INTO markets SELECT MAX(idMarket)+1, ?, ?, ?::TIMESTAMP, CURRENT_TIMESTAMP, ?::INTEGER, 2 FROM markets;";
+		    String insertA 		= "INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES(?, ?::TIMESTAMP, CURRENT_TIMESTAMP, 2, 0, ?, 0);";
+		    String insertB 		= "INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES(?, ?::TIMESTAMP, CURRENT_TIMESTAMP, 2, 1, ?, ?);";
+
+		    int 	id = 0,
+		    		idInverse = 0;
 
 		    try {
 				Context initCtx = 	new InitialContext();
 	            Context envCtx 	= 	(Context) initCtx.lookup("java:comp/env");
 	            DataSource ds 	= 	(DataSource) envCtx.lookup("base");
 	            Connection con 	= 	ds.getConnection();
-
-	            Statement st 	=	con.createStatement();
+	            Statement st 	= 	con.createStatement();
+	            ResultSet rs;
 
 	            Personne util 	= 	(Personne)req.getSession().getAttribute("Personne");
 
-		        pst = con.prepareStatement(insert);
+		        pstA = con.prepareStatement(insertA, Statement.RETURN_GENERATED_KEYS);
+		        pstB = con.prepareStatement(insertB, Statement.RETURN_GENERATED_KEYS);
+
 
 		        String fin = StringEscapeUtils.escapeHtml(req.getParameter("dateFin")) + " " + StringEscapeUtils.escapeHtml(req.getParameter("heurefin"));
 
-		        pst.setString(1, StringEscapeUtils.escapeHtml(req.getParameter("libelle")));
-		        pst.setString(2, StringEscapeUtils.escapeHtml(req.getParameter("libelleInverse")));
-		        pst.setString(3, fin);
-		        pst.setString(4, util.id() + "");
+		        pstA.setString(1, StringEscapeUtils.escapeHtml(req.getParameter("libelle")));
+		        pstA.setString(2, fin);
+		        pstA.setInt(3, util.id());
 
-      			pst.executeUpdate();
+      			pstA.executeUpdate();
+
+      			rs = pstA.getGeneratedKeys();
+      			if(rs.next())
+      				id = rs.getInt(1);
+
+      			pstB.setString(1, StringEscapeUtils.escapeHtml(req.getParameter("libelleInverse")));
+      			pstB.setString(2, fin);
+      			pstB.setInt(3, util.id());
+      			pstB.setInt(4, id);
+
+      			pstB.executeUpdate();
+
+      			rs = pstB.getGeneratedKeys();
+      			if(rs.next())
+      				idInverse = rs.getInt(1);
+
+      			st = con.createStatement();
+      			st.executeUpdate("UPDATE markets SET idInverse=" + idInverse + " WHERE idMarket=" + id + ";");
 
       			con.close();
       			res.sendRedirect("creerPronostic?succes=1");

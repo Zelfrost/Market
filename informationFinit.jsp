@@ -38,7 +38,7 @@
 
 			<span id="rsltt">
 <%
-			if(m.resultat().equals("0"))
+			if(m.resultat().equals(m.id() + ""))
 				out.println(res.getString("gagne"));
 			else
 				out.println(res.getString("perd"));

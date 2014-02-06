@@ -74,7 +74,6 @@ public class AcheterBons extends HttpServlet
 															+ util.id() + ", "
 															+ retraitBons + ", "
 															+ "0, "
-															+ "0, "
 															+ rs.getInt("prix") + ", "
 															+ "0, "
 															+ "CURRENT_TIMESTAMP);");
@@ -104,7 +103,7 @@ public class AcheterBons extends HttpServlet
 						    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, etat, dateTrans) VALUES ("
 						    							+ req.getParameter("id") + ", "
 						    							+ util.id() + ", "
-						    							+ req.getParameter("nbBons") + ", "
+						    							+ nbBons + ", "
 						    							+ nbBons + ", "
 						    							+ req.getParameter("prixBons") + ", "
 						    							+ "0, "

@@ -50,18 +50,18 @@ public class Result extends HttpServlet
 			if( m.createur() != util.id() || fin.after(new java.util.Date()) )
 				res.sendRedirect("marches");
 			else {
-				int rest 	= 	req.getParameter("result").equals("oui")?0:1;
+				int rest 	= 	req.getParameter("result").equals("oui")?m.id():m.idInverse();
 				String lib 	= 	m.libelle();
 
-				st.executeUpdate("UPDATE markets SET resultat=" + rest + " WHERE idMarket=" + id + ";");
+				st.executeUpdate("UPDATE markets SET resultat=" + rest + " WHERE idMarket=" + id + " OR idMarket=" + m.idInverse() + ";");
 
-				rs 			= 	st.executeQuery("SELECT userID, SUM(nombreRestant * prix) AS argent FROM transactions WHERE marketID=" + id + " AND nombreRestant<>0 GROUP BY userID");
+				rs = st.executeQuery("SELECT userID, SUM(nombreRestant * prix) AS argent FROM transactions WHERE ( marketID=" + id + " OR marketID=" + m.idInverse() + " ) AND nombreRestant<>0 GROUP BY userID");
 				while(rs.next())
 					upST.executeUpdate("UPDATE users SET argentBloque = argentBloque - " + rs.getString("argent") + " WHERE idUser = " + rs.getString("userID") + ";");
 
-				rs 			= 	st.executeQuery("SELECT userID, mail, (100 * (nombre - nombreRestant)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + id + " AND choix=" + rest + " AND nombreRestant<>nombre;");
+				rs = st.executeQuery("SELECT userID, mail, (100 * (nombre - nombreRestant)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + rest + " AND nombreRestant<>nombre;");
 				while(rs.next()) {
-					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + " WHERE idUser=" + rs.getString("userID") + ";");
+					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + " AND nbVictoire = nbVictoire + 1 WHERE idUser=" + rs.getString("userID") + ";");
 
 					// Envoi d'un mail
 

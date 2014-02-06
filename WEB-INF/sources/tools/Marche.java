@@ -392,6 +392,51 @@ public class Marche
 		}
 	}
 
+	public static String recherche(String r)
+	{
+		String ret = "";
+		Connection con 	= null;
+		try {
+			con 			= getConnection();
+			Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"idMarket, " +
+													"libelle, " +
+													"to_char(dateFin, 'DD/MM/YYYY') AS dateFin, " +
+													"date_part('epoch', dateFin) AS dateFinEpoch, " +
+													"resultat " +
+												"FROM markets " +
+												"WHERE " +
+													"idMarket<>0 AND " +
+													"libelle ILIKE '%" + r + "%' " +
+												"ORDER BY dateFin, libelle DESC;" );
+
+			while(rs.next()) {
+				ret += "<tr>";
+				ret += "<td><a class='orange' href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></td>";
+				ret += "<td>" + rs.getString("dateFin") + "</td>";
+
+				java.util.Date fin = new java.util.Date(Math.round(Double.parseDouble(rs.getString("dateFinEpoch"))) * 1000);
+				if(fin.after(new java.util.Date()))
+					ret += "<td>En cours</td>";
+				else {
+					if(rs.getString("resultat").equals("2"))
+						ret += "<td style='color: red;'>En attente d'un résultat</td>";
+					else
+						ret += "<td style='color: green;'>Finit</td>";
+				}
+				ret += "</tr>";
+			}
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return e.getMessage();
+		}
+	}
+
 	public int nbProp()
 	{
 		Connection con 	= null;

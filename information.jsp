@@ -35,23 +35,22 @@
 
 <a id="prev" href='marches'><%= res.getString("lienRetour") %></a>
 <%
+				if( (! fin.after(new java.util.Date())) && request.getUserPrincipal()!=null && m.createur() == util.id())
+					out.println("<span id='result'><a href='resultat?id=" + id + "'>" + res.getString("resultat") + " ?</a></span>");
+
 				String finS = m.dateFin();
 				if( finS.substring(0, 5).equals("00:00"))
-					finS = finS.substring(5, finS.length()-1);
+					finS = finS.substring(5, finS.length());
 
 				out.println("<div><h3 class='followLink'>" + libelle + " -> " + finS + "</h3>");
 
 				out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + m.idInverse() + "'>" + res.getString("inverseLien") + "</a></span></div>");
 
 				if(m.nbProp() > 0) {
-
-					if( (! fin.after(new java.util.Date())) && request.getUserPrincipal()!=null && m.createur() == util.id())
-						out.println("<span id='result'><a href='resultat?id=" + id + "'>" + res.getString("resultat") + " ?</a></span>");
 %>
-</p>
 
 <h3><%= res.getString("etatMarche") %></h3>
-<div id="graphique" style="width: auto; height: 200px; background-color: #F6F6F6;"></div>
+<div id="graphique"></div>
 <%
 				}
 %>

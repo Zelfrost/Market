@@ -13,8 +13,7 @@ public class Graphique extends HttpServlet
 		throws ServletException, IOException
 	{
 		try {
-			if(	req.getParameter("id")!=null && !req.getParameter("id").equals("") && !req.getParameter("id").equals("0") &&
-				req.getParameter("choix")!=null && !req.getParameter("choix").equals("") ) {
+			if(	req.getParameter("id")!=null && !req.getParameter("id").equals("") && !req.getParameter("id").equals("0") ) {
 
 				String id 		= 	req.getParameter("id");
 				String retour	= 	"";

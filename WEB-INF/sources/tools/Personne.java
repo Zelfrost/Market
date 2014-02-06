@@ -19,8 +19,8 @@ public class Personne
 					prenom,
 					mail,
 					login,
-					role,
-					error;
+					pass,
+					role;
 
 	private int 	id,
 					argent,
@@ -39,17 +39,17 @@ public class Personne
 	private void setInformation()
 	{
 		Connection con 		= null;
-		error 				= "Pas d'erreurs.<br>";
 		try {
 
 			con 			= getConnection();
 
             Statement st 	= con.createStatement();
-			ResultSet rs 	= st.executeQuery("SELECT nom, prenom, mail, login, role, idUser, argent, argentBloque FROM users WHERE login='" + login + "';");
+			ResultSet rs 	= st.executeQuery("SELECT nom, prenom, mail, login, pass, role, idUser, argent, argentBloque FROM users WHERE login='" + login + "';");
 			rs.next();
 
 			nom 			= rs.getString("nom");
 			prenom 			= rs.getString("prenom");
+			pass 			= rs.getString("pass");
 			mail 			= rs.getString("mail");
 			role 			= rs.getString("role");
 			id 				= rs.getInt("idUser");
@@ -59,7 +59,6 @@ public class Personne
 			con.close();
 
 		} catch( Exception e ) {
-			setError(e);
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 		}
 	}
@@ -81,36 +80,46 @@ public class Personne
 
 	public void setMail(String mail)
 	{
-		this.mail 	= mail;
-	}
-
-	public boolean setPass(String oldPass, String newPass)
-	{
 		Connection con 		= null;
-		try {
 
+		try {
 			con 			= getConnection();
 
-            Statement st 	= con.createStatement();
-			ResultSet rs 	= st.executeQuery("SELECT pass FROM users WHERE idUser=" + id + ";");
-			rs.next();
-
-			String pass 	= rs.getString("pass");
-			if(! pass.equals(oldPass))
-				return false;
-
-			PreparedStatement pst = con.prepareStatement("UPDATE users SET pass=? WHERE idUser=" + id + ";");
-			pst.setString(1, newPass);
+			PreparedStatement pst = con.prepareStatement("UPDATE users SET mail=? WHERE idUser=" + id + ";");
+			pst.setString(1, mail);
 			pst.executeUpdate();
 
+			this.mail 	= mail;
+
 			con.close();
-			
-			return true;
 
 		} catch( Exception e ) {
-			setError(e);
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
-			return false;
+		}
+	}
+
+	public String pass()
+	{
+		return pass;
+	}
+
+	public void setPass(String pass)
+	{
+		Connection con 		= null;
+
+		try {
+			con 			= getConnection();
+
+			PreparedStatement pst = con.prepareStatement("UPDATE users SET pass=? WHERE idUser=" + id + ";");
+			pst.setString(1, pass);
+			pst.executeUpdate();
+
+			this.pass = pass;
+
+			con.close();
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 		}
 	}
 
@@ -152,7 +161,6 @@ public class Personne
 			return true;
 
 		} catch( Exception e ) {
-			setError(e);
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 			return false;
 		}
@@ -189,7 +197,6 @@ public class Personne
 			con.close();
 
 		} catch( Exception e ) {
-			setError(e);
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 		}
 	}
@@ -209,7 +216,6 @@ public class Personne
 			con.close();
 			
 		} catch( Exception e ) {
-			setError(e);
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 		}
 	}
@@ -232,7 +238,6 @@ public class Personne
 			return true;
 			
 		} catch( Exception e ) {
-			setError(e);
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
 			return false;
 		}
@@ -298,23 +303,21 @@ public class Personne
 	public String getTitres(int marketID)
 	{
 		Connection con 	= null;
-		String ret 		= "Vous ne possédez actuellement <strong>aucuns</strong> titres dans ce marché.";
+		String ret 		= "Vous ne possédez actuellement <span class='underline'>aucun</span> titres dans ce marché.";
 		try {
 
 			con 			= getConnection();
 
             Statement st 	= con.createStatement();
-			ResultSet rs 	= st.executeQuery(	"SELECT " +
+            String rq 		= "SELECT " +
 													"SUM(nombre - nombreRestant) AS nombre " +
 												"FROM transactions " +
 												"WHERE userID = '" + id + "'" +
 													" AND marketID=" + marketID +
-													" AND nombre > nombreRestant " +
-												"ORDER BY " +
-													"prix ASC, " +
-													"nombreRestant ASC;");
-			if(rs.next())
-				ret = "Vous possédez actuellement <strong>" + rs.getString("nombre") + "</strong> titre" + ((rs.getInt("nombre")!=1)?"s":"") + " dans ce marché.";
+													" AND nombre > nombreRestant;";
+			ResultSet rs 	= st.executeQuery( rq );
+			if(rs.next() && rs.getString("nombre") != null)
+				ret = "Vous possédez actuellement <span class='underline'>" + rs.getString("nombre") + "</span> titre" + ((rs.getInt("nombre")!=1)?"s":"") + " dans ce marché.";
 
 			con.close();
 			return ret;
@@ -457,8 +460,45 @@ public class Personne
 		}
 	}
 
+	public static String recherche(String r)
+	{
+		String ret = "";
+		Connection con 	= null;
+		try {
+			con 			= getConnection();
+			Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery(	"SELECT " +
+													"idUser, " +
+													"( prenom || ' ' || nom ) AS nom, " +
+													"mail " +
+												"FROM users " +
+												"WHERE " +
+													"idUser<>0 AND " +
+													"( " +
+														"nom ILIKE '%" + r + "%' OR " +
+														"prenom ILIKE '%" + r + "%' OR " +
+														"login ILIKE '%" + r + "%' OR " +
+														"mail ILIKE '%" + r + "%' " +
+													") " +
+												"ORDER BY nom, prenom;" );
 
-	private Connection getConnection()
+			while(rs.next()) {
+				ret += "<tr>";
+				ret += "<td><a class='orange' href='utilisateur?id=" + rs.getString("idUser") + "'>" + rs.getString("nom") + "</a></td>";
+				ret += "<td>" + rs.getString("mail") + "</td>";
+				ret += "</tr>";
+			}
+
+			con.close();
+			return ret;
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			return e.getMessage();
+		}
+	}
+
+	private static Connection getConnection()
 	{
 		Connection con 	= null;
 		try {
@@ -471,27 +511,8 @@ public class Personne
             return con;
 
 		} catch( Exception e ) {
-			setError(e);
 			try { con.close(); } catch( Exception ex ) { /* Ignored */ }
 			return null;
 		}
-	}
-
-
-
-	private void setError(Exception error)
-	{
-		if(this.error.equals("Pas d'erreurs.<br>") && error != null) {
-			StringWriter errors = new StringWriter();
-			error.printStackTrace(new PrintWriter(errors));
-			this.error 	= errors.toString();
-		}
-	}
-
-	public String error()
-	{
-		String tmp  = error;
-		error 		= "Pas d'erreurs.<br>";
-		return tmp;
 	}
 }

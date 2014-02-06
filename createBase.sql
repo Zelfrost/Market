@@ -12,14 +12,15 @@ CREATE TABLE  users (
     mail                        VARCHAR(40),
     argent                      NUMERIC(10),
     argentBloque                NUMERIC(10),
+    nbVictoire                  NUMERIC(1),
     role                        VARCHAR(20),
     
     CONSTRAINT pk_user          PRIMARY KEY (idUser)
 );
 
-INSERT INTO users VALUES(0, 'Admin', 'admin', 'admin', 'Rt6cO9f', 'deconinck.damien@gmail.com', '1000000', '0', 'Admin');
-INSERT INTO users(nom, prenom, login, pass, mail, argent, argentBloque, role) VALUES('Deconinck', 'Damien', 'deconind', 'vrpCLZ', 'deconinck.damien@gmail.com', '100000', '0', 'Admin');
-INSERT INTO users(nom, prenom, login, pass, mail, argent, argentBloque, role) VALUES('Godart', 'Christophe', 'godartc', 'vrpCLZ', 'godart.christophe@gmail.com', '100000', '0', 'Admin');
+INSERT INTO users VALUES(0, 'Admin', 'admin', 'admin', 'Rt6cO9f', 'deconinck.damien@gmail.com', '1000000', 0, 0, 'Admin');
+INSERT INTO users(nom, prenom, login, pass, mail, argent, argentBloque, nbVictoire, role) VALUES('Deconinck', 'Damien', 'deconind', 'vrpCLZ', 'deconinck.damien@gmail.com', '100000', 0, 0, 'Admin');
+INSERT INTO users(nom, prenom, login, pass, mail, argent, argentBloque, nbVictoire, role) VALUES('Godart', 'Christophe', 'godartc', 'vrpCLZ', 'godart.christophe@gmail.com', '100000', 0, 0, 'Admin');
 
 CREATE TABLE markets
 (

@@ -49,7 +49,7 @@ public class Inscrire extends HttpServlet
       			pst.executeUpdate();
 
       			con.close();
-      			res.sendRedirect("connexion?success=1");
+      			res.sendRedirect("Conn");
 		    } catch (Exception e ) {
 		    	e.printStackTrace(res.getWriter());
 		    }

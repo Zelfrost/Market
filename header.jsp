@@ -67,7 +67,7 @@
 		                <img src="Images/user-group.gif" alt="icone" />
 		                <%
 		                	if( request.getUserPrincipal() == null )
-		                		out.println(res.getString("deconnecte") + " (<a href='Conn?url=" + URLEncoder.encode((request.getRequestURL().append('?').append(request.getQueryString())).toString()) + "'>" + res.getString("deconnecte_link") + "</a>)");
+		                		out.println(res.getString("deconnecte") + " (<a href='Conn?url=" + URLEncoder.encode((request.getRequestURL().append('?').append(request.getQueryString())).toString()) + "'>" + res.getString("deconnecte_link") + "</a>, <a href='inscription'>" + res.getString("inscrire_link") + "</a>)");
 		            		else {
 		            			out.print(res.getString("connecte") + " « <a style='text-decoration: underline;' href='perso'>" + util.prenom() + " " + util.nom() + "</a> » (<a href='Conn?deco=1'>" + res.getString("connecte_link") +"</a>)");
 		            		}
