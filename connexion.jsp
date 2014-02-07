@@ -28,8 +28,11 @@
 
 	<input type="submit" value="<%= res.getString("conf") %>" />
 
-	<div>
+	<div class='last'>
 		<a href='inscription' id='insc'><%= res.getString("insc") %> ?</a>
+	</div>
+	<div class='last'>
+		<a href='retrouver' id='insc'><%= res.getString("retrouv") %></a>
 	</div>
 </form>
 

@@ -529,7 +529,7 @@ strong {
 
     color: #444;
 }
-#body form#conn div:last-child {
+#body form#conn div.last {
     margin-top: 10px;
     width: 437px;
     text-align: right;

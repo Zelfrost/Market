@@ -72,6 +72,11 @@
         <servlet-name>inscription</servlet-name>
         <jsp-file>/inscription.jsp</jsp-file>
     </servlet>
+        
+    <servlet>
+        <servlet-name>retrouver</servlet-name>
+        <jsp-file>/retrouver.jsp</jsp-file>
+    </servlet>
     
     
     <servlet-mapping>
