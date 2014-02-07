@@ -1,8 +1,7 @@
 <%@ page import="tools.*" %>
-<%@ page import="java.sql.*" %>
-<%@ page import="javax.sql.*" %>
-<%@ page import="javax.naming.*" %>
+
 <%@ page contentType="text/html;charset=UTF-8" %>
+
 <jsp:include page="header.jsp?title=Recherche" />
 
 

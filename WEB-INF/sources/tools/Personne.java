@@ -36,7 +36,7 @@ public class Personne
 
 
 
-	private void setInformation()
+	public void setInformation()
 	{
 		Connection con 		= null;
 		try {
@@ -345,7 +345,7 @@ public class Personne
 												"WHERE" +
 													" transactions.userID=" + id + 
 													" AND dateFin>=DATE('now')" +
-													" AND resultat=2 " +
+													" AND resultat=0 " +
 												"GROUP BY " +
 													"idMarket " +
 												"ORDER BY publication " +
@@ -386,7 +386,7 @@ public class Personne
 												"WHERE" +
 													" transactions.userID=" + id + 
 													" AND dateFin>=DATE('now')" +
-													" AND resultat=2 " +
+													" AND resultat=0 " +
 												"GROUP BY " +
 													"idMarket " +
 												"ORDER BY publication " +
@@ -403,7 +403,7 @@ public class Personne
 					if(fin.after(new java.util.Date()))
 						ret += "<td>En cours</td>";
 					else {
-						if(rs.getString("resultat").equals("2"))
+						if(rs.getString("resultat").equals("0"))
 							ret += "<td style='color: red;'>En attente d'un résultat</td>";
 						else
 							ret += "<td style='color: green;'>Finit</td>";
@@ -439,7 +439,7 @@ public class Personne
 												"WHERE" +
 													" transactions.userID=" + id + 
 													" AND dateFin>=DATE('now')" +
-													" AND resultat = 2, " +
+													" AND resultat = 0, " +
 													" AND etat = 0 " +
 												"GROUP BY " +
 													"idMarket " +

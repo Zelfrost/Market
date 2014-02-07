@@ -84,7 +84,7 @@
 										"WHERE " +
 											"markets.userID=" + util.id() + 
 											" AND dateFin <= CURRENT_TIMESTAMP" +
-											" AND resultat=2 " +
+											" AND resultat=0 " +
 											" AND etat=0 " +
 										"GROUP BY " +
 											"idMarket, " +

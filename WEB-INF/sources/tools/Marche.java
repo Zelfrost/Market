@@ -141,7 +141,7 @@ public class Marche
 													"FROM markets " +
 													"WHERE " +
 														"dateFin >= date('now') " +
-														"AND resultat = 2 " +
+														"AND resultat = 0 " +
 														"AND etat = 0;");
 
 				if(rs.next())
@@ -173,7 +173,7 @@ public class Marche
 													"FROM markets " +
 													"WHERE " +
 														"( dateFin<DATE('now') " +
-														"OR resultat <> 2 ) " +
+														"OR resultat <> 0 ) " +
 														"AND etat = 0;");
 			    
 				if(rs.next())
@@ -206,7 +206,7 @@ public class Marche
 													"FROM markets " +
 													"WHERE" +
 														" dateFin>=DATE('now')" +
-														" AND resultat=2 " +
+														" AND resultat=0 " +
 														" AND etat = 0 " +
 													"ORDER BY publication DESC " +
 													"LIMIT 10");
@@ -227,15 +227,15 @@ public class Marche
 
 	public String marchesEnCours(int decalage)
 	{
-		return marches(	decalage, "m1.dateFin >= date('now') " +
-							" AND m1.resultat = 2 ", 
+		return marches(	decalage, "m1.dateFin >= CURRENT_TIMESTAMP " +
+							" AND m1.resultat = 0 ", 
 						"m1.publication" );
 	}
 
 	public String marchesFinit(int decalage)
 	{
-		return marches( decalage, "(m1.dateFin < date('now') " +
-							" OR m1.resultat <> 2) ", 
+		return marches( decalage, "(m1.dateFin < CURRENT_TIMESTAMP " +
+							" OR m1.resultat <> 0) ", 
 						"m1.dateFin" );
 	}
 
@@ -254,7 +254,8 @@ public class Marche
 														"m2.libelle AS libelleInverse, " +
 														"to_char(m1.dateFin, 'DD/MM/YYYY') AS dateFin, " +
 														"date_part('epoch', m1.dateFin) AS dateFinEpoch, " +
-														"m1.resultat " +
+														"m1.resultat, " +
+														"m2.idMarket AS idI " +
 													"FROM markets AS m1 " +
 														"LEFT JOIN markets AS m2 ON m1.idMarket = m2.idInverse " +
 													"WHERE " + condition + " " +
@@ -268,11 +269,11 @@ public class Marche
 				else {
 					do {
 						ret += "<tr>";
-						ret += "<td><a " + ((! rs.getString("resultat").equals("2"))
+						ret += "<td><a " + ((! rs.getString("resultat").equals("0"))
 												?"class='finit'"
 												: "") + 
 								" href='information?id=" + rs.getString("idMarket") + "'>" + 
-								((rs.getString("resultat").equals("1"))
+								((rs.getString("resultat").equals(rs.getString("idI")))
 									? rs.getString("libelleInverse")
 									: rs.getString("libelle"))
 								+ "</a></td>";
@@ -282,7 +283,7 @@ public class Marche
 						if(fin.after(new java.util.Date()))
 							ret += "<td>En cours</td>";
 						else {
-							if(rs.getString("resultat").equals("2"))
+							if(rs.getString("resultat").equals("0"))
 								ret += "<td style='color: red;'>En attente d'un résultat</td>";
 							else
 								ret += "<td style='color: green;'>Finit</td>";
@@ -297,7 +298,7 @@ public class Marche
 
 			} catch( Exception e ) {
 				try { con.close(); } catch( Exception ex ) { /* Ignored */}
-				return ret;
+				return e.getMessage();
 			}
 		}
 
@@ -420,7 +421,7 @@ public class Marche
 				if(fin.after(new java.util.Date()))
 					ret += "<td>En cours</td>";
 				else {
-					if(rs.getString("resultat").equals("2"))
+					if(rs.getString("resultat").equals("0"))
 						ret += "<td style='color: red;'>En attente d'un résultat</td>";
 					else
 						ret += "<td style='color: green;'>Finit</td>";

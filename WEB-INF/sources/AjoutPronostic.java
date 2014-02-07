@@ -22,8 +22,8 @@ public class AjoutPronostic extends HttpServlet
 			PreparedStatement pstA = null;
 			PreparedStatement pstB = null;
 
-		    String insertA 		= "INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES(?, ?::TIMESTAMP, CURRENT_TIMESTAMP, 2, 0, ?, 0);";
-		    String insertB 		= "INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES(?, ?::TIMESTAMP, CURRENT_TIMESTAMP, 2, 1, ?, ?);";
+		    String insertA 		= "INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES(?, ?::TIMESTAMP, CURRENT_TIMESTAMP, 0, 0, ?, 0);";
+		    String insertB 		= "INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES(?, ?::TIMESTAMP, CURRENT_TIMESTAMP, 0, 1, ?, ?);";
 
 		    int 	id = 0,
 		    		idInverse = 0;

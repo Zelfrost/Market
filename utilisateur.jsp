@@ -5,7 +5,7 @@
 <jsp:include page="header.jsp?titre=Page utilisateur" />
 
 <%
-	if(request.getParameter("id")==null || request.getParameter("id").equals(""))
+	if(request.getParameter("id")==null || request.getParameter("id").equals("") || request.getParameter("id").equals("0"))
 		response.sendRedirect("index");
 	
 	String id 		= request.getParameter("id");
@@ -38,7 +38,7 @@
 </div>
 
 <%
-	rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle, libelleInverse, choix FROM transactions JOIN users ON transactions.userID=users.idUser JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " GROUP BY idMarket, choix ORDER BY publication DESC;");
+	rs = st.executeQuery("SELECT count(*) AS nb, idMarket, libelle FROM transactions JOIN markets ON markets.idMarket=transactions.marketID WHERE transactions.userID=" + id + " GROUP BY idMarket ORDER BY publication DESC;");
 	if(rs.next() && rs.getInt("nb") != 0 ) {
 %>
 
@@ -51,7 +51,7 @@
 <%
 		do {
 			out.println("<tr>");
-			out.println( "<td style='text-align: center;' class='invest' id='" + rs.getString("idMarket") + ":" + rs.getString("choix") + "'><a href='information?id=" + rs.getString("idMarket") + "&choix=" + rs.getString("choix") + "'>" + ((rs.getString("choix").equals("0"))?rs.getString("libelle"):rs.getString("libelleInverse")) + "</a></td>" );
+			out.println( "<td style='text-align: center;' class='invest'><a href='information?id=" + rs.getString("idMarket") + "'>" + rs.getString("libelle") + "</a></td>" );
 			out.println("</tr>");
 		} while(rs.next());
 %>

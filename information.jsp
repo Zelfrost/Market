@@ -14,7 +14,7 @@
 		if(m.libelle() == null)
 			response.sendRedirect("marches");
 		else {
-			if(! m.resultat().equals("2"))
+			if(! m.resultat().equals("0"))
 				response.sendRedirect("informationFinit?id=" + id);
 			else {
 				String libelle 	= m.libelle();

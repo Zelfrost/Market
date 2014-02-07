@@ -61,7 +61,7 @@ public class Result extends HttpServlet
 
 				rs = st.executeQuery("SELECT userID, mail, (100 * (nombre - nombreRestant)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + rest + " AND nombreRestant<>nombre;");
 				while(rs.next()) {
-					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + " AND nbVictoire = nbVictoire + 1 WHERE idUser=" + rs.getString("userID") + ";");
+					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + ", nbVictoire = nbVictoire + 1 WHERE idUser=" + rs.getString("userID") + ";");
 
 					// Envoi d'un mail
 
@@ -89,8 +89,10 @@ public class Result extends HttpServlet
 
 			      	// Envoi
 			      	Transport.send(message);
+			      	
 			    }
 				res.sendRedirect("informationFinit?id=" + id + "&success=1");
+				((Personne)req.getSession().getAttribute("Personne")).setInformation();
 			}
 			con.close();
 		} catch(Exception e) {
