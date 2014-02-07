@@ -1,11 +1,21 @@
 package tools;
-import tools.Marche;
 
 
 
+import java.util.*;
 import java.io.*;
+
 import java.sql.*;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
+
 import javax.sql.*;
+
+import javax.mail.*;
+import javax.mail.internet.*;
+
 import javax.naming.*;
 
 
@@ -32,6 +42,30 @@ public class Personne
 	{
 		this.login 	= login;
 		setInformation();
+	}
+
+	public Personne(String mail, int m)
+	{
+		this.mail 	= mail;
+		Connection con 		= null;
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery("SELECT idUser, nom, prenom FROM users WHERE mail='" + mail + "';");
+			
+			if(rs.next()) {
+				id 			= rs.getInt("idUser");
+				nom 		= rs.getString("nom");
+				prenom 		= rs.getString("prenom");
+			}
+
+			con.close();
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+		}
 	}
 
 
@@ -98,6 +132,50 @@ public class Personne
 		}
 	}
 
+	public void sendNouvPass()
+	{
+		final String username = "deconinck.damien@gmail.com";
+		final String password = "feuer-frei";
+
+		String car = "abcdefghijklmnopqrstuvwxyz0123456789";
+		String nPass = "";
+
+		java.util.Random g = new java.util.Random();
+		int ind = 0;
+
+		for(int i = 0; i < 8; i ++) {
+			ind = (int)(g.nextFloat() *26) + 1;
+			nPass += car.substring( ind, ind+1);
+		}
+
+ 		try {
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", "smtp.gmail.com");
+			props.put("mail.smtp.port", "587");
+	 
+			Session session = Session.getInstance(props,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(username, password);
+					}
+				}
+			);
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("deconinck.damien@gmail.com"));
+			message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse(mail));
+			message.setSubject("Nouveau mot de passe - Marché de l'Information");
+			message.setText("Voici votre nouveau mot de passe : " + nPass + ". A bientôt sur votre Marché de l'Information.");
+
+			Transport.send(message);
+
+			setPass(nPass);
+		} catch( Exception e ) { /* Ignored */ }
+	}
+
 	public String pass()
 	{
 		return pass;
@@ -143,14 +221,14 @@ public class Personne
 		return argent;
 	}
 
-	public boolean setArgent(int argent)
+	public void setArgent(int argent)
 	{
 		Connection con 		= null;
 		try {
 
 			con 			= getConnection();
 			if(con == null)
-				return false;
+				return;
 
             PreparedStatement pst 	= con.prepareStatement("UPDATE users SET argent=? WHERE idUser=" + id + ";");
 			pst.setInt(1, argent);
@@ -158,11 +236,9 @@ public class Personne
 			this.argent 			= argent;
 
 			con.close();
-			return true;
 
 		} catch( Exception e ) {
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
-			return false;
 		}
 	}
 
@@ -197,7 +273,7 @@ public class Personne
 			con.close();
 
 		} catch( Exception e ) {
-			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+			try { con.close(); } catch( Exception ex ) { /* Ignored */ }
 		}
 	}
 

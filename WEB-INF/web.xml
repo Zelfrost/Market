@@ -144,6 +144,11 @@
         <url-pattern>/inscription</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>retrouver</servlet-name>
+        <url-pattern>/retrouver</url-pattern>
+    </servlet-mapping>
+
 
     <resource-ref>
         <description>Connexion à un serveur SMTP</description>

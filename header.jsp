@@ -9,8 +9,8 @@
 		util 	= new Personne(request.getUserPrincipal().getName());
 		session.setAttribute("Personne", util);
 	}
-	if(util == null)
-		util = (Personne)session.getAttribute("Personne");
+	if(util != null)
+		util.setInformation();
 
 	Locale loc 	= (Locale) session.getAttribute("loc");
 	if(request.getParameter("loc")!=null) {

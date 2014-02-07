@@ -56,7 +56,8 @@ public class AcheterBons extends HttpServlet
 						rs 			= st.executeQuery("SELECT idTrans, "
 															+ "userID, "
 															+ "100 - prix AS prix, "
-															+ "nombreRestant "
+															+ "nombreRestant, "
+															+ "etat "
 														+ "FROM transactions "
 														+ "WHERE 100 - prix <= " + req.getParameter("prixBons")
 															+ " AND marketID=" + req.getParameter("idInverse")
@@ -81,15 +82,22 @@ public class AcheterBons extends HttpServlet
 								upST.executeUpdate("UPDATE transactions SET "
 														+ "nombreRestant = nombreRestant - " + retraitBons
 													+ " WHERE idTrans = " + rs.getString("idTrans"));
-								// On rend l'argent bloqué à l'utilisateur en face
-								upST.executeUpdate("UPDATE users SET "
-														+ "argentBloque = argentBloque - " + ((100-rs.getInt("prix")) * retraitBons)
-													+ " WHERE idUser = " + rs.getString("userID"));
-								// Et on descend son argent réel
-								upST.executeUpdate("UPDATE users SET "
-														+ "argent = argent - " + ((100-rs.getInt("prix")) * retraitBons)
-													+ " WHERE idUser = " + rs.getString("userID"));
+								if(rs.getString("etat").equals("0")) {
+									// On rend l'argent bloqué à l'utilisateur en face
+									upST.executeUpdate("UPDATE users SET "
+															+ "argentBloque = argentBloque - " + ((100-rs.getInt("prix")) * retraitBons)
+														+ " WHERE idUser = " + rs.getString("userID"));
+									// Et on descend son argent réel
+									upST.executeUpdate("UPDATE users SET "
+															+ "argent = argent - " + ((100-rs.getInt("prix")) * retraitBons)
+														+ " WHERE idUser = " + rs.getString("userID"));
+								} else {
+									upST.executeUpdate("UPDATE users SET "
+															+ "argent = argent + " + (rs.getInt("prix") * retraitBons)
+														+ " WHERE idUser = " + rs.getString("userID"));
+								}
 								// On met à jour l'argent de l'utilisateur
+								util.setInformation();
 								util.retirerArgent(rs.getInt("prix") * retraitBons);
 
 								nbBons		-= retraitBons;
@@ -123,9 +131,11 @@ public class AcheterBons extends HttpServlet
 					    							+ "CURRENT_TIMESTAMP);");
 						}
 						con.close();
+						util.setInformation();
 						res.sendRedirect("information?id=" + req.getParameter("id") + "&success=1");
 				    } else {
 						con.close();
+						util.setInformation();
 						res.sendRedirect("information?id=" + req.getParameter("id") + "&error=1");
 				    }
 				} else {
@@ -162,19 +172,21 @@ public class AcheterBons extends HttpServlet
 													"nombre, " +
 													"nombreRestant, " +
 													"prix, " +
-													"etat" +
+													"etat, " +
 													"dateTrans) " +
 												"VALUES(" +
 													util.id() + ", " +
-													req.getParameter("id") + ", " +
+													m.idInverse() + ", " +
 													nbRetrait + ", " +
 													nbRetrait + ", " +
-													prix + ", " + 
+													(100 - prix) + ", " + 
 													"1, " +
 													"CURRENT_TIMESTAMP);");
 						}
+						res.sendRedirect("information?id=" + m.id() + "&success=1");
 					} else {
-						res.getWriter().println("Erreur");
+						util.setInformation();
+						res.sendRedirect("information?id=" + m.id() + "&error=5");
 					}
 				}
 			} catch (Exception e ) {

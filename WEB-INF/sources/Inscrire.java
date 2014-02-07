@@ -25,7 +25,7 @@ public class Inscrire extends HttpServlet
 		else {
 			PreparedStatement pst = null;
 
-		    String insert 		= "INSERT INTO users SELECT MAX(idUser)+1, ?, ?, ?, ?, ?, 10000, 0, 'User' FROM users;";
+		    String insert 		= "INSERT INTO users(nom, prenom, login, pass, mail, argent, argentBloque, nbVictoire, role) VALUES(?, ?, ?, ?, ?, 10000, 0, 0, 'User');";
 
 		    try {
 				Context initCtx = 	new InitialContext();
@@ -34,9 +34,13 @@ public class Inscrire extends HttpServlet
 	            Connection con 	= 	ds.getConnection();
 
 	            Statement st 	=	con.createStatement();
-	            ResultSet rs 	=	st.executeQuery("SELECT idUser FROM users WHERE login ='" + req.getParameter("login") + "';");
-	            if(rs.next())
-	            	res.sendRedirect("inscription?error=3");
+	            ResultSet rs 	=	st.executeQuery("SELECT idUser, login FROM users WHERE login='" + req.getParameter("login") + "' OR mail='" + req.getParameter("mail") + "';");
+	            if(rs.next()) {
+	            	if(rs.getString("login").equals(req.getParameter("login")))
+	            		res.sendRedirect("inscription?error=3");
+	            	else
+	            		res.sendRedirect("inscription?error=4");
+	            }
 
 		        pst = con.prepareStatement(insert);
 

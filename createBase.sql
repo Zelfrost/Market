@@ -39,10 +39,10 @@ CREATE TABLE markets
                                 ON DELETE SET NULL
 );
 
-INSERT INTO markets VALUES(0, '', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 0, 0, 1);
-INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 1, 0, 0);
-INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('Il pleuvra le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 0, 1, 3);
-INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('Il ne pleuvra pas le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 2, 1, 1, 2);
+INSERT INTO markets VALUES(0, '', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 0, 0, 1);
+INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('', '1995-01-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 1, 0, 0);
+INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('Il pleuvra le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 0, 1, 3);
+INSERT INTO markets(libelle, dateFin, publication, resultat, etat, userID, idInverse) VALUES('Il ne pleuvra pas le 1er Juin', '2014-06-01 00:00:00.0',  CURRENT_TIMESTAMP, 0, 1, 1, 2);
 
 
 CREATE TABLE transactions

@@ -140,7 +140,7 @@ public class Marche
 														"count(*) as c " +
 													"FROM markets " +
 													"WHERE " +
-														"dateFin >= date('now') " +
+														"dateFin >= CURRENT_TIMESTAMP " +
 														"AND resultat = 0 " +
 														"AND etat = 0;");
 
@@ -172,7 +172,7 @@ public class Marche
 														"COUNT(*) AS c " +
 													"FROM markets " +
 													"WHERE " +
-														"( dateFin<DATE('now') " +
+														"( dateFin<CURRENT_TIMESTAMP " +
 														"OR resultat <> 0 ) " +
 														"AND etat = 0;");
 			    
@@ -205,7 +205,7 @@ public class Marche
 														"libelle " +
 													"FROM markets " +
 													"WHERE" +
-														" dateFin>=DATE('now')" +
+														" dateFin>=CURRENT_TIMESTAMP" +
 														" AND resultat=0 " +
 														" AND etat = 0 " +
 													"ORDER BY publication DESC " +
@@ -324,7 +324,7 @@ public class Marche
 												"WHERE" +
 													" marketID=" + ((prixInverse!=0)?idInverse:id) + 
 													" AND nombreRestant <> 0" +
-													" AND etat = 0 " +
+													((prixInverse!=0)?" ":" AND etat = 0 ") +
 												"GROUP BY prix " +
 												"ORDER BY prix DESC;");
 
@@ -345,7 +345,7 @@ public class Marche
 
 		} catch( Exception e ) {
 			try { con.close(); } catch( Exception ex ) { /* Ignored */}
-			return "<td></td>";
+			return "<tr><td colspan='3'>Erreur de la base</td></tr>";
 		}
 	}
 
@@ -368,7 +368,7 @@ public class Marche
 												"WHERE " +
 													"marketID=" + marche +
 													" AND nombreRestant <> 0" +
-													" AND etat = 0 " +
+													((prixInverse!=0)?" ":" AND etat = 0 ") +
 												"GROUP BY prix " +
 												"ORDER BY prix DESC;");
 

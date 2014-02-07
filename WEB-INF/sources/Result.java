@@ -59,36 +59,38 @@ public class Result extends HttpServlet
 				while(rs.next())
 					upST.executeUpdate("UPDATE users SET argentBloque = argentBloque - " + rs.getString("argent") + " WHERE idUser = " + rs.getString("userID") + ";");
 
-				rs = st.executeQuery("SELECT userID, mail, (100 * (nombre - nombreRestant)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + rest + " AND nombreRestant<>nombre;");
+				rs = st.executeQuery("SELECT userID, nom, prenom, mail, SUM(100 * (nombre - nombreRestant)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + rest + " AND nombreRestant<>nombre GROUP BY userID, nom, prenom, mail;");
+
+				final String username = "deconinck.damien@gmail.com";
+				final String password = "feuer-frei";
+		 
+				Properties props = new Properties();
+				props.put("mail.smtp.auth", "true");
+				props.put("mail.smtp.starttls.enable", "true");
+				props.put("mail.smtp.host", "smtp.gmail.com");
+				props.put("mail.smtp.port", "587");
+		 
+				Session session = Session.getInstance(props,
+					new javax.mail.Authenticator() {
+						protected PasswordAuthentication getPasswordAuthentication() {
+							return new PasswordAuthentication(username, password);
+						}
+					}
+				);
+
 				while(rs.next()) {
 					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + ", nbVictoire = nbVictoire + 1 WHERE idUser=" + rs.getString("userID") + ";");
 
 					// Envoi d'un mail
 
-					// Récupération de la session
-					Context iniCont = new InitialContext();
-			        Context envCont = (Context) iniCont.lookup("java:/comp/env");
-			      	javax.mail.Session sess = (javax.mail.Session)envCont.lookup("mail/Session");
-
-			      	// Création du message
-			      	Message message = new MimeMessage(sess);
-
-			      	// From
-			      	message.setFrom(new InternetAddress("market@dammien-deconinck.fr"));
-
-			      	// To
-			      	InternetAddress to[] = new InternetAddress[1];
-			      	to[0] = new InternetAddress(rs.getString("mail"));
-			      	message.setRecipients(Message.RecipientType.TO, to);
-
-			      	// Sujet
-		         	message.setSubject("Vous avez misé sur le bon cheval !");
-
-		         	// Contenu
-			      	message.setContent("Bravo ! Le pronostic \"" + lib + "\" sur lequel vous aviez parié vient d'être confirmé. Vous êtes donc l'heureux vainqueurs de " + rs.getString("somme") + "€, qui viennent d'être ajouté à votre argent sur le site.", "text/plain");
-
-			      	// Envoi
-			      	Transport.send(message);
+					Message message = new MimeMessage(session);
+					message.setFrom(new InternetAddress("deconinck.damien@gmail.com"));
+					message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse(rs.getString("mail")));
+					message.setSubject("Félicitation - Votre Marché de l'Information");
+					message.setText("Bravo ! Grâce à vos bons acheté sur le marché '" + lib + "', vous venez de remporter " + rs.getString("somme") + "€.");
+		 
+					Transport.send(message);
 			      	
 			    }
 				res.sendRedirect("informationFinit?id=" + id + "&success=1");
