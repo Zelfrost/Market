@@ -29,6 +29,8 @@ public class Result extends HttpServlet
 				req.getParameter("result")==null )
 				res.sendRedirect("resultat");
 
+			int gainM1 = 0, gainM2 = 0, idM1 = 0, idM2 = 0;
+
 			int id 		= 	Integer.parseInt(req.getParameter("id"));
 			Marche m  		= 	new Marche(id);
 			Personne util	= 	(Personne)req.getSession().getAttribute("Personne");
@@ -79,6 +81,14 @@ public class Result extends HttpServlet
 				);
 
 				while(rs.next()) {
+					if(rs.getInt("somme")>gainM1) {
+						gainM1 = rs.getInt("somme");
+						idM1 = rs.getInt("userID");
+					} else if(rs.getInt("somme")>gainM2) {
+						gainM2 = rs.getInt("somme");
+						idM2 = rs.getInt("userID");
+					}
+
 					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + ", nbVictoire = nbVictoire + 1 WHERE idUser=" + rs.getString("userID") + ";");
 
 					// Envoi d'un mail
@@ -93,8 +103,17 @@ public class Result extends HttpServlet
 					Transport.send(message);
 			      	
 			    }
-				res.sendRedirect("informationFinit?id=" + id + "&success=1");
+			    if(idM1 != 0) {
+				    Personne p = new Personne(idM1);
+				    p.setMarketMaker();
+				    if(idM2 != 0) {
+					    p = new Personne(idM2);
+					    p.setMarketMaker();
+					}
+				}
+
 				((Personne)req.getSession().getAttribute("Personne")).setInformation();
+				res.sendRedirect("informationFinit?id=" + id + "&success=1");
 			}
 			con.close();
 		} catch(Exception e) {

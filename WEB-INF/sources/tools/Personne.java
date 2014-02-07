@@ -44,6 +44,12 @@ public class Personne
 		setInformation();
 	}
 
+	public Personne(int id)
+	{
+		this.id = id;
+		setInformationId();
+	}
+
 	public Personne(String mail, int m)
 	{
 		this.mail 	= mail;
@@ -87,6 +93,33 @@ public class Personne
 			mail 			= rs.getString("mail");
 			role 			= rs.getString("role");
 			id 				= rs.getInt("idUser");
+			argent 			= rs.getInt("argent");
+			argentBloque 	= rs.getInt("argentBloque");
+
+			con.close();
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+		}
+	}
+
+	public void setInformationId()
+	{
+		Connection con 		= null;
+		try {
+
+			con 			= getConnection();
+
+            Statement st 	= con.createStatement();
+			ResultSet rs 	= st.executeQuery("SELECT nom, prenom, mail, login, pass, role, argent, argentBloque FROM users WHERE idUser='" + id + "';");
+			rs.next();
+
+			nom 			= rs.getString("nom");
+			prenom 			= rs.getString("prenom");
+			login 			= rs.getString("login");
+			pass 			= rs.getString("pass");
+			mail 			= rs.getString("mail");
+			role 			= rs.getString("role");
 			argent 			= rs.getInt("argent");
 			argentBloque 	= rs.getInt("argentBloque");
 
@@ -209,6 +242,27 @@ public class Personne
 	public String role()
 	{
 		return role;
+	}
+
+	public void setMarketMaker()
+	{
+		Connection con 		= null;
+		try {
+
+			con 			= getConnection();
+			if(con == null)
+				return;
+
+            Statement st 	= con.createStatement();
+            st.executeUpdate("UPDATE users SET role=MarketMaker WHERE idUser=" + id + ";");
+			
+			setInformation();
+
+			con.close();
+
+		} catch( Exception e ) {
+			try { con.close(); } catch( Exception ex ) { /* Ignored */}
+		}
 	}
 
 	public int id()
