@@ -6,15 +6,6 @@
                 username="damien" password="moi" driverClassName="org.postgresql.Driver"
                 url="jdbc:postgresql:dev" />
 
-    <Resource   name="mail/Session" auth="Container"
-                type="java.mail.Session" 
-                mail.smtp.auth="true"
-                mail.smtp.starttls.enable="true"
-                mail.smtp.host="smtp.gmail.com"
-                mail.smtp.port="587"
-    			username="deconinck.damien@gmail.com"
-    			password="feuer-frei" />
-
     <Realm className="org.apache.catalina.realm.DataSourceRealm" name="realmBase" localDataSource="true"
 			    dataSourceName="base" userTable="users" userNameCol="login"
 			    userCredCol="pass" userRoleTable="users" roleNameCol="role" />
