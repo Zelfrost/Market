@@ -63,6 +63,8 @@ public class Result extends HttpServlet
 
 				rs = st.executeQuery("SELECT userID, nom, prenom, mail, SUM(100 * (nombre - nombreRestant - nombreBloque)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + rest + " AND nombreRestant<>nombre - nombreBloque GROUP BY userID, nom, prenom, mail;");
 
+				// Identifiants
+				///*
 				final String username = "";
 				final String password = "";
 		 
@@ -80,6 +82,8 @@ public class Result extends HttpServlet
 					}
 				);
 
+				//*/
+
 				while(rs.next()) {
 					if(rs.getInt("somme")>gainM1) {
 						gainM1 = rs.getInt("somme");
@@ -92,7 +96,7 @@ public class Result extends HttpServlet
 					upST.executeUpdate("UPDATE users SET argent = argent + " + rs.getString("somme") + ", nbVictoire = nbVictoire + 1 WHERE idUser=" + rs.getString("userID") + ";");
 
 					// Envoi d'un mail
-
+					///*
 					Message message = new MimeMessage(session);
 					message.setFrom(new InternetAddress("deconinck.damien@gmail.com"));
 					message.setRecipients(Message.RecipientType.TO,
@@ -101,7 +105,7 @@ public class Result extends HttpServlet
 					message.setText("Bravo ! Grâce à vos bons acheté sur le marché '" + lib + "', vous venez de remporter " + rs.getString("somme") + "€.");
 		 
 					Transport.send(message);
-			      	
+			      	//*/
 			    }
 			    if(idM1 != 0) {
 				    Personne p = new Personne(idM1);

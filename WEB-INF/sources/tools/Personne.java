@@ -167,8 +167,10 @@ public class Personne
 
 	public void sendNouvPass()
 	{
-		final String username = "deconinck.damien@gmail.com";
-		final String password = "feuer-frei";
+		// Identifiants
+		///*
+		final String username = "";
+		final String password = "";
 
 		String car = "abcdefghijklmnopqrstuvwxyz0123456789";
 		String nPass = "";
@@ -207,6 +209,7 @@ public class Personne
 
 			setPass(nPass);
 		} catch( Exception e ) { /* Ignored */ }
+		//*/
 	}
 
 	public String pass()
