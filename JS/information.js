@@ -1,12 +1,8 @@
-$(document).ready( function() {
-	raffr();
-});
-
 function raffr() {
 	var id 			= $('input#id').val();
 	var idInverse	= $('input#idInverse').val();
 
-	$("#graphique").html("");
+	$("#graph").html("");
 
 	$.getJSON(
 		"/Market/Graphique", 
@@ -14,8 +10,9 @@ function raffr() {
 			"id": id
 		}, 
 		function(res){
+			$("#graph").css({height: "200px"});
 			new Morris.Line({
-		 		element: 'graphique',
+		 		element: 'graph',
 				data: res,
 				xkey: 'jour',
 				ykeys: ['valeur'],
@@ -24,6 +21,10 @@ function raffr() {
 			});
 		}
 	)
+	.fail( function() {
+		$("#graph").css({height: "auto"});
+		$("#graph").html("Aucune évolution actuellement");
+	});
 
 	$("table.rouge tbody").load(
 		"/Market/MarcheQuery", 
@@ -43,3 +44,7 @@ function raffr() {
 
 	setTimeout("raffr()", 5000);
 }
+
+$(document).ready( function() {
+	raffr();
+});

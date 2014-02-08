@@ -324,7 +324,6 @@ public class Marche
 												"WHERE" +
 													" marketID=" + ((prixInverse!=0)?idInverse:id) + 
 													" AND nombreRestant <> 0" +
-													((prixInverse!=0)?" ":" AND etat = 0 ") +
 												"GROUP BY prix " +
 												"ORDER BY prix DESC;");
 
@@ -367,8 +366,7 @@ public class Marche
 													"LEFT JOIN users ON transactions.userID=users.idUser " +
 												"WHERE " +
 													"marketID=" + marche +
-													" AND nombreRestant <> 0" +
-													((prixInverse!=0)?" ":" AND etat = 0 ") +
+													" AND nombreRestant <> 0 " +
 												"GROUP BY prix " +
 												"ORDER BY prix DESC;");
 
@@ -450,7 +448,7 @@ public class Marche
 												"FROM transactions " +
 												"WHERE " +
 													"marketID=" + id +
-													" AND nombre <> 0;" );
+													" AND nombre - nombreRestant - nombreBloque <> 0;" );
 
 			int nb = 0;
 			if(rs.next())

@@ -75,6 +75,24 @@ hr {
 #body {
     padding: 1% 8%;
 }
+#notifs {
+    position: fixed;
+
+    bottom: 5px;
+    right: -255px;
+
+    padding: 10px;
+
+    height: auto;
+    width: 230px;
+
+    background-color: rgb(238, 247, 255);
+    border: 1px solid rgb(165, 198, 217);
+
+    color: #666;
+
+    transform: skewX(3deg);
+}
 strong {
     font-size: 1.1em;
 }
@@ -140,11 +158,21 @@ strong {
     color: #4F9FCF;
 }
 #body #graphique {
-    width: auto;
-    height: 200px;
+    width: 90%;
+    margin: 35px auto 0;
 
     background-color: #FAFAFA;
     border: 1px solid #F0F0F0;
+}
+#body #graphique h3 {
+    margin-left: 10px;
+}
+#body #graph {
+    width: auto;
+    height: 200px;
+
+    padding: 15px;
+    padding-top: 0;
 }
 #body #prev + div {
     padding-left: 15px;
@@ -311,7 +339,7 @@ strong {
     font-size: 1.1em;
 }
 
-#body a.orange {
+a.orange {
     color: #FF6600;
     text-decoration: none;
 }

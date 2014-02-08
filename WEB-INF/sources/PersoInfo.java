@@ -24,7 +24,7 @@ public class PersoInfo extends HttpServlet
             	rs.next();
             	String id 		= rs.getString("idUser");
 
-            	rs 				= st.executeQuery("SELECT SUM(nombre - nombreRestant) AS nombre, SUM((nombre - nombreRestant) * prix) AS prix FROM transactions WHERE userID=" + id + " AND marketID=" + req.getParameter("id") + " AND choix=" + req.getParameter("choix") + " AND nombre<>nombreRestant;");
+            	rs 				= st.executeQuery("SELECT SUM(nombre - nombreRestant - nombreBloque) AS nombre, SUM((nombre - nombreRestant - nombreBloque) * prix) AS prix FROM transactions WHERE userID=" + id + " AND marketID=" + req.getParameter("id") + " AND choix=" + req.getParameter("choix") + " AND nombre<>nombreRestant;");
             	rs.next();
             	res.getWriter().print("nombre:" + rs.getString("nombre") + ";prix:" + rs.getString("prix") + "|");
 

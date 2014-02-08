@@ -405,6 +405,7 @@ public class Personne
 												"WHERE userID = '" + id + "'" +
 													" AND marketID=" + marketID +
 													" AND nombreRestant <> 0 " +
+													" AND etat = 0" +
 												"ORDER BY " +
 													"prix ASC, " +
 													"nombreRestant ASC;");
@@ -440,11 +441,11 @@ public class Personne
 
             Statement st 	= con.createStatement();
             String rq 		= "SELECT " +
-													"SUM(nombre - nombreRestant) AS nombre " +
+													"SUM(nombre - nombreRestant - nombreBloque) AS nombre " +
 												"FROM transactions " +
 												"WHERE userID = '" + id + "'" +
 													" AND marketID=" + marketID +
-													" AND nombre > nombreRestant;";
+													" AND nombre - nombreBloque > nombreRestant;";
 			ResultSet rs 	= st.executeQuery( rq );
 			if(rs.next() && rs.getString("nombre") != null)
 				ret = "Vous possédez actuellement <span class='underline'>" + rs.getString("nombre") + "</span> titre" + ((rs.getInt("nombre")!=1)?"s":"") + " dans ce marché.";
@@ -469,7 +470,7 @@ public class Personne
             Statement st 	= con.createStatement();
 			ResultSet rs 	= st.executeQuery(	"SELECT " +
 													"idMarket, " +
-													"libelle, " +
+													"libelle " +
 												"FROM transactions " +
 													"JOIN markets ON markets.idMarket=transactions.marketID " +
 												"WHERE" +
@@ -478,7 +479,7 @@ public class Personne
 													" AND resultat=0 " +
 												"GROUP BY " +
 													"idMarket " +
-												"ORDER BY publication " +
+												"ORDER BY publication, libelle " +
 												"DESC LIMIT 10;");
 			if(! rs.next())
 				ret = "0";
@@ -515,7 +516,7 @@ public class Personne
 													"JOIN markets ON markets.idMarket=transactions.marketID " +
 												"WHERE" +
 													" transactions.userID=" + id + 
-													" AND dateFin>=DATE('now')" +
+													" AND dateFin>=CURRENT_TIMESTAMP" +
 													" AND resultat=0 " +
 												"GROUP BY " +
 													"idMarket " +

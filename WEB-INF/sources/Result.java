@@ -61,10 +61,10 @@ public class Result extends HttpServlet
 				while(rs.next())
 					upST.executeUpdate("UPDATE users SET argentBloque = argentBloque - " + rs.getString("argent") + " WHERE idUser = " + rs.getString("userID") + ";");
 
-				rs = st.executeQuery("SELECT userID, nom, prenom, mail, SUM(100 * (nombre - nombreRestant)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + rest + " AND nombreRestant<>nombre GROUP BY userID, nom, prenom, mail;");
+				rs = st.executeQuery("SELECT userID, nom, prenom, mail, SUM(100 * (nombre - nombreRestant - nombreBloque)) AS somme FROM transactions JOIN users ON transactions.userID=users.idUser WHERE marketID=" + rest + " AND nombreRestant<>nombre - nombreBloque GROUP BY userID, nom, prenom, mail;");
 
-				final String username = "deconinck.damien@gmail.com";
-				final String password = "feuer-frei";
+				final String username = "";
+				final String password = "";
 		 
 				Properties props = new Properties();
 				props.put("mail.smtp.auth", "true");

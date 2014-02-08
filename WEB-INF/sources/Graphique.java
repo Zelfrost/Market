@@ -25,7 +25,7 @@ public class Graphique extends HttpServlet
 
 				Statement st 	= 	con.createStatement();
 				Statement upST 	= 	con.createStatement();
-				ResultSet rs 	= 	st.executeQuery("SELECT SUM(prix * nombre) / SUM(nombre) AS total, to_char(dateTrans, 'YYYY-MM-DD') AS date FROM transactions WHERE marketID=" + id + " GROUP BY date ORDER BY date ASC;");
+				ResultSet rs 	= 	st.executeQuery("SELECT SUM(prix * (nombre - nombreRestant)) / SUM(nombre) AS total, to_char(dateTrans, 'YYYY-MM-DD') AS date FROM transactions WHERE marketID=" + id + " AND nombre - nombreRestant <> 0 GROUP BY date ORDER BY date ASC;");
 				
 				if(rs.next()){
 					retour 			+= 	"[";
@@ -42,7 +42,6 @@ public class Graphique extends HttpServlet
 				con.close();
 			}
 		} catch(Exception e) {
-				res.getWriter().println("<script>alert('coucou');</script>");
 			e.printStackTrace(res.getWriter());
 		}
 	}

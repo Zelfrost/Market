@@ -45,15 +45,12 @@
 				out.println("<div><h3 class='followLink'>" + libelle + " -> " + finS + "</h3>");
 
 				out.println("<span class='small'>" + res.getString("inverse") + " <a class='orange' href='information?id=" + m.idInverse() + "'>" + res.getString("inverseLien") + "</a></span></div>");
-
-				if(m.nbProp() > 0) {
 %>
 
-<h3><%= res.getString("etatMarche") %></h3>
-<div id="graphique"></div>
-<%
-				}
-%>
+<div id='graphique'>
+	<h3><%= res.getString("etatMarche") %></h3>
+	<div id='graph'></div>
+</div>
 
 <div class='infoLeft left'>
 

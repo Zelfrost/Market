@@ -36,6 +36,7 @@ public class AcheterBons extends HttpServlet
 		}
 
 		Marche m = new Marche(Integer.parseInt(req.getParameter("id")));
+		Marche mI = new Marche(m.idInverse());
 		java.util.Date fin = new java.util.Date(m.dateFinEpoch() * 1000);
 
 		if (req.getParameter("nbBons") != null && req.getParameter("prixBons") != null && valable && fin.after(new java.util.Date())) {
@@ -70,10 +71,11 @@ public class AcheterBons extends HttpServlet
 								retraitBons	= (nbBons > rs.getInt("nombreRestant")?rs.getInt("nombreRestant"):nbBons);
 								upST		= con.createStatement();
 								// Ajout de la transactions avec le nombre de bons
-								upST.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, etat, dateTrans) VALUES (" 
+								upST.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, nombreBloque, prix, etat, dateTrans) VALUES (" 
 															+ req.getParameter("id") + ", "
 															+ util.id() + ", "
 															+ retraitBons + ", "
+															+ "0, "
 															+ "0, "
 															+ rs.getInt("prix") + ", "
 															+ "0, "
@@ -91,10 +93,12 @@ public class AcheterBons extends HttpServlet
 									upST.executeUpdate("UPDATE users SET "
 															+ "argent = argent - " + ((100-rs.getInt("prix")) * retraitBons)
 														+ " WHERE idUser = " + rs.getString("userID"));
+									upST.executeUpdate("INSERT INTO notifications(libelle, userID) VALUES('Achat de " + retraitBons + " bons sur le march&eacute; &quot;<a class=orange href=information?id=" + mI.id() + ">" + mI.libelle() + "</a>&quot;. Vous perdez la somme de " + ((100-rs.getInt("prix")) * retraitBons) + "&euro;.', " + rs.getString("userID") +");");
 								} else {
 									upST.executeUpdate("UPDATE users SET "
 															+ "argent = argent + " + (rs.getInt("prix") * retraitBons)
 														+ " WHERE idUser = " + rs.getString("userID"));
+									upST.executeUpdate("INSERT INTO notifications(libelle, userID) VALUES('Vente de " + retraitBons + " bons sur le march&eacute; &quot;<a class=orange href=information?id=" + m.id() + ">" + m.libelle() + "</a>&quot;. Vous gagnez la somme de " + (rs.getInt("prix") * retraitBons) + "&euro;.', " + rs.getString("userID") +");");
 								}
 								// On met à jour l'argent de l'utilisateur
 								util.setInformation();
@@ -108,11 +112,12 @@ public class AcheterBons extends HttpServlet
 						    	// On met à jour l'argent bloqué du joueur si il reste des bons
 						    	util.ajouterArgentBloque(Integer.parseInt(req.getParameter("prixBons")) * nbBons);
 						    	// Et on crée une transactions pour les bons restants
-						    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, etat, dateTrans) VALUES ("
+						    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, nombreBloque, prix, etat, dateTrans) VALUES ("
 						    							+ req.getParameter("id") + ", "
 						    							+ util.id() + ", "
 						    							+ nbBons + ", "
 						    							+ nbBons + ", "
+						    							+ "0, "
 						    							+ req.getParameter("prixBons") + ", "
 						    							+ "0, "
 						    							+ "CURRENT_TIMESTAMP);");
@@ -121,11 +126,12 @@ public class AcheterBons extends HttpServlet
 					    	// On met à jour l'argent bloqué du joueur si il reste des bons
 					    	util.ajouterArgentBloque(Integer.parseInt(req.getParameter("prixBons")) * nbBons);
 					    	// Et on crée une transactions pour les bons restants
-					    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, prix, etat, dateTrans) VALUES ("
+					    	st.executeUpdate("INSERT INTO transactions(marketID, userID, nombre, nombreRestant, nombreBloque, prix, etat, dateTrans) VALUES ("
 					    							+ req.getParameter("id") + ", "
 					    							+ util.id() + ", "
 					    							+ nbBons + ", "
 					    							+ nbBons + ", "
+					    							+ "0, "
 					    							+ req.getParameter("prixBons") + ", "
 					    							+ "0, "
 					    							+ "CURRENT_TIMESTAMP);");
@@ -140,7 +146,7 @@ public class AcheterBons extends HttpServlet
 				    }
 				} else {
 					rs 	= st.executeQuery("SELECT "
-												+ "SUM(nombre - nombreRestant) AS nombre "
+												+ "SUM(nombre - nombreRestant - nombreBloque) AS nombre "
 											+ "FROM transactions "
 											+ "WHERE marketID=" + req.getParameter("id") + " "
 												+ "AND userID=" + util.id() + " "
@@ -148,11 +154,11 @@ public class AcheterBons extends HttpServlet
 					if(rs.next() && rs.getInt("nombre") >= nbBons) {
 						rs 	= st.executeQuery("SELECT "
 												+ "idTrans, "
-												+ "nombre - nombreRestant AS nombre "
+												+ "nombre - nombreRestant - nombreBloque AS nombre "
 											+ "FROM transactions "
 											+ "WHERE marketID=" + req.getParameter("id") + " "
 												+ "AND userID=" + util.id() + " "
-												+ "AND nombre - nombreRestant <> 0 "
+												+ "AND nombre - nombreRestant - nombreBloque <> 0 "
 												+ "AND etat = 0;");
 
 						Statement upSt 	= con.createStatement();
@@ -164,13 +170,14 @@ public class AcheterBons extends HttpServlet
 								nbRetrait = nbBons;
 
 							upSt.executeUpdate(	"UPDATE transactions " +
-												"SET nombre = nombre - " + nbRetrait + " " +
+												"SET nombreBloque = nombreBloque + " + nbRetrait + " " +
 												"WHERE idTrans=" + rs.getString("idTrans"));
 							upSt.executeUpdate( "INSERT INTO transactions(" +
 													"userID, " +
 													"marketID, " +
 													"nombre, " +
 													"nombreRestant, " +
+													"nombreBloque, " +
 													"prix, " +
 													"etat, " +
 													"dateTrans) " +
@@ -179,9 +186,11 @@ public class AcheterBons extends HttpServlet
 													m.idInverse() + ", " +
 													nbRetrait + ", " +
 													nbRetrait + ", " +
+													"0, " +
 													(100 - prix) + ", " + 
 													"1, " +
 													"CURRENT_TIMESTAMP);");
+							nbBons -= nbRetrait;
 						}
 						res.sendRedirect("information?id=" + m.id() + "&success=1");
 					} else {

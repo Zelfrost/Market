@@ -50,6 +50,13 @@
 	</head>
 	
 	<body>
+
+<script type="text/javascript" src="JS/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="JS/header.js"></script>
+
+<div id='notifs'>
+</div>
+
 	    <div id="wrapper">
 	        <div id="header">
 	            <div class="left">
